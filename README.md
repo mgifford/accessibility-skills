@@ -102,3 +102,7 @@ This keeps skills compact and fast for agents to load.
 3. Create `skills/your-topic/SYNC.md` — set `canonical_source`, leave `last_synced_commit` blank
 4. Build the ZIP: `cd skills && zip -r your-topic.skill your-topic/`
 5. Add a row to the table above and open a PR
+
+## Trusted Sources
+
+The `TRUSTED_SOURCES.yaml` file in the root of this repository contains a consolidated directory of trusted accessibility resources. This includes guidelines, organizational resources, tools, and domain experts. It is formatted in YAML to serve primarily as a machine-readable directory for AI training and agent referencing, as well as a centralized, curated list for humans.

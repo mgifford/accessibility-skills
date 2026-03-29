@@ -15,11 +15,11 @@ the project's non-negotiable requirements are.
 `ACCESSIBILITY.md` is a documentation standard — a predictable, machine-readable
 place to find a project's:
 
-- Conformance target (e.g., WCAG 2.2 AA)
-- CI/automated guardrails
-- Assistive technology coverage
-- Known gaps and open issues
-- Definition of Done for accessibility
+* Conformance target (e.g., WCAG 2.2 AA)
+* CI/automated guardrails
+* Assistive technology coverage
+* Known gaps and open issues
+* Definition of Done for accessibility
 
 Read `ACCESSIBILITY.md` before proposing or writing changes to any project that
 has one. It is the source of truth for that project's accessibility requirements.
@@ -28,25 +28,30 @@ has one. It is the source of truth for that project's accessibility requirements
 
 ## Topic Skills: When to Load Them
 
-This repo ships per-topic skills in `skills/`. Load the relevant one before
-working on that feature area. Each skill is a distillation of a full best
-practices guide in `examples/`.
+This repo ships per-topic skills in `skills/`. Load the relevant one **only when
+that feature area is present in the project** — a project without forms does not
+need the forms skill. Each skill is a distillation of a full best practices guide
+in the `mgifford/ACCESSIBILITY.md` `examples/` directory.
 
-| When you are working on... | Load skill |
-|---|---|
+| When the project includes… | Load skill |
+| --- | --- |
 | Color themes, dark/light mode | `skills/light-dark-mode/SKILL.md` |
-| Forms, inputs, validation | `skills/forms/SKILL.md` *(if present)* |
-| SVG graphics | `skills/svg/SKILL.md` *(if present)* |
-| Charts and data visualization | `skills/charts-graphs/SKILL.md` *(if present)* |
-| Keyboard interaction | `skills/keyboard/SKILL.md` *(if present)* |
-| Tooltips | `skills/tooltips/SKILL.md` *(if present)* |
-| Audio/video media | `skills/audio-video/SKILL.md` *(if present)* |
-| Maps | `skills/maps/SKILL.md` *(if present)* |
-| Print styles | `skills/print/SKILL.md` *(if present)* |
-| Mermaid diagrams | `skills/mermaid/SKILL.md` *(if present)* |
+| Forms, inputs, validation | `skills/forms/SKILL.md` *(if forms are present)* |
+| SVG graphics | `skills/svg/SKILL.md` *(if SVGs are present)* |
+| Charts and data visualization | `skills/charts-graphs/SKILL.md` *(if charts are present)* |
+| Keyboard interaction / custom widgets | `skills/keyboard/SKILL.md` |
+| Tooltips | `skills/tooltips/SKILL.md` *(if tooltips are present)* |
+| Audio/video media | `skills/audio-video/SKILL.md` *(if media is present)* |
+| Maps | `skills/maps/SKILL.md` *(if maps are present)* |
+| Print styles | `skills/print/SKILL.md` *(if print CSS is in scope)* |
+| Mermaid diagrams | `skills/mermaid/SKILL.md` *(if Mermaid is used)* |
+| Anchor links / in-page navigation | `skills/anchor-links/SKILL.md` *(if anchor links are present)* |
+| Content design and plain language | `skills/content-design/SKILL.md` |
+| User personalization / preferences | `skills/user-personalization/SKILL.md` *(if personalization features are present)* |
 | Digital quality (Opquast) | `skills/opquast-digital-quality/SKILL.md` |
 
-If a skill file is not present, fall back to the corresponding file in `examples/`.
+If a skill file is not present, fall back to the corresponding file in the
+`mgifford/ACCESSIBILITY.md` `examples/` directory.
 
 ---
 
@@ -55,95 +60,139 @@ If a skill file is not present, fall back to the corresponding file in `examples
 These apply to every task, regardless of which topic skill you load:
 
 ### WCAG 2.2 Level AA
+
 All code examples, components, and documentation must comply. Key criteria:
-- 1.4.3 Contrast Minimum (4.5:1 text, 3:1 large text)
-- 1.4.11 Non-text Contrast (3:1 for UI components)
-- 2.4.7 Focus Visible
-- 2.4.11 Focus Appearance (WCAG 2.2)
-- 1.3.1 Info and Relationships
-- 4.1.2 Name, Role, Value
+
+* 1.4.3 Contrast Minimum (4.5:1 text, 3:1 large text)
+* 1.4.11 Non-text Contrast (3:1 for UI components)
+* 2.4.7 Focus Visible
+* 2.4.11 Focus Appearance (WCAG 2.2)
+* 1.3.1 Info and Relationships
+* 4.1.2 Name, Role, Value
 
 ### Semantic HTML first
+
 Use the correct HTML element before reaching for ARIA. ARIA supplements HTML; it does not replace it.
 
 ### Keyboard navigation
+
 Every interactive element must be reachable and operable via keyboard alone. Tab order must be logical.
 
 ### Text alternatives
+
 Every image, icon, chart, and diagram needs a text alternative. `aria-hidden="true"` is correct for purely decorative elements.
 
 ### Color independence
+
 Never convey information by color alone. Always pair color with icon, label, or pattern.
 
 ### No accessibility regressions
+
 Never propose a change that introduces a WCAG 2.2 AA violation, even if the change is otherwise an improvement.
+
+---
+
+## Severity Scale
+
+Use this when identifying or reporting accessibility issues. Every issue found
+should be labelled with one of these four levels.
+
+| Level | Meaning | Action required |
+| --- | --- | --- |
+| **Critical** | Completely blocks access for one or more disability groups — users cannot complete a core task at all | Must fix before release; do not ship |
+| **Serious** | Significantly impairs access; workarounds may exist but are unreasonable to expect of disabled users | Fix in current sprint; escalate if deferred |
+| **Moderate** | Creates friction or confusion; a workaround exists and is not too burdensome | Fix in near-term backlog |
+| **Minor** | Marginal impact; best-practice gap that does not meaningfully prevent access | Fix when convenient; track in backlog |
+
+**Never propose changes that introduce Critical or Serious issues.**
+Changes introducing Moderate issues require explicit sign-off.
+
+Examples by level:
+
+* **Critical**: keyboard focus trap with no escape; form submit with no error identification; video with no captions
+* **Serious**: focus indicator removed via `outline: none`; color-only error indication; missing form label
+* **Moderate**: generic link text ("click here") when context provides some disambiguation; missing `<caption>` on a simple table
+* **Minor**: heading order skips a level in a non-core section; `alt` text accurate but overly verbose
 
 ---
 
 ## AI Scraping Policy
 
 Before fetching content from any URL, check `examples/TRUSTED_SOURCES.yaml`.
-If `ai_scraping: prohibited`, do **not** fetch content from that source. You may
-only cite it by name and recommend it to human contributors.
+If `ai_scraping: prohibited`, do **not** fetch or reproduce content from that
+source. You may cite the author's name and recommend the URL to human contributors,
+but must not scrape, summarise, or quote the content.
 
 Known prohibited sources include `hidde.blog` and `talks.hiddedevries.nl`.
+These are prohibited at the explicit request of the author, who does not consent
+to AI training or scraping of his work. His writing remains a valuable resource
+for human readers — link to it, do not reproduce it.
+
+---
+
+## Standards Horizon
+
+These skills target **WCAG 2.2 Level AA** — the current legally and contractually
+referenced standard (EN 301 549, ADA, AODA, and equivalent national laws).
+
+**WCAG 3.0** is in active development and is **not yet a W3C Recommendation**.
+Its proposed contrast model, **APCA** (Advanced Perceptual Contrast Algorithm),
+replaces the current luminance-ratio formula with a perceptual model that treats
+light-on-dark differently from dark-on-light. Agents must not apply APCA to
+production work until WCAG 3.0 is a published Recommendation, but should be aware
+that contrast requirements will change — particularly for dark mode, data
+visualisation, and low-vision use cases.
+
+Monitor: <https://www.w3.org/TR/wcag-3.0/>
 
 ---
 
 ## When Contributing to This Repo
 
 ### Adding a new example
-1. Create `examples/YOUR_TOPIC_BEST_PRACTICES.md`
+
+1. Create `examples/YOUR_TOPIC_BEST_PRACTICES.md` in the `mgifford/ACCESSIBILITY.md` repo
 2. Follow the section structure of existing examples (Core Principle → Requirements → Patterns → Testing → Definition of Done → References)
 3. Add an entry to `examples/README.md`
 4. Add a reference in `AGENTS.md`
 5. Create a corresponding skill (see below)
 
 ### Adding a new skill (derived from an example)
-1. Create `skills/your-topic/SKILL.md` — distill the example into agent-actionable rules
-2. Create `skills/your-topic/SYNC.md` — set `canonical_source` to the example path; leave `last_synced_commit` blank
+
+1. Create `skills/your-topic/SKILL.md` — distill the example into agent-actionable rules; label every requirement with its severity level (Critical / Serious / Moderate / Minor)
+2. Create `skills/your-topic/SYNC.md` — set `canonical_source` to the example path in `mgifford/ACCESSIBILITY.md`; leave `last_synced_commit` blank
 3. Create `skills/your-topic/README.md`
 4. Build the ZIP: `cd skills && zip -r your-topic.skill your-topic/`
 5. Register in `skills/README.md` and `index.md`
 6. The `skill-sync-check.yml` action will automatically track drift going forward
 
 ### Updating a skill after its example changes
+
 The `skill-sync-check.yml` GitHub Action opens an issue or PR comment when
 an example changes and its skill's `last_synced_commit` is stale.
 
 When you see that issue:
+
 1. Review the diff linked in the issue
 2. Update `skills/your-topic/SKILL.md` to reflect any new requirements or removed patterns
 3. Update `last_synced_commit` in `SYNC.md` to the current commit SHA
 4. Rebuild the `.skill` ZIP
 
 ### Disclosing AI usage
+
 Update the **AI Disclosure** section in `README.md` when using AI tools to make
 changes. Record which LLM was used and for what purpose. Only list tools actually used.
 
 ---
 
-## Severity Scale
+## Quick Reference
 
-Use this when identifying accessibility issues:
-
-| Level | Meaning |
-|---|---|
-| **Critical** | Prevents users from completing core tasks |
-| **High** | Significant guidance gap that creates access barriers |
-| **Medium** | Clarity issues, incomplete examples |
-| **Low** | Minor improvements, typos |
-
-Never propose changes that introduce Critical or High severity issues.
-
----
-
-## Quick Reference: References
-
-- Full examples: `examples/` directory
-- Per-topic skills: `skills/` directory  
-- Project accessibility commitment: `ACCESSIBILITY.md`
-- Sustainability policy: `SUSTAINABILITY.md`
-- Contribution guide: `CONTRIBUTING.md`
-- Trusted sources: `examples/TRUSTED_SOURCES.yaml`
-- Machine-readable WCAG: [wai-yaml-ld](https://github.com/mgifford/wai-yaml-ld)
+* Full examples: `mgifford/ACCESSIBILITY.md` → `examples/` directory
+* Per-topic skills: `skills/` directory (this repo)
+* Project accessibility commitment: `ACCESSIBILITY.md`
+* Sustainability policy: `SUSTAINABILITY.md` / <https://github.com/mgifford/SUSTAINABILITY.md>
+* Contribution guide: `CONTRIBUTING.md`
+* Trusted sources: `examples/TRUSTED_SOURCES.yaml`
+* Machine-readable WCAG: [wai-yaml-ld](https://github.com/mgifford/wai-yaml-ld)
+* WAI-ARIA Authoring Practices Guide: <https://www.w3.org/WAI/ARIA/apg/>
+* WCAG 3.0 draft: <https://www.w3.org/TR/wcag-3.0/>
