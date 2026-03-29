@@ -196,3 +196,22 @@ changes. Record which LLM was used and for what purpose. Only list tools actuall
 * Machine-readable WCAG: [wai-yaml-ld](https://github.com/mgifford/wai-yaml-ld)
 * WAI-ARIA Authoring Practices Guide: <https://www.w3.org/WAI/ARIA/apg/>
 * WCAG 3.0 draft: <https://www.w3.org/TR/wcag-3.0/>
+
+## Alternative: Frontend-Focused Minimal Accessibility Skill
+
+For a complementary frontend skill that emphasises trusting the browser and writing as
+little code as possible, see **[mikemai2awesome/agent-skills — `frontend-a11y`](https://github.com/mikemai2awesome/agent-skills/tree/main/skills/frontend-a11y)**.
+
+That skill covers:
+
+* Using native HTML elements (`<dialog>`, `<details>`, `<button>`) instead of ARIA-hacked divs
+* Avoiding redundant ARIA roles on landmark elements
+* Using ARIA attribute selectors (`[aria-expanded="true"]`) as CSS hooks
+* Safe fade-in animation patterns that do not break screen reader announcement order
+* Native `<dialog>` with `showModal()` for focus-trap-free modal dialogs
+
+Install it alongside this skill:
+
+```bash
+npx skills add mikemai2awesome/agent-skills --skill frontend-a11y
+```

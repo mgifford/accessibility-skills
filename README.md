@@ -27,6 +27,27 @@ Each skill distills a full example into agent-actionable rules.
 | [user-personalization](./user-personalization/SKILL.md) | `examples/USER_PERSONALIZATION_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [opquast-digital-quality](./opquast-digital-quality/SKILL.md) | Opquast checklist (external) | ✅ |
 
+## Alternative Accessibility Skills
+
+For a complementary, frontend-focused approach that emphasises writing minimal, accessible HTML, CSS, and JavaScript by trusting the browser over ARIA engineering, see:
+
+**[mikemai2awesome/agent-skills — `frontend-a11y`](https://github.com/mikemai2awesome/agent-skills/tree/main/skills/frontend-a11y)**
+
+Key principles from that skill that align well with this repo:
+
+- **Trust the browser** — native elements (`<dialog>`, `<details>`, `<button>`) over ARIA-hacked `<div>`s
+- **Semantic over ARIA** — use the right element; ARIA supplements HTML, it doesn't replace it
+- **Less is more** — every ARIA attribute you don't write is one less thing to break
+- **Style with ARIA attributes** — use `[aria-expanded="true"]` as CSS hooks instead of adding redundant modifier classes
+
+Install using the `npx skills` CLI:
+
+```bash
+npx skills add mikemai2awesome/agent-skills --skill frontend-a11y
+```
+
+The two skill sets are complementary: `mikemai2awesome/agent-skills` covers the "how to write accessible HTML/CSS/JS" layer; this repo (`mgifford/accessibility-skills`) covers the WCAG conformance, testing, topic-specific patterns (forms, SVG, charts, maps, etc.), and project-level documentation layer.
+
 ## How to Install Skills
 
 ### Option 1: Claude Code (CLI) — Global Installation

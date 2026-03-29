@@ -22,6 +22,7 @@ That repo contains:
 | Add an `AGENTS.md` or `ACCESSIBILITY.md` to my project | [mgifford/ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md) |
 | Copy best-practice example files into my project | [mgifford/ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md) |
 | Use skills with Claude.ai Projects or Cursor | **This repo** ([mgifford/accessibility-skills](https://github.com/mgifford/accessibility-skills)) |
+| Write minimal accessible HTML/CSS/JS using native browser elements (frontend-focused) | [mikemai2awesome/agent-skills — `frontend-a11y`](https://github.com/mikemai2awesome/agent-skills/tree/main/skills/frontend-a11y) |
 
 ## How the two repos stay in sync
 
