@@ -4,6 +4,8 @@ AI agent skills derived from `examples/` best practice guides.
 Each skill distills a full example into agent-actionable rules.
 **The `examples/` file is always the canonical source of truth.**
 
+> **Looking for the AGENTS.md approach?** If you want to add accessibility guidance to a project via `AGENTS.md` or `ACCESSIBILITY.md` files (for GitHub Copilot, Cursor, or any AI agent), see the companion repo: **[mgifford/ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md)**. See [ACCESSIBILITY.md](./ACCESSIBILITY.md) for a full comparison.
+
 ## Available Skills
 
 | Skill | Derived from | Install |
