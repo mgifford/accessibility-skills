@@ -1,3 +1,13 @@
+---
+name: audio-video
+description: >
+  Load this skill whenever the project contains audio or video content,
+  media players, podcasts, video embeds, or any <audio>/<video> elements.
+  Under no circumstances publish audio or video without captions, transcripts,
+  and audio descriptions where required. Absolutely always apply WCAG 1.2
+  criteria for time-based media.
+---
+
 # Audio/Video Accessibility Skill
 
 > **Canonical source**: `examples/AUDIO_VIDEO_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

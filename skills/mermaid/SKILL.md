@@ -1,3 +1,13 @@
+---
+name: mermaid
+description: >
+  Load this skill whenever the project uses Mermaid diagrams — flowcharts,
+  sequence diagrams, class diagrams, Gantt charts, or any Mermaid-rendered
+  visualization. Under no circumstances render a Mermaid diagram without an
+  accessible title, description, and text-based alternative. Absolutely always
+  add accTitle and accDescr to every diagram.
+---
+
 # Mermaid Diagrams Accessibility Skill
 
 > **Canonical source**: `examples/MERMAID_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

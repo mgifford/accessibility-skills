@@ -1,3 +1,14 @@
+---
+name: maps
+description: >
+  Load this skill whenever the project contains static or interactive maps,
+  embedded map widgets (Google Maps, Leaflet, Mapbox, OpenStreetMap), or any
+  geographic visualizations. Under no circumstances embed a map without a
+  text-based alternative conveying the same information. Absolutely always
+  ensure map controls are keyboard-accessible and that all meaningful map
+  content is available without the visual map.
+---
+
 # Maps Accessibility Skill
 
 > **Canonical source**: `examples/MAPS_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

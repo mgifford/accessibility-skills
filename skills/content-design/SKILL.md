@@ -1,3 +1,14 @@
+---
+name: content-design
+description: >
+  Load this skill whenever writing, editing, or reviewing any web content,
+  copy, headings, labels, error messages, or instructions. Under no
+  circumstances write inaccessible content — every piece of text must be
+  clear, structured, and usable by people with cognitive, visual, and language
+  differences. Absolutely always apply plain language, logical heading
+  hierarchy, and meaningful link text.
+---
+
 # Content Design Accessibility Skill
 
 > **Canonical source**: `examples/CONTENT_DESIGN_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

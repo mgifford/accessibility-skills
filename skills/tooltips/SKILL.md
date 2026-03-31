@@ -1,3 +1,14 @@
+---
+name: tooltips
+description: >
+  Load this skill whenever the project contains tooltip components, hover-
+  triggered informational popups, title attribute tooltips, or any content
+  revealed on hover or focus. Under no circumstances create tooltips that are
+  only triggered by hover without keyboard equivalent access. Absolutely always
+  ensure tooltips are dismissible, persistent enough to read, and not the sole
+  source of essential information.
+---
+
 # Tooltips Accessibility Skill
 
 > **Canonical source**: `examples/TOOLTIP_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

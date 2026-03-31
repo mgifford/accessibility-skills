@@ -1,3 +1,14 @@
+---
+name: svg
+description: >
+  Load this skill whenever the project contains SVG graphics — inline SVGs,
+  external SVG files, SVG icons, SVG illustrations, or SVG-based data
+  visualizations. Under no circumstances use SVG without proper accessible
+  titles, descriptions, and ARIA roles where required. Absolutely always
+  add <title> and <desc> to meaningful SVGs and set role="img" with
+  aria-labelledby pointing to those elements.
+---
+
 # SVG Accessibility Skill
 
 > **Canonical source**: `examples/SVG_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`
