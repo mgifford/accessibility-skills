@@ -10,23 +10,28 @@ Each skill distills a full example into agent-actionable rules.
 
 | Skill | Derived from | Install |
 |---|---|---|
-| [ACCESSIBILITY-general](./ACCESSIBILITY-general/SKILL.md) | `AGENTS.md` + project-wide | General project skill |
-| [anchor-links](./anchor-links/SKILL.md) | `examples/ANCHOR_LINKS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [audio-video](./audio-video/SKILL.md) | `examples/AUDIO_VIDEO_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [charts-graphs](./charts-graphs/SKILL.md) | `examples/CHARTS_GRAPHS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [content-design](./content-design/SKILL.md) | `examples/CONTENT_DESIGN_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [forms](./forms/SKILL.md) | `examples/FORMS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [image-alt-text](./image-alt-text/SKILL.md) | `examples/IMAGE_ALT_TEXT_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [keyboard](./keyboard/SKILL.md) | `examples/KEYBOARD_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [light-dark-mode](./light-dark-mode/SKILL.md) | `examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [maps](./maps/SKILL.md) | `examples/MAPS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [mermaid](./mermaid/SKILL.md) | `examples/MERMAID_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [print](./print/SKILL.md) | `examples/PRINT_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [progressive-enhancement](./progressive-enhancement/SKILL.md) | `examples/PROGRESSIVE_ENHANCEMENT_BEST_PRACTICES.md` | ✅ |
-| [svg](./svg/SKILL.md) | `examples/SVG_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [tooltips](./tooltips/SKILL.md) | `examples/TOOLTIP_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [user-personalization](./user-personalization/SKILL.md) | `examples/USER_PERSONALIZATION_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
-| [opquast-digital-quality](./opquast-digital-quality/SKILL.md) | Opquast checklist (external) | ✅ |
+| [ACCESSIBILITY-general](./skills/ACCESSIBILITY-general/SKILL.md) | `AGENTS.md` + project-wide | General project skill |
+| [anchor-links](./skills/anchor-links/SKILL.md) | `examples/ANCHOR_LINKS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [aria-live-regions](./skills/aria-live-regions/SKILL.md) | `examples/ARIA_LIVE_REGIONS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [audio-video](./skills/audio-video/SKILL.md) | `examples/AUDIO_VIDEO_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [charts-graphs](./skills/charts-graphs/SKILL.md) | `examples/CHARTS_GRAPHS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [content-design](./skills/content-design/SKILL.md) | `examples/CONTENT_DESIGN_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [forms](./skills/forms/SKILL.md) | `examples/FORMS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [image-alt-text](./skills/image-alt-text/SKILL.md) | `examples/IMAGE_ALT_TEXT_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [keyboard](./skills/keyboard/SKILL.md) | `examples/KEYBOARD_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [light-dark-mode](./skills/light-dark-mode/SKILL.md) | `examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [maps](./skills/maps/SKILL.md) | `examples/MAPS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [mermaid](./skills/mermaid/SKILL.md) | `examples/MERMAID_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [navigation](./skills/navigation/SKILL.md) | `examples/NAVIGATION_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [plain-language](./skills/plain-language/SKILL.md) | `examples/PLAIN_LANGUAGE_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [print](./skills/print/SKILL.md) | `examples/PRINT_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [progressive-enhancement](./skills/progressive-enhancement/SKILL.md) | `examples/PROGRESSIVE_ENHANCEMENT_BEST_PRACTICES.md` | ✅ |
+| [svg](./skills/svg/SKILL.md) | `examples/SVG_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [tables](./skills/tables/SKILL.md) | `examples/TABLES_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [tooltips](./skills/tooltips/SKILL.md) | `examples/TOOLTIP_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [touch-pointer](./skills/touch-pointer/SKILL.md) | `examples/TOUCH_POINTER_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [user-personalization](./skills/user-personalization/SKILL.md) | `examples/USER_PERSONALIZATION_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [opquast-digital-quality](./skills/opquast-digital-quality/SKILL.md) | Opquast checklist (external) | ✅ |
 
 ## Alternative Accessibility Skills
 
@@ -50,6 +55,23 @@ npx skills add mikemai2awesome/agent-skills --skill frontend-a11y
 The two skill sets are complementary: `mikemai2awesome/agent-skills` covers the "how to write accessible HTML/CSS/JS" layer; this repo (`mgifford/accessibility-skills`) covers the WCAG conformance, testing, topic-specific patterns (forms, SVG, charts, maps, etc.), and project-level documentation layer.
 
 ## How to Install Skills
+
+### Option 0: npx / `skills` CLI — Quickest Installation
+
+This repository follows the standard `skills/` directory layout, making it compatible with the [`skills` CLI](https://www.npmjs.com/package/skills):
+
+```bash
+# Install a single skill
+npx skills add mgifford/accessibility-skills --skill forms
+
+# Install multiple skills
+npx skills add mgifford/accessibility-skills --skill forms --skill keyboard
+
+# Install all skills
+npx skills add mgifford/accessibility-skills
+```
+
+Skills are installed into your project's local `skills/` directory so any AI agent can find them.
 
 ### Option 1: Claude Code (CLI) — Global Installation
 
@@ -124,8 +146,9 @@ This keeps skills compact and fast for agents to load.
 1. Identify a stable, reviewed file in `examples/`
 2. Create `skills/your-topic/SKILL.md` — distilled, agent-actionable rules
 3. Create `skills/your-topic/SYNC.md` — set `canonical_source`, leave `last_synced_commit` blank
-4. Build the ZIP: `cd skills && zip -r your-topic.skill your-topic/`
-5. Add a row to the table above and open a PR
+4. Optionally add `skills/your-topic/scripts/`, `skills/your-topic/references/`, or `skills/your-topic/assets/` subdirectories
+5. Build the ZIP: `cd skills && zip -r your-topic.skill your-topic/`
+6. Add a row to the table above and open a PR
 
 ## Trusted Sources
 
