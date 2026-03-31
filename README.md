@@ -15,6 +15,7 @@ Each skill distills a full example into agent-actionable rules.
 | [aria-live-regions](./skills/aria-live-regions/SKILL.md) | `examples/ARIA_LIVE_REGIONS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [audio-video](./skills/audio-video/SKILL.md) | `examples/AUDIO_VIDEO_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [charts-graphs](./skills/charts-graphs/SKILL.md) | `examples/CHARTS_GRAPHS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [color-contrast](./skills/color-contrast/SKILL.md) | `examples/COLOR_CONTRAST_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [content-design](./skills/content-design/SKILL.md) | `examples/CONTENT_DESIGN_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [forms](./skills/forms/SKILL.md) | `examples/FORMS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [image-alt-text](./skills/image-alt-text/SKILL.md) | `examples/IMAGE_ALT_TEXT_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
