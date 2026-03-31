@@ -16,6 +16,7 @@ Each skill distills a full example into agent-actionable rules.
 | [charts-graphs](./charts-graphs/SKILL.md) | `examples/CHARTS_GRAPHS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [content-design](./content-design/SKILL.md) | `examples/CONTENT_DESIGN_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [forms](./forms/SKILL.md) | `examples/FORMS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [image-alt-text](./image-alt-text/SKILL.md) | `examples/IMAGE_ALT_TEXT_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [keyboard](./keyboard/SKILL.md) | `examples/KEYBOARD_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [light-dark-mode](./light-dark-mode/SKILL.md) | `examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [maps](./maps/SKILL.md) | `examples/MAPS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
