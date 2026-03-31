@@ -1,0 +1,28 @@
+{
+  "name": "accessibility-skills",
+  "version": "1.0.0",
+  "description": "AI agent skills for web accessibility — WCAG conformance, ARIA patterns, and topic-specific best practices for Claude Code, Cursor, Copilot and other AI agents",
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "wcag",
+    "aria",
+    "claude",
+    "agent-skills",
+    "ai-agent",
+    "skills"
+  ],
+  "homepage": "https://github.com/mgifford/accessibility-skills#readme",
+  "bugs": {
+    "url": "https://github.com/mgifford/accessibility-skills/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgifford/accessibility-skills.git"
+  },
+  "license": "MIT",
+  "author": "Mike Gifford",
+  "files": [
+    "skills/**"
+  ]
+}
