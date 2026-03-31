@@ -155,6 +155,17 @@ For automated scans, include aggregate counts:
 }
 ```
 
+Frequency informs prioritisation. A single critical failure may warrant immediate action; a low-severity issue across hundreds of pages may need a systematic fix.
+
+**Frequency amplifies effective severity.** A "Low" rated issue on every page or a top user task (sign-in, checkout, search) should be treated with higher urgency than its base severity suggests.
+
+| Situation | Suggested priority adjustment |
+|-----------|-------------------------------|
+| Low severity, appears on every page | Treat as Medium |
+| Medium severity, appears on every page | Treat as High |
+| Low/Medium severity, on a top-task page | Escalate by one severity level |
+| Low/Medium severity, on a high-traffic landing page | Escalate by one severity level |
+
 ---
 
 ## High: Recommended Additional Fields
@@ -268,6 +279,46 @@ Provide a concrete remediation when possible.
 </button>
 ```
 
+### Personalisation and Context
+
+Accessibility failures are not always reproducible on every page load. Many issues only surface under specific user settings, device types, or navigation paths. Always record the personalisation state and context at the time of discovery.
+
+**Colour scheme and display preferences**
+
+```
+Colour scheme:    Light mode / Dark mode / System default
+Forced Colors:    Active (Windows High Contrast) / Inactive
+Contrast mode:    Standard / Increased contrast (macOS)
+```
+
+**CSS media features**
+
+```
+prefers-color-scheme:   light / dark
+prefers-reduced-motion: reduce / no-preference
+prefers-contrast:       more / less / forced / no-preference
+forced-colors:          active / none
+```
+
+**Viewport and device type**
+
+```
+Viewport:    375 × 812 px (iPhone 14, Safari iOS 17)
+Viewport:    1440 × 900 px (MacBook Pro, Chrome 124)
+Device:      Mobile — iOS 17 / Android 14
+Device:      Desktop — Windows 11 / macOS 14
+Orientation: Portrait / Landscape
+```
+
+**Navigation path and UI state**
+
+```
+Arrived via:   Direct URL / Search results link / Internal navigation from [page]
+Preceded by:   Clicked "Add to cart" on product page, then navigated to checkout
+UI state:      Modal open / Accordion expanded / Dropdown active
+Login state:   Authenticated (standard user role) / Guest / Admin
+```
+
 ---
 
 ## Moderate: Structured Report Templates
@@ -277,6 +328,7 @@ Provide a concrete remediation when possible.
 ```markdown
 ## Accessibility Issue: [Brief Description]
 
+**Bug ID:** `[PREFIX-xxxxxxxx]` (instance) / `[PREFIX-xxxxxxxx]` (pattern)
 **URL:** [Full URL where issue was found]
 **XPath:** `[Shortest unique XPath]`
 **Full DOM path:** `[Full ancestor chain XPath]`
@@ -284,6 +336,7 @@ Provide a concrete remediation when possible.
 **Rule:** [Tool name] — [Rule ID]
 **Severity:** [Critical / High / Medium / Low]
 **Frequency:** [Number of instances; pages affected]
+**Screen type:** [desktop / mobile] | **Colour mode:** [light / dark]
 
 ### HTML Snippet
 
@@ -327,34 +380,183 @@ Provide a concrete remediation when possible.
 [Code or prose describing the fix]
 ```
 
+### JSON Schema for Automated Tool Output
+
+Use this schema when scripts or CI pipelines emit machine-readable accessibility reports.
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AccessibilityIssue",
+  "type": "object",
+  "required": ["url", "wcag_sc", "severity", "rule_id", "xpath", "html_snippet"],
+  "properties": {
+    "instance_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]+-[0-9a-f]{8}$",
+      "examples": ["DRU-a3f1b2c4"],
+      "description": "Stable identifier for this specific violation on this page. Hash of page path + CSS selector + rule ID + screen type."
+    },
+    "pattern_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]+-[0-9a-f]{8}$",
+      "examples": ["DRU-f7e3a1b2"],
+      "description": "Stable identifier for the underlying template-level pattern across pages. Hash of CSS selector + rule ID + screen type (no page path)."
+    },
+    "screen_type": { "type": "string", "enum": ["desktop", "mobile"] },
+    "color_mode": { "type": "string", "enum": ["light", "dark"], "default": "light" },
+    "url": { "type": "string", "format": "uri" },
+    "xpath": { "type": "string" },
+    "xpath_full": { "type": "string" },
+    "html_snippet": { "type": "string" },
+    "wcag_sc": { "type": "string", "pattern": "^\\d\\.\\d+\\.\\d+$" },
+    "wcag_level": { "type": "string", "enum": ["A", "AA", "AAA"] },
+    "rule_id": { "type": "string" },
+    "act_rule_id": { "type": "string" },
+    "tool": { "type": "string" },
+    "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+    "frequency": {
+      "type": "object",
+      "properties": {
+        "instances_on_page": { "type": "integer" },
+        "pages_affected": { "type": "integer" },
+        "total_pages_scanned": { "type": "integer" }
+      }
+    },
+    "summary": { "type": "string" },
+    "description": { "type": "string" },
+    "impact": { "type": "array", "items": { "type": "string" } },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "browser": { "type": "string" },
+        "os": { "type": "string" },
+        "screen_reader": { "type": "string" },
+        "zoom_level": { "type": "string" }
+      }
+    },
+    "suggested_fix": { "type": "string" },
+    "steps_to_reproduce": { "type": "array", "items": { "type": "string" } }
+  }
+}
+```
+
+### Example JSON Report (axe-core output mapped to schema)
+
+```json
+{
+  "instance_id": "DRU-a3f1b2c4",
+  "pattern_id": "DRU-f7e3a1b2",
+  "screen_type": "desktop",
+  "color_mode": "light",
+  "url": "https://example.com/checkout?step=2",
+  "xpath": "//button[contains(@class,'close-btn')]",
+  "xpath_full": "/html/body/div[@id='cookie-banner']/button[contains(@class,'close-btn')]",
+  "html_snippet": "<button class=\"close-btn\"><svg aria-hidden=\"true\"></svg></button>",
+  "wcag_sc": "4.1.2",
+  "wcag_level": "A",
+  "rule_id": "button-name",
+  "act_rule_id": "97a4e1",
+  "tool": "axe-core 4.9.1",
+  "severity": "critical",
+  "frequency": { "instances_on_page": 1, "pages_affected": 12, "total_pages_scanned": 50 },
+  "summary": "Close button missing accessible name (WCAG 4.1.2)",
+  "description": "The cookie consent close button contains only an SVG icon with no accessible name.",
+  "impact": ["blind", "low-vision", "voice-control"],
+  "environment": { "browser": "Chrome 124", "os": "Windows 11", "screen_reader": "NVDA 2024.1", "zoom_level": "100%" },
+  "suggested_fix": "<button class=\"close-btn\" aria-label=\"Close cookie consent dialog\"><svg aria-hidden=\"true\"></svg></button>",
+  "steps_to_reproduce": [
+    "Go to https://example.com/checkout?step=2",
+    "Wait for the cookie consent banner to appear",
+    "Open NVDA and press Tab to reach the close button",
+    "Observe that NVDA announces 'button' with no label"
+  ]
+}
+```
+
+### EARL: Evaluation and Report Language
+
+[EARL (Evaluation and Report Language)](https://www.w3.org/WAI/standards-guidelines/earl/) is a W3C standard for expressing test results in a machine-readable format. Use EARL when you need interoperable, tool-agnostic reports that can be processed by different systems — for example, aggregating results from multiple tools, feeding a compliance dashboard, or archiving audit evidence.
+
+```turtle
+@prefix earl: <http://www.w3.org/ns/earl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+[] a earl:Assertion ;
+   earl:assertedBy <https://example.com/tools/axe-runner> ;
+   earl:subject <https://example.com/checkout?step=2> ;
+   earl:test <http://www.w3.org/TR/WCAG21/#non-text-content> ;
+   earl:result [
+     a earl:TestResult ;
+     earl:outcome earl:failed ;
+     dcterms:description "Close button contains only an SVG icon with no accessible name." ;
+     dcterms:date "2025-06-01T10:30:00Z"^^xsd:dateTime
+   ] ;
+   earl:mode earl:automatic .
+```
+
+| Term | Meaning |
+|------|---------|
+| `earl:Assertion` | A single test result (subject + test + outcome) |
+| `earl:subject` | The URL or resource that was tested |
+| `earl:test` | The criterion or rule being tested (WCAG SC, ACT rule, etc.) |
+| `earl:outcome` | `earl:passed`, `earl:failed`, `earl:cantTell`, `earl:inapplicable`, or `earl:untested` |
+| `earl:mode` | How the test was performed: `earl:automatic`, `earl:manual`, or `earl:semiAuto` |
+| `earl:assertedBy` | The tool or person that produced the assertion |
+
+EARL output can be produced by [Alfa](https://github.com/Siteimprove/alfa), [Axe Reporter EARL](https://github.com/dequelabs/axe-reporter-earl), and [ACT-Rules implementations](https://act-rules.github.io/). The W3C [WCAG-EM Report Tool](https://www.w3.org/WAI/eval/report-tool/) also exports EARL.
+
 ---
 
 ## Guidance for Automated Tools and AI Agents
 
 Apply these additional rules when scripts or AI agents generate reports.
 
-* **Emit both XPath forms** — simplified and full DOM path — in every violation.
-* **Deduplicate before reporting** — group violations by rule and normalised XPath;
-  report one issue with `frequency.instances_on_page` set to the count rather than
-  filing hundreds of identical issues.
-* **Map every rule to a WCAG SC** — maintain a rule-to-WCAG mapping so reports
-  consistently include the criterion.
-* **Preserve the HTML snippet at scan time** — DOM content may change after the
-  scan; the preserved snippet allows verification of a deployed fix.
-* **Use a single severity taxonomy** — if multiple tools report the same violation
-  at different severities, use the higher severity.
-* **Include a confidence score** for automated detections that require manual
-  confirmation (e.g. colour contrast over a gradient):
+### 5.1 Always Emit Both XPath Forms
+
+Emit both the simplified XPath (shortest unique selector) and the full DOM path XPath in every violation. The simplified form aids human readability; the full form aids deterministic replay.
+
+### 5.2 Deduplicate Before Reporting
+
+Group violations by rule and normalised XPath before filing. Report one issue with `frequency.instances_on_page` set to the count rather than filing hundreds of identical issues.
+
+```python
+# Pseudocode: aggregate duplicates
+issues = defaultdict(list)
+for violation in raw_results:
+    key = (violation["rule_id"], violation["wcag_sc"], normalize_xpath(violation["xpath"]))
+    issues[key].append(violation)
+
+for key, group in issues.items():
+    report_issue(group[0], frequency=len(group))
+```
+
+### 5.3 Map Tool Output to WCAG Criteria
+
+Every automated rule should map to at least one WCAG SC. Maintain a rule-to-WCAG mapping table in your project so that reports consistently include the criterion.
+
+### 5.4 Preserve the HTML Snippet
+
+Extract the failing element's outer HTML at scan time. DOM content may change after the scan. The preserved snippet allows verification of whether a deployed fix addresses the original issue.
+
+### 5.5 Assign Severity Consistently
+
+Use a single severity taxonomy across all reports and all tools. If multiple tools report the same violation at different severities, use the higher severity.
+
+### 5.6 Include Confidence Score for Automated Detections
+
+Include a `confidence` field when the tool provides it, especially for violations that require manual confirmation (e.g. colour contrast over a gradient):
 
 ```json
 {
   "rule_id": "color-contrast",
   "confidence": "needs-review",
-  "note": "Background is a CSS gradient; contrast check may be inaccurate. Manual verification required."
+  "note": "Background colour is a CSS gradient; automated contrast check may be inaccurate. Manual verification required."
 }
 ```
 
-### AI Agent Prompt for Filing a GitHub Issue
+### 5.7 AI Agent Prompt for Filing a GitHub Issue
 
 When an AI agent files a GitHub Issue from scan output, use this prompt structure:
 
@@ -372,7 +574,75 @@ Rules:
 
 Violation data:
 [INSERT JSON HERE]
+
+Template:
+[INSERT MARKDOWN TEMPLATE HERE]
 ```
+
+### 5.8 Generate Stable Unique Identifiers for Violations
+
+Assigning a stable identifier to each violation enables automated pipelines to track fixes, detect regressions, and deduplicate across scan runs.
+
+**Two levels of identification**
+
+| Level | Inputs to hash | Purpose |
+|-------|---------------|---------|
+| `instance_id` | page path + CSS selector + rule ID + screen type | Identifies one occurrence on one specific page |
+| `pattern_id` | CSS selector + rule ID + screen type | Identifies the recurring pattern across pages |
+
+**Identifier format:** `[PREFIX]-[8-char-hex]` (e.g. `DRU-a3f1b2c4`)
+
+The prefix is project-specific (e.g. `DRU` for Drupal, `A11Y` as a generic default). Infer screen type from viewport width: `< 768 px = mobile`, `>= 768 px = desktop`. Default `color_mode` to `light`.
+
+**JavaScript implementation (Node.js)**
+
+```javascript
+const crypto = require('crypto');
+
+const MOBILE_BREAKPOINT = 768;
+
+function detectScreenType(viewport) {
+  return viewport && viewport.width < MOBILE_BREAKPOINT ? 'mobile' : 'desktop';
+}
+
+function normalizeSelector(target) {
+  return Array.isArray(target) ? target.join(' > ') : String(target);
+}
+
+function generateInstanceId(pagePath, selector, ruleId, screenType, prefix = 'A11Y') {
+  const input = `${pagePath}|${selector}|${ruleId}|${screenType}`;
+  const hash = crypto.createHash('sha256').update(input).digest('hex').slice(0, 8);
+  return `${prefix}-${hash}`;
+}
+
+function generatePatternId(selector, ruleId, screenType, prefix = 'A11Y') {
+  const input = `${selector}|${ruleId}|${screenType}`;
+  const hash = crypto.createHash('sha256').update(input).digest('hex').slice(0, 8);
+  return `${prefix}-${hash}`;
+}
+
+function annotateViolations(axeResults, prefix = 'A11Y', colorMode = 'light') {
+  const pagePath = new URL(axeResults.url).pathname;
+  const viewport = { width: axeResults.testEnvironment.windowWidth };
+  const screenType = detectScreenType(viewport);
+
+  return axeResults.violations.flatMap(violation =>
+    violation.nodes.map(node => {
+      const selector = normalizeSelector(node.target);
+      return {
+        ...node,
+        rule_id:     violation.id,
+        instance_id: generateInstanceId(pagePath, selector, violation.id, screenType, prefix),
+        pattern_id:  generatePatternId(selector, violation.id, screenType, prefix),
+        screen_type: screenType,
+        color_mode:  colorMode,
+      };
+    })
+  );
+}
+```
+
+The CSS selector (from `node.target`) is used in the hash rather than the XPath because axe-core reports it natively and it is stable across XPath conversion logic changes. Include both in the report; use only the CSS selector as the hash input.
 
 ---
 
@@ -433,6 +703,8 @@ Thank you for your attention to this matter.
 Before filing or submitting an accessibility bug report, verify each item:
 
 * [ ] URL is exact and publicly accessible (or a test account is provided)
+* [ ] Unique bug identifiers (`instance_id` and `pattern_id`) are generated and included
+* [ ] Screen type (`desktop` / `mobile`) and colour mode (`light` / `dark`) are recorded
 * [ ] XPath (simplified) uniquely identifies the element
 * [ ] Full DOM path XPath is included
 * [ ] HTML snippet is minimal and self-contained
@@ -444,6 +716,7 @@ Before filing or submitting an accessibility bug report, verify each item:
 * [ ] Steps to reproduce are numbered and complete
 * [ ] Expected and actual behaviours are stated separately
 * [ ] Testing environment (browser, OS, AT, tool) is documented
+* [ ] Personalisation context is recorded (colour scheme, CSS media features, viewport, navigation path)
 * [ ] Impact on specific disability groups is described
 * [ ] Duplicate violations are aggregated, not filed individually
 * [ ] For automated output: confidence level is included where relevant
@@ -479,6 +752,9 @@ For the complete list, see the [WCAG 2.2 Quick Reference](https://www.w3.org/WAI
 * [Writing Impactful Accessibility Reports](https://medium.com/openconcept-stories/writing-impactful-accessibility-reports-d6cdd84356fd) — Mike Gifford, OpenConcept
 * [How to Fix Accessibility Bugs](https://github.com/readme/guides/fix-accessibility-bugs) — Mike Gifford, GitHub README Guides
 * [Contacting Organizations about Inaccessible Websites](https://www.w3.org/WAI/teach-advocate/contact-inaccessible-websites/) — W3C WAI
+* [How to Report Accessibility Bugs](https://www.digitala11y.com/how-where-to-report-accessibility-bugs/) — DigitalA11y
+* [Template: Reporting Accessibility Issues](https://accessibility.huit.harvard.edu/template-reporting-accessibility-issues) — Harvard University
 * [ACT Rules Community Group](https://act-rules.github.io/) — W3C
 * [Accessibility Insights for Web](https://github.com/microsoft/accessibility-insights-web) — Microsoft
+* [EARL: Evaluation and Report Language](https://www.w3.org/WAI/standards-guidelines/earl/) — W3C WAI
 * [WCAG 2.2 Quick Reference](https://www.w3.org/WAI/WCAG22/quickref/)
