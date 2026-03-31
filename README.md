@@ -12,6 +12,7 @@ Each skill distills a full example into agent-actionable rules.
 |---|---|---|
 | [ACCESSIBILITY-general](./skills/ACCESSIBILITY-general/SKILL.md) | `AGENTS.md` + project-wide | General project skill |
 | [anchor-links](./skills/anchor-links/SKILL.md) | `examples/ANCHOR_LINKS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [bug-reporting](./skills/bug-reporting/SKILL.md) | `examples/ACCESSIBILITY_BUG_REPORTING_BEST_PRACTICES.md` | ✅ |
 | [aria-live-regions](./skills/aria-live-regions/SKILL.md) | `examples/ARIA_LIVE_REGIONS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [audio-video](./skills/audio-video/SKILL.md) | `examples/AUDIO_VIDEO_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [charts-graphs](./skills/charts-graphs/SKILL.md) | `examples/CHARTS_GRAPHS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |

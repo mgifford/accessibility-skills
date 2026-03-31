@@ -57,6 +57,7 @@ in the `mgifford/ACCESSIBILITY.md` `examples/` directory.
 | Print styles | `skills/print/SKILL.md` *(if print CSS is in scope)* |
 | Mermaid diagrams | `skills/mermaid/SKILL.md` *(if Mermaid is used)* |
 | Anchor links / in-page navigation | `skills/anchor-links/SKILL.md` *(if anchor links are present)* |
+| Accessibility bug reporting | `skills/bug-reporting/SKILL.md` *(when filing or reviewing bug reports)* |
 | Content design and plain language | `skills/content-design/SKILL.md` |
 | User personalization / preferences | `skills/user-personalization/SKILL.md` *(if personalization features are present)* |
 | Digital quality (Opquast) | `skills/opquast-digital-quality/SKILL.md` |
