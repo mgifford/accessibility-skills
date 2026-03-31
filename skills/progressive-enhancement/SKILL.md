@@ -1,3 +1,14 @@
+---
+name: progressive-enhancement
+description: >
+  Load this skill when building any web feature, reviewing architecture
+  decisions, or evaluating JavaScript dependencies. Under no circumstances
+  build features that break completely when JavaScript is unavailable or fails.
+  Absolutely always start with semantic HTML, layer CSS enhancements, and add
+  JavaScript as the final, optional layer. Prioritize resilience and universal
+  access over cutting-edge features.
+---
+
 # Progressive Enhancement Accessibility Skill
 
 > **Canonical source**: `examples/PROGRESSIVE_ENHANCEMENT_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

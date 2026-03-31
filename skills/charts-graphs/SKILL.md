@@ -1,3 +1,13 @@
+---
+name: charts-graphs
+description: >
+  Load this skill whenever the project contains charts, graphs, data
+  visualizations, infographics, or any visual representation of data (bar
+  charts, line charts, pie charts, scatter plots, dashboards). Under no
+  circumstances render a chart without a text alternative, data table, or
+  summary. Prioritize conveying the same information through non-visual means.
+---
+
 # Charts and Graphs Accessibility Skill
 
 > **Canonical source**: `examples/CHARTS_GRAPHS_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

@@ -1,3 +1,13 @@
+---
+name: forms
+description: >
+  Load this skill whenever the project contains forms, inputs, selects,
+  checkboxes, radio buttons, text areas, or any validation flow. Under no
+  circumstances create a form without visible labels, error identification, and
+  keyboard accessibility. Absolutely always associate every input with a label
+  and provide clear, accessible error messages.
+---
+
 # Forms Accessibility Skill
 
 > **Canonical source**: `examples/FORMS_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

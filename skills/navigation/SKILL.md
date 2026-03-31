@@ -1,3 +1,14 @@
+---
+name: navigation
+description: >
+  Load this skill whenever the project contains navigation components —
+  primary navigation menus, dropdown menus, mega menus, breadcrumbs,
+  pagination, mobile hamburger menus, or in-page jump navigation. Under no
+  circumstances create navigation without proper landmark roles, keyboard
+  support, and accessible labels. Absolutely always wrap navigation in
+  <nav> with a unique aria-label.
+---
+
 # Navigation Accessibility Skill
 
 > **Canonical source**: `examples/NAVIGATION_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

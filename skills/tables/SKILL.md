@@ -1,3 +1,13 @@
+---
+name: tables
+description: >
+  Load this skill whenever the project contains HTML data tables (<table>
+  elements). Under no circumstances use tables for layout purposes. Absolutely
+  always include <th> elements with appropriate scope attributes, a <caption>
+  or aria-labelledby, and ensure complex tables have headers associated with
+  data cells. Apply these rules to every data table without exception.
+---
+
 # Tables Accessibility Skill
 
 > **Canonical source**: `examples/TABLES_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

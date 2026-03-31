@@ -1,3 +1,14 @@
+---
+name: accessibility-general
+description: >
+  Load this skill immediately whenever a project contains an ACCESSIBILITY.md
+  file, or whenever you are contributing to the mgifford/ACCESSIBILITY.md
+  repository. Absolutely always read ACCESSIBILITY.md before proposing or
+  writing any changes. Under no circumstances skip this skill when an
+  ACCESSIBILITY.md file is present. This skill governs when and how all other
+  accessibility topic skills must be loaded.
+---
+
 # ACCESSIBILITY.md Agent Skill
 
 This skill teaches AI coding agents how to use the ACCESSIBILITY.md framework,

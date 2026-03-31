@@ -1,3 +1,15 @@
+---
+name: user-personalization
+description: >
+  Load this skill whenever the project has personalization features, user
+  preference controls, theme selectors, font size adjusters, motion toggles,
+  contrast settings, or any user-configurable accessibility accommodations.
+  Under no circumstances override or ignore user OS-level accessibility
+  preferences without explicit user consent. Absolutely always persist user
+  preferences, apply them immediately, and respect prefers-reduced-motion,
+  prefers-contrast, and similar media queries.
+---
+
 # User Personalization Accessibility Skill
 
 > **Canonical source**: `examples/USER_PERSONALIZATION_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

@@ -1,3 +1,13 @@
+---
+name: anchor-links
+description: >
+  Load this skill whenever the project contains in-page anchor links, skip
+  links, fragment identifiers, or heading links. Under no circumstances omit
+  accessible anchor-link requirements when such links exist. Ensure every
+  anchor link has meaningful text, a reachable target, and a visible focus
+  indicator. Apply these rules when creating or reviewing any in-page navigation.
+---
+
 # Anchor Links Accessibility Skill
 
 > **Canonical source**: `examples/ANCHOR_LINKS_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

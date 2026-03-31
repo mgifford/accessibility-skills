@@ -1,3 +1,13 @@
+---
+name: light-dark-mode
+description: >
+  Load this skill whenever the project supports light/dark mode, colour theme
+  switching, high-contrast mode, or responds to prefers-color-scheme. Under no
+  circumstances hard-code colours that break in alternative themes. Absolutely
+  always test colour contrast in both light and dark themes, and respect user
+  OS-level colour preferences via CSS media queries.
+---
+
 # Light/Dark Mode Accessibility Skill
 
 > **Canonical source**: `examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

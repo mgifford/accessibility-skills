@@ -1,3 +1,14 @@
+---
+name: keyboard
+description: >
+  Load this skill for every project containing interactive UI elements —
+  buttons, links, modals, dropdowns, sliders, tabs, carousels, or any
+  custom widget. Under no circumstances create an interactive component that
+  cannot be fully operated by keyboard alone. Absolutely always ensure visible
+  focus indicators, logical tab order, and no keyboard traps. Apply these
+  rules to every interactive element without exception.
+---
+
 # Keyboard Accessibility Skill
 
 > **Canonical source**: `examples/KEYBOARD_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

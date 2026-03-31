@@ -1,3 +1,15 @@
+---
+name: touch-pointer
+description: >
+  Load this skill whenever the project contains interactive UI elements that
+  users touch, tap, click, drag, swipe, or gesture with — buttons, links,
+  drag-and-drop interfaces, sliders, carousels, or custom touch interactions.
+  Under no circumstances create touch targets smaller than 44×44 CSS pixels.
+  Absolutely always provide pointer cancellation, single-pointer alternatives
+  to gestures, and load alongside keyboard/SKILL.md since pointer and keyboard
+  requirements are complementary.
+---
+
 # Touch and Pointer Accessibility Skill
 
 > **Canonical source**: `examples/TOUCH_POINTER_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

@@ -1,3 +1,13 @@
+---
+name: aria-live-regions
+description: >
+  Load this skill whenever the project contains dynamic content updates,
+  status messages, alerts, notifications, loading indicators, or any use of
+  aria-live, role="status", role="alert", or role="log". Under no circumstances
+  add or modify live-region markup without applying these rules. Prioritize
+  correct politeness levels and avoid redundant announcements.
+---
+
 # ARIA Live Regions Accessibility Skill
 
 > **Canonical source**: `examples/ARIA_LIVE_REGIONS_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

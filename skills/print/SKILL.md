@@ -1,3 +1,13 @@
+---
+name: print
+description: >
+  Load this skill whenever the project includes print stylesheets, print
+  media queries (@media print), or any content intended for physical printing.
+  Under no circumstances omit print CSS that ensures readable, accessible
+  printed output. Absolutely always hide decorative elements, expand link URLs,
+  and maintain sufficient contrast and font sizing in print styles.
+---
+
 # Print Accessibility Skill
 
 > **Canonical source**: `examples/PRINT_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

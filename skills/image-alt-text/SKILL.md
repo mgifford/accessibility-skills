@@ -1,3 +1,14 @@
+---
+name: image-alt-text
+description: >
+  Load this skill whenever the project contains <img> elements, inline SVGs
+  used as content images, CSS background images that convey meaning, or icon
+  fonts. Under no circumstances omit alt text on meaningful images. Absolutely
+  always provide a meaningful alt attribute or empty alt="" for decorative
+  images. Apply WCAG 2.2 SC 1.1.1 — every non-text element requires a text
+  alternative.
+---
+
 # Image Alt Text Accessibility Skill
 
 > **Canonical source**: `examples/IMAGE_ALT_TEXT_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`

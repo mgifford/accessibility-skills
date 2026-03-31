@@ -1,3 +1,15 @@
+---
+name: plain-language
+description: >
+  Load this skill whenever the project involves writing, editing, or reviewing
+  content for a general audience, including UI copy, help text, error messages,
+  documentation, and instructions. Under no circumstances use jargon, complex
+  sentence structures, or unexplained acronyms without providing plain
+  alternatives. Absolutely always target a reading level accessible to the
+  broadest possible audience. Load alongside content-design/SKILL.md for all
+  content work.
+---
+
 # Plain Language Accessibility Skill
 
 > **Canonical source**: `examples/PLAIN_LANGUAGE_ACCESSIBILITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`
