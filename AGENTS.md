@@ -24,6 +24,7 @@ Before working on a topic area, read the relevant skill file:
 - Anchor links: read `skills/anchor-links/SKILL.md`
 - ARIA live regions: read `skills/aria-live-regions/SKILL.md`
 - Audio / video: read `skills/audio-video/SKILL.md`
+- CI/CD pipelines: read `skills/ci-cd/SKILL.md`
 - Charts and graphs: read `skills/charts-graphs/SKILL.md`
 - Color contrast: read `skills/color-contrast/SKILL.md`
 - Content design: read `skills/content-design/SKILL.md`
