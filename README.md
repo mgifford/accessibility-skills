@@ -153,6 +153,10 @@ This keeps skills compact and fast for agents to load.
 5. Build the ZIP: `cd skills && zip -r your-topic.skill your-topic/`
 6. Add a row to the table above and open a PR
 
+## Related Projects
+- [Intopia's Web Accessibility Skill](https://github.com/Intopia/intopia-web-accessibility-skill/)
+- [Mike Mai's Agent Skills](https://github.com/mikemai2awesome/agent-skills) 
+
 ## Trusted Sources
 
 The `TRUSTED_SOURCES.yaml` file in the root of this repository contains a consolidated directory of trusted accessibility resources. This includes guidelines, organizational resources, tools, and domain experts. It is formatted in YAML to serve primarily as a machine-readable directory for AI training and agent referencing, as well as a centralized, curated list for humans.
