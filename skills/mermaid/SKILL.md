@@ -180,6 +180,82 @@ Before exporting or committing any diagram, verify:
 
 ---
 
+## Mermaid Diagram Types
+
+MermaidJS supports **23 diagram types** across 5 categories. All types support
+`accTitle` / `accDescr` (Mermaid ≥ 9.4) and YAML frontmatter configuration.
+
+**Categories and types:**
+
+| Category | Types |
+|---|---|
+| Logic & Process | Flowchart, State Diagram, Mind Map |
+| Interaction & Time | Sequence, User Journey, Gantt, Timeline |
+| Data Structure | Class, Entity Relationship, C4, Architecture |
+| Data Visualization | Pie, Quadrant, Radar, XY Chart, Sankey, Treemap |
+| Domain-Specific | Git Graph, Requirement, Packet, Kanban, ZenUML, Block |
+
+For a machine-readable reference of all 23 types, parsing approaches, and
+narrative generation support, see
+[`examples/MERMAID_DIAGRAM_TYPES.md`](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/MERMAID_DIAGRAM_TYPES.md).
+
+---
+
+## SVG Post-Processing Pipeline (Pattern 11)
+
+When Mermaid's output does not produce Pattern 11 automatically, use this
+transformation pipeline:
+
+```javascript
+// 1. Parse generated SVG
+const doc = (new DOMParser()).parseFromString(svgString, 'image/svg+xml');
+const svg = doc.documentElement;
+
+// 2. Extract %%accTitle / %%accDescr from source
+const title = mermaidSource.match(/%%\s*accTitle\s*(.+)/)?.[1] ?? '';
+const desc  = mermaidSource.match(/%%\s*accDescr\s*(.+)/)?.[1] ?? '';
+
+// 3. Generate unique IDs (required when multiple diagrams exist on a page)
+const titleId = `title-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+const descId  = `desc-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+
+// 4. Apply root attributes
+svg.setAttribute('role', 'img');
+svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+svg.setAttribute('aria-labelledby', `${titleId} ${descId}`);
+
+// 5. Insert <title> and <desc> as first children
+svg.querySelector('title')?.remove();
+svg.querySelector('desc')?.remove();
+const titleEl = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+titleEl.id = titleId; titleEl.textContent = title;
+const descEl  = document.createElementNS('http://www.w3.org/2000/svg', 'desc');
+descEl.id  = descId;  descEl.textContent  = desc;
+svg.insertBefore(descEl,  svg.firstChild);
+svg.insertBefore(titleEl, svg.firstChild);
+```
+
+**Never remove during post-processing:** `<title>`, `<desc>`, `viewBox`, `xmlns`,
+IDs used in references, `role`, or `aria-*` attributes.
+
+**Safe to remove:** comments, extra whitespace, unused CSS classes.
+
+### Dark mode in SVG
+
+```css
+/* Inside a <style> element in the SVG */
+:root { --text: #1a1a1a; --bg: #ffffff; --border: #cccccc; }
+@media (prefers-color-scheme: dark) {
+  :root { --text: #ffffff; --bg: #1a1a1a; --border: #333333; }
+}
+text { fill: var(--text); }
+rect { fill: var(--bg); stroke: var(--border); }
+```
+
+Alternatively, use `color: currentColor` so SVG inherits the page's color scheme.
+
+---
+
 ## Definition of Done Checklist
 
 * [ ] `%%accTitle` present, ≤100 chars, unique, meaningful
@@ -191,6 +267,7 @@ Before exporting or committing any diagram, verify:
 * [ ] Named edges include contextual label
 * [ ] Contrast verified in light and dark modes
 * [ ] GitHub diagrams have a text alternative below the code block
+* [ ] Post-processing pipeline applied when Mermaid does not emit Pattern 11 automatically
 * [ ] Tested with screen reader
 
 ---
@@ -207,6 +284,8 @@ Before exporting or committing any diagram, verify:
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/MERMAID_ACCESSIBILITY_BEST_PRACTICES.md)
+* [Mermaid diagram types reference](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/MERMAID_DIAGRAM_TYPES.md)
+* [Mermaid transformation best practices](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/MERMAID_TRANSFORMATION_BEST_PRACTICES.md)
 * [Accessible SVG flowcharts — Léonie Watson (tink.uk)](https://tink.uk/accessible-svg-flowcharts/) — do not scrape; link to it
 * [Accessible SVGs: Perfect Patterns — Carie Fisher](https://cariefisher.com/a11y-svg-updated/) — do not scrape; link to it
 * [Mermaid accessibility documentation](https://mermaid.js.org/config/accessibility.html)

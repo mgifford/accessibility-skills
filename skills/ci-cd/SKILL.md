@@ -319,6 +319,57 @@ npm install -D @playwright/test @axe-core/playwright
 
 ---
 
+## Moderate: Shift-Left Accessibility Strategy
+
+Prevent issues from entering commits in the first place. Catch problems in order
+from fastest to slowest feedback:
+
+1. **In-editor / local lint** — framework-specific a11y lint rules run as you type.
+2. **Pre-commit gate** — run checks on changed files only; block commit when checks
+   fail. Use `pre-commit` (Python) or `husky` + `lint-staged` (Node). Keep total
+   runtime ≤ 30–60 seconds.
+3. **PR gate** — re-run in CI for trust and consistency; fail PR on blocking
+   regressions; publish artifact links.
+4. **Scheduled depth scans** — nightly/weekly deeper scans; auto-label findings;
+   trend metrics over time in `ACCESSIBILITY.md`.
+
+**Suggested Definition of Done addition:**
+> No UI-impacting commit is accepted unless local/pre-commit accessibility checks
+> pass and PR CI accessibility checks are green.
+
+**Policy model:**
+* **Fast fail locally** — contributors get immediate feedback before push.
+* **Strict PR enforcement** — no merge with blocking accessibility failures.
+* **Transparent metrics** — show pass rate, open defects, and remediation trend in `ACCESSIBILITY.md`.
+* **Waiver discipline** — only time-bound waivers with explicit owner and expiry.
+
+---
+
+## Moderate: AI-Assisted Remediation Loop
+
+Close the detect → fix gap using GitHub's accessibility scanner and the Copilot
+coding agent:
+
+1. The scheduled scan (workflow B above) uses `github/accessibility-scanner@v3`
+   and creates issues labelled `accessibility`.
+2. A companion remediation workflow watches for that label event and passes the
+   issue to a Copilot coding agent.
+3. The agent locates the offending code, applies a minimal fix, and opens a
+   **draft pull request** linked to the original issue.
+4. A human reviews and merges the draft PR.
+
+Copy [`examples/AGENT_REMEDIATION_WORKFLOW.yml`](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/AGENT_REMEDIATION_WORKFLOW.yml)
+to `.github/workflows/accessibility-remediation.yml` to enable this loop.
+
+Covered violation types: `image-alt`, `label`, `link-name`, `heading-order`,
+`color-contrast`, `aria-required-attr`.
+
+> Requires a GitHub Copilot subscription with the coding agent feature enabled
+> and **Settings → Copilot → "Allow Copilot to create and approve pull requests"**
+> turned on.
+
+---
+
 ## Tool Comparison
 
 | Approach | Finds WCAG rule violations | Finds announcement quality issues | Works for SVG / canvas | CI-friendly |
@@ -355,6 +406,8 @@ No single tool catches everything — use the approaches together.
 * [ ] Accessibility tree tests in place for SVG, custom widgets, and live regions
 * [ ] Local `test:a11y` script documented in contributing guide
 * [ ] `audit-report.json` artifact uploaded on manual deep-crawl run
+* [ ] Pre-commit / lint-staged accessibility check present and runs on changed files
+* [ ] Shift-left metrics (pass rate, open defects) tracked in `ACCESSIBILITY.md` table
 
 ---
 
@@ -383,6 +436,8 @@ No single tool catches everything — use the approaches together.
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/CI_CD_ACCESSIBILITY_BEST_PRACTICES.md)
+* [Shift-left automation guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/SHIFT_LEFT_ACCESSIBILITY_AUTOMATION.md)
+* [GitHub Accessibility Scanner integration](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/GITHUB_ACCESSIBILITY_SCANNER_INTEGRATION.md)
 * [Lighthouse CI documentation](https://github.com/GoogleChrome/lighthouse-ci)
 * [axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright)
 * [Playwright aria snapshots](https://playwright.dev/docs/aria-snapshots)

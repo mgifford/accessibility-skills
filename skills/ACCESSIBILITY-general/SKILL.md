@@ -61,6 +61,8 @@ in the `mgifford/ACCESSIBILITY.md` `examples/` directory.
 | Content design and plain language | `skills/content-design/SKILL.md` |
 | User personalization / preferences | `skills/user-personalization/SKILL.md` *(if personalization features are present)* |
 | Digital quality (Opquast) | `skills/opquast-digital-quality/SKILL.md` |
+| axe-core scans / automated rule results | `skills/axe-rules/SKILL.md` |
+| Manual / assistive-technology testing | `skills/manual-testing/SKILL.md` |
 
 If a skill file is not present, fall back to the corresponding file in the
 `mgifford/ACCESSIBILITY.md` `examples/` directory.

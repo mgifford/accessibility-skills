@@ -10,7 +10,7 @@ This repository contains **AI agent skills** for web accessibility work — dist
 
 When contributing to or using this repository, always follow these principles:
 
-- **Follow WCAG 2.1 AA** as the baseline standard for all accessibility guidance.
+- **Follow WCAG 2.2 AA** as the baseline standard for all accessibility guidance.
 - **Prefer semantic HTML** over ARIA engineering. Native elements (`<button>`, `<dialog>`, `<details>`) carry built-in accessibility semantics.
 - **ARIA supplements HTML** — it does not replace it. Only use ARIA when a native element cannot meet the need.
 - **Test with real assistive technologies** — screen readers, keyboard-only navigation, and zoom at 200 %.
@@ -24,6 +24,8 @@ Before working on a topic area, read the relevant skill file:
 - Anchor links: read `skills/anchor-links/SKILL.md`
 - ARIA live regions: read `skills/aria-live-regions/SKILL.md`
 - Audio / video: read `skills/audio-video/SKILL.md`
+- Axe-core rules: read `skills/axe-rules/SKILL.md`
+- Accessibility bug reporting: read `skills/bug-reporting/SKILL.md`
 - CI/CD pipelines: read `skills/ci-cd/SKILL.md`
 - Charts and graphs: read `skills/charts-graphs/SKILL.md`
 - Color contrast: read `skills/color-contrast/SKILL.md`
@@ -32,9 +34,11 @@ Before working on a topic area, read the relevant skill file:
 - Image alt text: read `skills/image-alt-text/SKILL.md`
 - Keyboard navigation: read `skills/keyboard/SKILL.md`
 - Light / dark mode: read `skills/light-dark-mode/SKILL.md`
+- Manual accessibility testing: read `skills/manual-testing/SKILL.md`
 - Maps: read `skills/maps/SKILL.md`
 - Mermaid diagrams: read `skills/mermaid/SKILL.md`
 - Navigation: read `skills/navigation/SKILL.md`
+- Digital quality (Opquast): read `skills/opquast-digital-quality/SKILL.md`
 - Plain language: read `skills/plain-language/SKILL.md`
 - Print styles: read `skills/print/SKILL.md`
 - Progressive enhancement: read `skills/progressive-enhancement/SKILL.md`

@@ -12,8 +12,9 @@ Each skill distills a full example into agent-actionable rules.
 |---|---|---|
 | [ACCESSIBILITY-general](./skills/ACCESSIBILITY-general/SKILL.md) | `AGENTS.md` + project-wide | General project skill |
 | [anchor-links](./skills/anchor-links/SKILL.md) | `examples/ANCHOR_LINKS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [axe-rules](./skills/axe-rules/SKILL.md) | `examples/AXE_RULES_REFERENCE.md` | ✅ |
 | [bug-reporting](./skills/bug-reporting/SKILL.md) | `examples/ACCESSIBILITY_BUG_REPORTING_BEST_PRACTICES.md` | ✅ |
-| [aria-live-regions](./skills/aria-live-regions/SKILL.md) | `examples/ARIA_LIVE_REGIONS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [aria-live-regions](./skills/aria-live-regions/SKILL.md) | `examples/ARIA_LIVE_REGIONS_BEST_PRACTICES.md` | ✅ |
 | [audio-video](./skills/audio-video/SKILL.md) | `examples/AUDIO_VIDEO_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [ci-cd](./skills/ci-cd/SKILL.md) | `examples/CI_CD_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [charts-graphs](./skills/charts-graphs/SKILL.md) | `examples/CHARTS_GRAPHS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
@@ -24,6 +25,7 @@ Each skill distills a full example into agent-actionable rules.
 | [keyboard](./skills/keyboard/SKILL.md) | `examples/KEYBOARD_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [light-dark-mode](./skills/light-dark-mode/SKILL.md) | `examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [maps](./skills/maps/SKILL.md) | `examples/MAPS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
+| [manual-testing](./skills/manual-testing/SKILL.md) | `examples/MANUAL_ACCESSIBILITY_TESTING_GUIDE.md` | ✅ |
 | [mermaid](./skills/mermaid/SKILL.md) | `examples/MERMAID_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [navigation](./skills/navigation/SKILL.md) | `examples/NAVIGATION_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [plain-language](./skills/plain-language/SKILL.md) | `examples/PLAIN_LANGUAGE_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
