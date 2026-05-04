@@ -216,15 +216,17 @@ const title = mermaidSource.match(/%%\s*accTitle\s*(.+)/)?.[1] ?? '';
 const desc  = mermaidSource.match(/%%\s*accDescr\s*(.+)/)?.[1] ?? '';
 
 // 3. Generate unique IDs (required when multiple diagrams exist on a page)
-const titleId = `title-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-const descId  = `desc-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+// Use crypto.randomUUID() for guaranteed uniqueness
+const titleId = `title-${crypto.randomUUID()}`;
+const descId  = `desc-${crypto.randomUUID()}`;
 
 // 4. Apply root attributes
 svg.setAttribute('role', 'img');
 svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
 svg.setAttribute('aria-labelledby', `${titleId} ${descId}`);
 
-// 5. Insert <title> and <desc> as first children
+// 5. Remove any existing <title>/<desc> then insert new ones as first children
+//    (removal first ensures idempotent re-processing of already-transformed SVGs)
 svg.querySelector('title')?.remove();
 svg.querySelector('desc')?.remove();
 const titleEl = document.createElementNS('http://www.w3.org/2000/svg', 'title');
