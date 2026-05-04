@@ -6,8 +6,9 @@ last_synced_commit: ""
 last_synced_date: "2026-03-29"
 skill_maintainer: ""
 notes: >
-  Canonical example file does not yet exist in mgifford/ACCESSIBILITY.md.
-  Skill was authored first; create the example file then update last_synced_commit.
+  Canonical example file exists in mgifford/ACCESSIBILITY.md.
+  Set last_synced_commit to the current commit SHA of mgifford/ACCESSIBILITY.md
+  after verifying the skill is in sync with the canonical file.
 ```
 
 ## How to Update
