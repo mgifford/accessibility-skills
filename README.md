@@ -155,9 +155,12 @@ This keeps skills compact and fast for agents to load.
 5. Build the ZIP: `cd skills && zip -r your-topic.skill your-topic/`
 6. Add a row to the table above and open a PR
 
+
 ## Related Projects
+- [Mike Mai's Agent Skills](https://github.com/mikemai2awesome/agent-skills)
 - [Intopia's Web Accessibility Skill](https://github.com/Intopia/intopia-web-accessibility-skill/)
-- [Mike Mai's Agent Skills](https://github.com/mikemai2awesome/agent-skills) 
+- [A11y Spec-First Coding](https://github.com/LaurenceRLewis/a11y-spec-first-skill)
+- [ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md) - Paired version of this one.
 
 ## Trusted Sources
 
