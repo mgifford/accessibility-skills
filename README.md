@@ -1,4 +1,4 @@
-# Skills Directory
+# A11y Skills Collection
 
 AI agent skills derived from `examples/` best practice guides.
 Each skill distills a full example into agent-actionable rules.
