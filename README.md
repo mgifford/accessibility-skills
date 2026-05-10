@@ -161,6 +161,8 @@ This keeps skills compact and fast for agents to load.
 - [Intopia's Web Accessibility Skill](https://github.com/Intopia/intopia-web-accessibility-skill/)
 - [A11y Spec-First Coding](https://github.com/LaurenceRLewis/a11y-spec-first-skill)
 - [ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md) - Paired version of this one.
+- [A11y.md](https://github.com/fecarrico/A11Y.md)
+-[iOS Agent Skill]( https://github.com/dadede
 
 ## Trusted Sources
 
