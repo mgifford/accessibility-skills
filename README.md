@@ -162,7 +162,8 @@ This keeps skills compact and fast for agents to load.
 - [A11y Spec-First Coding](https://github.com/LaurenceRLewis/a11y-spec-first-skill)
 - [ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md) - Paired version of this one.
 - [A11y.md](https://github.com/fecarrico/A11Y.md)
--[iOS Agent Skill]( https://github.com/dadede
+-[iOS Agent Skill]( https://github.com/dadede)
+- [Accessibility Agents](https://github.com/Community-Access/accessibility-agents)
 
 ## Trusted Sources
 
