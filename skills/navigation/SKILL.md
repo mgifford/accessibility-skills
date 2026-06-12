@@ -469,7 +469,7 @@ this, screen reader users hear nothing after navigation.
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/NAVIGATION_ACCESSIBILITY_BEST_PRACTICES.md)
-* [Curated resources — navigation](../resources/by-topic/navigation.md)
+* [Curated resources — navigation](../../resources/by-topic/navigation.md)
 * [WAI Menus Tutorial](https://www.w3.org/WAI/tutorials/menus/) — structure, fly-out, application menus
 * [WAI-ARIA APG — Disclosure Navigation](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/) — recommended dropdown pattern
 * [WAI-ARIA APG — Menubar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) — for application toolbar menus only

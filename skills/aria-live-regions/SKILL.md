@@ -374,7 +374,7 @@ return (
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/ARIA_LIVE_REGIONS_BEST_PRACTICES.md)
-* [Curated resources — ARIA live regions](../resources/by-topic/aria-live-regions.md)
+* [Curated resources — ARIA live regions](../../resources/by-topic/aria-live-regions.md)
 * [MDN — ARIA live regions](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions)
 * [WAI-ARIA spec — aria-live](https://www.w3.org/TR/wai-aria/#aria-live)
 * [a11y-collective — ARIA live regions](https://www.a11y-collective.com/blog/aria-live/)

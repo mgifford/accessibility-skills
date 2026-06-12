@@ -1,0 +1,111 @@
+{
+  "skill_name": "touch-pointer",
+  "skill_file": "skills/touch-pointer/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write the viewport meta tag for a mobile page without blocking zoom.",
+      "expected_output": "Uses a normal viewport meta tag and avoids user-scalable=no or maximum-scale=1.",
+      "expectations": [
+        "Zoom is not blocked",
+        "The viewport tag does not disable scaling",
+        "The solution is safe for low-vision users",
+        "The meta tag uses standard responsive settings"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<meta name=\"viewport\"",
+        "width=device-width",
+        "initial-scale=1"
+      ],
+      "must_not_contain": [
+        "user-scalable=no",
+        "maximum-scale=1"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Build a map control that supports pinch zoom but also works with a single pointer.",
+      "expected_output": "Provides visible Zoom in and Zoom out buttons as the single-pointer alternative to pinch zoom.",
+      "expectations": [
+        "The functionality has a single-pointer alternative",
+        "The alternative is visible and operable",
+        "The control does not rely only on pinch gestures",
+        "The button labels are explicit"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "Zoom in",
+        "Zoom out",
+        "aria-label=\"Zoom in\""
+      ],
+      "must_not_contain": [
+        "pinch only",
+        "two-finger"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a reorderable list where items can be moved without dragging.",
+      "expected_output": "Includes Move up and Move down buttons so the same result is possible without drag and drop.",
+      "expectations": [
+        "A drag alternative is provided",
+        "The alternative uses buttons or clicks",
+        "The reordering result is possible without dragging",
+        "The list remains usable with keyboard and touch"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "Move",
+        "up",
+        "down"
+      ],
+      "must_not_contain": [
+        "drag only",
+        "swipe only"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Write CSS for a small icon button that still meets touch target guidance.",
+      "expected_output": "Uses min-width and min-height or enough padding to provide a 44x44 CSS pixel hit area.",
+      "expectations": [
+        "The clickable area is large enough for touch use",
+        "The target uses padding or minimum dimensions",
+        "The visible icon can remain small while the hit area grows",
+        "Primary actions should meet the 44x44 recommendation"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "44px",
+        "min-width",
+        "min-height"
+      ],
+      "must_not_contain": [
+        "16px only",
+        "touch target under 24x24"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write a button handler for deleting an item that must not fire on pointer down.",
+      "expected_output": "Uses click or another up-event equivalent so the user can cancel before the action completes.",
+      "expectations": [
+        "The action completes on pointer up rather than pointer down",
+        "The user can cancel the action by moving away",
+        "mousedown and touchstart are not used for the final action",
+        "The code respects pointer cancellation guidance"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "click",
+        "mouseup",
+        "touchend"
+      ],
+      "must_not_contain": [
+        "mousedown",
+        "touchstart"
+      ]
+    }
+  ]
+}

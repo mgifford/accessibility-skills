@@ -1,0 +1,111 @@
+{
+  "skill_name": "color-contrast",
+  "skill_file": "skills/color-contrast/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write CSS theme tokens that meet text contrast requirements in light and dark modes.",
+      "expected_output": "Defines color tokens with sufficient contrast and uses them through var() in both modes.",
+      "expectations": [
+        "Normal text contrast is handled through theme tokens",
+        "Light and dark values are both present",
+        "Component styles reference vars instead of raw colors",
+        "The theme is designed for both modes"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "--color-text",
+        "prefers-color-scheme: dark",
+        "var(--"
+      ],
+      "must_not_contain": [
+        "color: #aaa",
+        "placeholder"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write CSS for a checkbox or button border that meets non-text contrast requirements.",
+      "expected_output": "Uses a border or other visible boundary that reaches 3:1 contrast instead of relying on a faint shadow.",
+      "expectations": [
+        "The boundary is visible at 3:1 contrast",
+        "The control does not rely only on shadow",
+        "The control boundary is perceivable in both themes",
+        "The interactive element remains understandable"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "border",
+        "3:1",
+        "currentColor"
+      ],
+      "must_not_contain": [
+        "box-shadow",
+        "opacity: 0.4"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write focus styles that remain visible in light, dark, and forced-colors modes.",
+      "expected_output": "Uses :focus-visible with an outline-based focus ring and a forced-colors override.",
+      "expectations": [
+        "Keyboard focus is clearly visible",
+        "The style uses :focus-visible",
+        "Forced-colors mode has an explicit fallback",
+        "Focus styling does not disappear on dark surfaces"
+      ],
+      "files": [],
+      "must_contain_any": [
+        ":focus-visible",
+        "forced-colors: active",
+        "outline"
+      ],
+      "must_not_contain": [
+        "outline: none",
+        "box-shadow"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Refactor a status indicator so it does not depend on color alone.",
+      "expected_output": "Adds text, icons, or labels alongside color changes so the meaning is clear without color.",
+      "expectations": [
+        "Color is not the only cue",
+        "Text or icon supports the status meaning",
+        "The state remains understandable to color-blind users",
+        "The status indicator is not purely visual color encoding"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-invalid",
+        "icon",
+        "required"
+      ],
+      "must_not_contain": [
+        "color only",
+        "red border only"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write CSS for links and UI components so contrast is preserved in both themes.",
+      "expected_output": "Uses a consistent token system and preserves enough contrast for text, icons, and focus indicators.",
+      "expectations": [
+        "Links have sufficient contrast in both modes",
+        "Icons and UI controls also meet contrast requirements",
+        "Theme switching does not break contrast",
+        "Contrast is handled through reusable tokens"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "contrast",
+        "prefers-color-scheme",
+        "focus ring"
+      ],
+      "must_not_contain": [
+        "hardcode",
+        "low contrast"
+      ]
+    }
+  ]
+}

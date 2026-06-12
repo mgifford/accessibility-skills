@@ -1,0 +1,111 @@
+{
+  "skill_name": "maps",
+  "skill_file": "skills/maps/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write alt text for a static campus map image.",
+      "expected_output": "Describes the map's purpose and key locations in concise alt text rather than visual appearance.",
+      "expectations": [
+        "The map has a text alternative",
+        "The alt text describes purpose and key locations",
+        "The alt text is not just visual appearance",
+        "The information is available without the image"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "alt=\"Campus map",
+        "main entrance",
+        "library"
+      ],
+      "must_not_contain": [
+        "alt=\"image",
+        "alt=\"map\""
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Build an interactive map embed that users can skip and identify by title.",
+      "expected_output": "Provides a skip link before the map and a descriptive title on the iframe or map container.",
+      "expectations": [
+        "The interactive map can be skipped",
+        "The map is labelled descriptively",
+        "The map is identifiable to screen reader users",
+        "The skip target contains structured location details"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "Skip map",
+        "title=\"Interactive map",
+        "map-skip-target"
+      ],
+      "must_not_contain": [
+        "role=\"application\"",
+        "no title"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write keyboard controls for map zoom and pan.",
+      "expected_output": "Includes arrow keys for pan, plus and minus buttons for zoom, and Escape for closing popups.",
+      "expectations": [
+        "The map is keyboard operable",
+        "Zoom controls are exposed as buttons",
+        "Pan controls are available via arrow keys",
+        "Popups can be closed with Escape"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "Zoom in",
+        "Zoom out",
+        "Escape"
+      ],
+      "must_not_contain": [
+        "mouse only",
+        "role=\"application\""
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Create a structured text alternative for a map with listed locations.",
+      "expected_output": "Uses an adjacent accessible table or list so the essential location information is available independently of the map.",
+      "expectations": [
+        "The map has a structured text alternative",
+        "The locations are readable without the visual map",
+        "The alternative is adjacent and accessible",
+        "The information is not map-only"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<table",
+        "<ul",
+        "Accessible library branches"
+      ],
+      "must_not_contain": [
+        "map only",
+        "visual only"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write CSS for route legends and map markers so colour is not the only cue.",
+      "expected_output": "Adds text labels, patterns, or icons alongside colour-coded routes and markers.",
+      "expectations": [
+        "Colour is paired with another cue",
+        "The legend has text labels",
+        "The map remains understandable in forced colours",
+        "The marker or route meaning is not colour-only"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "legend",
+        "text labels",
+        "forced-colors"
+      ],
+      "must_not_contain": [
+        "colour only",
+        "color only"
+      ]
+    }
+  ]
+}

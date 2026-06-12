@@ -1,0 +1,109 @@
+{
+  "skill_name": "keyboard",
+  "skill_file": "skills/keyboard/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write markup for a save action and a text link to an About page.",
+      "expected_output": "Uses a native button for the action and a native anchor for navigation, instead of non-interactive elements with click handlers.",
+      "expectations": [
+        "Actions use a <button> element",
+        "Navigation uses an <a> element",
+        "No non-interactive element is used as a button",
+        "The solution does not require custom keyboard event handlers for native controls"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<button",
+        "<a href=",
+        "type=\"button\""
+      ],
+      "must_not_contain": [
+        "role=\"button\"",
+        "tabindex=\"0\"",
+        "onclick="
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Refactor a custom control so it is reachable and operable with Tab, Enter, and Space.",
+      "expected_output": "Uses a native interactive element where possible; otherwise includes role, tabindex=\"0\", and keyboard handling for both Enter and Space.",
+      "expectations": [
+        "The control is keyboard reachable",
+        "Enter and Space both activate the custom control if it is not native",
+        "The element is not left mouse-only",
+        "The implementation uses the smallest possible amount of ARIA and scripting"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "Enter",
+        "Space",
+        "tabindex=\"0\""
+      ],
+      "must_not_contain": [
+        "mouse only",
+        "click only"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write CSS for focus styles on links and buttons in a dark and light theme.",
+      "expected_output": "Uses :focus-visible with a persistent visible ring and does not remove outlines without replacement.",
+      "expectations": [
+        "The focus style uses :focus-visible",
+        "The focus ring remains visible against both light and dark backgrounds",
+        "Outline is not removed without a replacement",
+        "The indicator is clearly visible on keyboard focus"
+      ],
+      "files": [],
+      "must_contain_any": [
+        ":focus-visible",
+        "outline",
+        "focus ring"
+      ],
+      "must_not_contain": [
+        "outline: none"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Build a dialog that traps focus correctly and closes with Escape.",
+      "expected_output": "Uses native dialog semantics or a proper trap, returns focus to the trigger on close, and includes an Escape handler.",
+      "expectations": [
+        "The dialog can be closed with Escape",
+        "Focus returns to the trigger after closing",
+        "Focus does not escape the dialog while open",
+        "The background is made inert or otherwise removed from the tab order"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "Escape",
+        "focus",
+        "inert"
+      ],
+      "must_not_contain": [
+        "keyboard trap"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write a tab component where only the active tab is in the tab order and arrow keys move between tabs.",
+      "expected_output": "Uses roving tabindex for the tab list, with arrow keys to move between tabs and Enter or Space to activate the selected tab.",
+      "expectations": [
+        "The tablist uses roving tabindex",
+        "Arrow keys move between tabs",
+        "Enter or Space activates the current tab",
+        "Inactive tabs are not all tabbable at once"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "tabindex=\"0\"",
+        "tabindex=\"-1\"",
+        "Arrow"
+      ],
+      "must_not_contain": [
+        "positive tabindex"
+      ]
+    }
+  ]
+}

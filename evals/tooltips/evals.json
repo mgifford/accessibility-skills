@@ -1,0 +1,112 @@
+{
+  "skill_name": "tooltips",
+  "skill_file": "skills/tooltips/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write accessible markup for a Save button that shows a tooltip on hover and focus.",
+      "expected_output": "Uses a button with aria-describedby pointing to a role=\"tooltip\" element that is hidden by default and shown on both hover and focus.",
+      "expectations": [
+        "The trigger is keyboard accessible",
+        "The tooltip appears on focus as well as hover",
+        "The trigger references the tooltip with aria-describedby",
+        "The tooltip has role=\"tooltip\""
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-describedby",
+        "role=\"tooltip\"",
+        "hidden"
+      ],
+      "must_not_contain": [
+        "aria-labelledby",
+        "tabindex=\"0\"",
+        "aria-hidden=\"true\""
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a tooltip that can be dismissed with Escape without moving focus.",
+      "expected_output": "Adds an Escape key handler that hides the tooltip while leaving focus on the trigger.",
+      "expectations": [
+        "Escape dismisses the tooltip",
+        "Dismissal does not move focus away from the trigger",
+        "The tooltip is not used as a keyboard trap",
+        "The tooltip remains supplementary, not interactive"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "Escape",
+        "hideTooltip",
+        "hidden"
+      ],
+      "must_not_contain": [
+        "preventDefault()",
+        "focus()"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a touch-friendly replacement for a hover-only tooltip on mobile.",
+      "expected_output": "Uses a toggletip pattern with a button, aria-expanded, and aria-controls so the information can be revealed on tap.",
+      "expectations": [
+        "Touch users have a visible alternative to hover",
+        "The trigger is a button",
+        "The button exposes its state with aria-expanded",
+        "The content is toggled rather than hover-only"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-expanded",
+        "aria-controls",
+        "button"
+      ],
+      "must_not_contain": [
+        "hover only",
+        "title=\""
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Write a tooltip for an icon-only delete button.",
+      "expected_output": "Gives the button an accessible name, keeps the SVG decorative, and uses the tooltip only for supplementary text.",
+      "expectations": [
+        "The icon button has a clear accessible name",
+        "The SVG is decorative and not announced",
+        "The tooltip does not replace the accessible name",
+        "The tooltip remains supplementary"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-label=\"Delete item\"",
+        "aria-describedby",
+        "aria-hidden=\"true\""
+      ],
+      "must_not_contain": [
+        "role=\"tooltip\" on the trigger",
+        "aria-labelledby"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write CSS for tooltip motion and contrast requirements.",
+      "expected_output": "Keeps tooltip text readable, provides sufficient background contrast, and gates motion with prefers-reduced-motion.",
+      "expectations": [
+        "Tooltip text contrast is strong enough for readability",
+        "Tooltip background contrasts with adjacent surfaces",
+        "Motion is reduced when the user requests it",
+        "The tooltip is not animated unconditionally"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "prefers-reduced-motion",
+        "transition",
+        "role=\"tooltip\""
+      ],
+      "must_not_contain": [
+        "animation: infinite",
+        "aria-hidden=\"true\""
+      ]
+    }
+  ]
+}

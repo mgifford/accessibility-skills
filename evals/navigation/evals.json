@@ -1,0 +1,106 @@
+{
+  "skill_name": "navigation",
+  "skill_file": "skills/navigation/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write the HTML for a page header with a skip link, a single main navigation region, and a current-page indicator on the Home link.",
+      "expected_output": "Uses a first-focusable skip link to #main, wraps primary navigation in <nav aria-label=\"Main\">, uses <main id=\"main\" tabindex=\"-1\">, and marks the current page with aria-current=\"page\".",
+      "expectations": [
+        "Skip link appears before the rest of the page content",
+        "Primary navigation uses a <nav> landmark with a unique aria-label",
+        "The main landmark can receive programmatic focus via tabindex=\"-1\"",
+        "The current page link is identified with aria-current=\"page\""
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<nav",
+        "aria-current=\"page\"",
+        "tabindex=\"-1\""
+      ],
+      "must_not_contain": [
+        "role=\"menu\"",
+        "role=\"menuitem\""
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Refactor a site menu that currently uses role=\"menu\" and role=\"menuitem\" into semantic navigation.",
+      "expected_output": "Uses a <nav> landmark with a list of links, avoids menu roles, and keeps standard Tab navigation.",
+      "expectations": [
+        "Uses native links inside a list",
+        "Does not use role=\"menu\" for site navigation",
+        "Does not use role=\"menuitem\" for ordinary navigation links",
+        "Preserves normal keyboard tab order"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<nav",
+        "<ul",
+        "<a"
+      ],
+      "must_not_contain": [
+        "role=\"menu\"",
+        "role=\"menuitem\""
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write breadcrumb markup for a product detail page.",
+      "expected_output": "Uses nav aria-label=\"Breadcrumb\", an ordered list, and aria-current=\"page\" on the final item.",
+      "expectations": [
+        "Breadcrumbs are wrapped in a labeled <nav> landmark",
+        "Breadcrumbs use an ordered list",
+        "The current page is marked with aria-current=\"page\"",
+        "The breadcrumb label is short and descriptive"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-label=\"Breadcrumb\"",
+        "<ol",
+        "aria-current=\"page\""
+      ],
+      "must_not_contain": [
+        "role=\"menu\""
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Build a disclosure-style dropdown navigation for a Services section.",
+      "expected_output": "Uses a button with aria-expanded and aria-controls, keeps the submenu hidden until expanded, and does not use role=\"menu\".",
+      "expectations": [
+        "Top-level navigation remains semantic links or a disclosure button",
+        "The toggle button exposes state with aria-expanded",
+        "The toggle button references the submenu with aria-controls",
+        "The submenu is hidden until the disclosure is opened"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-expanded",
+        "aria-controls",
+        "hidden"
+      ],
+      "must_not_contain": [
+        "role=\"menu\"",
+        "role=\"menuitem\""
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write secondary footer navigation for policy links.",
+      "expected_output": "Uses a unique aria-label such as \"Footer\", wraps links in <nav>, and keeps link text visible and descriptive.",
+      "expectations": [
+        "Secondary navigation has its own unique label",
+        "Links remain visible text rather than icon-only controls",
+        "The navigation is wrapped in a <nav> landmark",
+        "The label distinguishes the region from primary navigation"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<nav",
+        "aria-label=\"Footer\""
+      ],
+      "must_not_contain": []
+    }
+  ]
+}

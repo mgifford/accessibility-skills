@@ -1,0 +1,105 @@
+{
+  "skill_name": "forms",
+  "skill_file": "skills/forms/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write HTML for an email signup form with a visible label, required indicator, and submit button.",
+      "expected_output": "Uses a labeled email input with type=\"email\", marks the field required in text, and does not rely on placeholder text as the only label.",
+      "expectations": [
+        "The email field has a visible label",
+        "The email input uses type=\"email\"",
+        "Required status is communicated in text",
+        "Placeholder text is not the only label"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<label",
+        "type=\"email\"",
+        "required"
+      ],
+      "must_not_contain": [
+        "placeholder=",
+        "aria-required=\"true\""
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create accessible validation markup for a form field with an error message after a failed submit.",
+      "expected_output": "Marks the field aria-invalid=\"true\", ties the error message to the field with aria-describedby, and uses clear actionable error text.",
+      "expectations": [
+        "The invalid field is marked aria-invalid=\"true\"",
+        "The error message is referenced by aria-describedby",
+        "The error copy tells the user how to fix the problem",
+        "The error is not communicated by color alone"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-invalid=\"true\"",
+        "aria-describedby",
+        "role=\"alert\""
+      ],
+      "must_not_contain": [
+        "invalid input"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a radio button group for preferred contact method.",
+      "expected_output": "Uses a fieldset and legend for the group, with each radio control labelled and grouped semantically.",
+      "expectations": [
+        "Related radio controls are wrapped in a fieldset",
+        "The group has a legend",
+        "Each radio option has a label",
+        "The markup is understandable without CSS"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<fieldset",
+        "<legend",
+        "type=\"radio\""
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": 4,
+      "prompt": "Build a date of birth form that works well without a custom date picker.",
+      "expected_output": "Uses three separate labelled inputs for day, month, and year with sensible autocomplete hints, rather than a custom calendar widget.",
+      "expectations": [
+        "The date is split into day, month, and year inputs",
+        "Each input has its own label",
+        "The inputs use appropriate autocomplete values",
+        "The solution avoids a custom calendar widget"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "autocomplete=\"bday-day\"",
+        "autocomplete=\"bday-month\"",
+        "autocomplete=\"bday-year\""
+      ],
+      "must_not_contain": [
+        "type=\"date\""
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write markup for a quantity field where the user should enter a numeric code, not a spinner control.",
+      "expected_output": "Uses type=\"text\" with inputmode=\"numeric\" and a pattern, instead of type=\"number\".",
+      "expectations": [
+        "The input uses text rather than number",
+        "The numeric keyboard hint is provided with inputmode=\"numeric\"",
+        "A pattern is supplied for numeric entry",
+        "The solution avoids unwanted spinner behaviour"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "inputmode=\"numeric\"",
+        "pattern=",
+        "type=\"text\""
+      ],
+      "must_not_contain": [
+        "type=\"number\""
+      ]
+    }
+  ]
+}

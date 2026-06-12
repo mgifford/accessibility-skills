@@ -1,0 +1,113 @@
+{
+  "skill_name": "light-dark-mode",
+  "skill_file": "skills/light-dark-mode/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write the base CSS theme tokens for a site that supports both light and dark mode.",
+      "expected_output": "Uses CSS custom properties on :root and overrides them in a prefers-color-scheme: dark block, without hardcoding colours in component styles.",
+      "expectations": [
+        "Theme tokens are defined as CSS custom properties",
+        "Light defaults live on :root",
+        "Dark values are set in a prefers-color-scheme: dark block",
+        "Component styles reference tokens instead of raw colours"
+      ],
+      "files": [],
+      "must_contain_any": [
+        ":root",
+        "prefers-color-scheme: dark",
+        "--color-text"
+      ],
+      "must_not_contain": [
+        "user-scalable=no",
+        "#ffffff",
+        "rgb("
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Add a theme toggle button that remembers the user's choice and updates its label correctly.",
+      "expected_output": "Uses localStorage safely with try/catch, defaults from prefers-color-scheme, and updates the toggle label to describe the action.",
+      "expectations": [
+        "The user's choice is persisted when storage is available",
+        "Storage access is wrapped in try/catch",
+        "The toggle label describes the action, not the current state",
+        "The initial theme follows the OS preference when no override exists"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "localStorage",
+        "try",
+        "Switch to dark mode"
+      ],
+      "must_not_contain": [
+        "hardcoded colours",
+        "user preference ignored"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write CSS for buttons and cards that remains understandable in forced-colors mode.",
+      "expected_output": "Uses borders and outline for meaning, and restores key styling with system colours inside a forced-colors: active block.",
+      "expectations": [
+        "Meaning does not rely on box-shadow alone",
+        "Focus indicators use outline",
+        "Forced-colors mode has explicit overrides",
+        "System colour keywords are used in forced-colors mode"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "forced-colors: active",
+        "CanvasText",
+        "outline"
+      ],
+      "must_not_contain": [
+        "box-shadow",
+        "opacity: 0.4"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Refactor component colour styles so they are theme-aware instead of hardcoded.",
+      "expected_output": "Moves component colours to tokens and keeps the component styles limited to var() references.",
+      "expectations": [
+        "Components use var() tokens",
+        "The component styles do not define raw colour values",
+        "Theme values can be swapped without rewriting component CSS",
+        "The approach works in both light and dark modes"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "var(--",
+        "--color-",
+        "theme"
+      ],
+      "must_not_contain": [
+        "background: #",
+        "color: #",
+        "rgb("
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write CSS that respects a user's dark mode preference and updates when the preference changes.",
+      "expected_output": "Uses prefers-color-scheme for the default and a data-theme override or equivalent for manual switching.",
+      "expectations": [
+        "The OS preference is used as the starting point",
+        "Manual switching can override the OS default",
+        "The implementation responds when the OS preference changes",
+        "Theme switching does not require page reloads"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "prefers-color-scheme",
+        "data-theme",
+        "color-scheme"
+      ],
+      "must_not_contain": [
+        "hardcoded values",
+        "inline styles only"
+      ]
+    }
+  ]
+}

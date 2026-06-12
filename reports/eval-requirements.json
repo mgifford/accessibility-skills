@@ -1,0 +1,830 @@
+{
+  "generatedAt": "2026-06-12",
+  "source": "eval manifests in evals/*/evals.json",
+  "skills": [
+    {
+      "skill": "aria-live-regions",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["role=\"status\"", "aria-live=\"polite\"", "announce"],
+          "mustNotContain": ["role=\"alert\"", "aria-live=\"assertive\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["aria-atomic=\"true\"", "results found", "search-status"],
+          "mustNotContain": ["aria-hidden=\"true\"", "display:none"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["role=\"alert\"", "aria-live=\"assertive\"", "session warning"],
+          "mustNotContain": ["aria-live=\"polite\""]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["aria-atomic=\"false\"", "aria-live=\"polite\"", "chat-log"],
+          "mustNotContain": ["aria-atomic=\"true\""]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["visually-hidden", "clip:", "overflow: hidden"],
+          "mustNotContain": ["display:none", "aria-hidden=\"true\""]
+        }
+      ]
+    },
+    {
+      "skill": "color-contrast",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["--color-text", "prefers-color-scheme: dark", "var(--"],
+          "mustNotContain": ["color: #aaa", "placeholder"]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["border", "3:1", "currentColor"],
+          "mustNotContain": ["box-shadow", "opacity: 0.4"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": [":focus-visible", "forced-colors: active", "outline"],
+          "mustNotContain": ["outline: none", "box-shadow"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["aria-invalid", "icon", "required"],
+          "mustNotContain": ["color only", "red border only"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["contrast", "prefers-color-scheme", "focus ring"],
+          "mustNotContain": ["hardcode", "low contrast"]
+        }
+      ]
+    },
+    {
+      "skill": "forms",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<label", "type=\"email\"", "required"],
+          "mustNotContain": ["placeholder=", "aria-required=\"true\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["aria-invalid=\"true\"", "aria-describedby", "role=\"alert\""],
+          "mustNotContain": ["invalid input"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["<fieldset", "<legend", "type=\"radio\""],
+          "mustNotContain": []
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["autocomplete=\"bday-day\"", "autocomplete=\"bday-month\"", "autocomplete=\"bday-year\""],
+          "mustNotContain": ["type=\"date\""]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["inputmode=\"numeric\"", "pattern=", "type=\"text\""],
+          "mustNotContain": ["type=\"number\""]
+        }
+      ]
+    },
+    {
+      "skill": "image-alt-text",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["alt=\"\"", "decorative"],
+          "mustNotContain": ["alt=\"decorative\"", "alt=\"spacer\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["Go to homepage", "Search", "alt=\""],
+          "mustNotContain": ["image of", "photo of"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["figcaption", "aria-describedby", "Bar chart"],
+          "mustNotContain": ["blue and green", "image of the chart"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["50% off", "Summer Sale", "alt=\""],
+          "mustNotContain": ["sale banner showing", "image of text"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["Rating:", "out of 5 stars", "alt=\"\""],
+          "mustNotContain": ["alt=\"star\"", "alt=\"image\""]
+        }
+      ]
+    },
+    {
+      "skill": "keyboard",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<button", "<a href=", "type=\"button\""],
+          "mustNotContain": ["role=\"button\"", "tabindex=\"0\"", "onclick="]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["Enter", "Space", "tabindex=\"0\""],
+          "mustNotContain": ["mouse only", "click only"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": [":focus-visible", "outline", "focus ring"],
+          "mustNotContain": ["outline: none"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["Escape", "focus", "inert"],
+          "mustNotContain": ["keyboard trap"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["tabindex=\"0\"", "tabindex=\"-1\"", "Arrow"],
+          "mustNotContain": ["positive tabindex"]
+        }
+      ]
+    },
+    {
+      "skill": "light-dark-mode",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": [":root", "prefers-color-scheme: dark", "--color-text"],
+          "mustNotContain": ["user-scalable=no", "#ffffff", "rgb("]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["localStorage", "try", "Switch to dark mode"],
+          "mustNotContain": ["hardcoded colours", "user preference ignored"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["forced-colors: active", "CanvasText", "outline"],
+          "mustNotContain": ["box-shadow", "opacity: 0.4"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["var(--", "--color-", "theme"],
+          "mustNotContain": ["background: #", "color: #", "rgb("]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["prefers-color-scheme", "data-theme", "color-scheme"],
+          "mustNotContain": ["hardcoded values", "inline styles only"]
+        }
+      ]
+    },
+    {
+      "skill": "maps",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["alt=\"Campus map", "main entrance", "library"],
+          "mustNotContain": ["alt=\"image", "alt=\"map\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["Skip map", "title=\"Interactive map", "map-skip-target"],
+          "mustNotContain": ["role=\"application\"", "no title"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["Zoom in", "Zoom out", "Escape"],
+          "mustNotContain": ["mouse only", "role=\"application\""]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["<table", "<ul", "Accessible library branches"],
+          "mustNotContain": ["map only", "visual only"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["legend", "text labels", "forced-colors"],
+          "mustNotContain": ["colour only", "color only"]
+        }
+      ]
+    },
+    {
+      "skill": "navigation",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<nav", "aria-current=\"page\"", "tabindex=\"-1\""],
+          "mustNotContain": []
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["<nav", "<ul", "<a"],
+          "mustNotContain": []
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["aria-label=\"Breadcrumb\"", "<ol", "aria-current=\"page\""],
+          "mustNotContain": []
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["aria-expanded", "aria-controls", "hidden"],
+          "mustNotContain": []
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["<nav", "aria-label=\"Footer\""],
+          "mustNotContain": []
+        }
+      ]
+    },
+    {
+      "skill": "progressive-enhancement",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<form", "action=", "method=\"get\""],
+          "mustNotContain": ["must use JavaScript", "JS required"]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["<nav", "<a href=", "JavaScript"],
+          "mustNotContain": ["rendered only in JS", "spa only"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["'fetch' in window", "querySelector", "feature detection"],
+          "mustNotContain": ["userAgent", "browser detection"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["serviceWorker", "register", "catch"],
+          "mustNotContain": ["break the page", "must install"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["semantic HTML", "prefers-reduced-motion", "forced-colors"],
+          "mustNotContain": ["display:none", "core content inaccessible"]
+        }
+      ]
+    },
+    {
+      "skill": "svg",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["aria-hidden=\"true\"", "focusable=\"false\""],
+          "mustNotContain": ["<title>", "<desc>", "role=\"img\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["role=\"img\"", "aria-labelledby", "<title"],
+          "mustNotContain": ["aria-hidden=\"true\"", "<text"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["<desc>", "aria-labelledby", "role=\"img\""],
+          "mustNotContain": ["aria-describedby", "<text"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["prefers-reduced-motion", "animation", "static"],
+          "mustNotContain": ["infinite", "begin=\"indefinite\""]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["<img", "role=\"img\"", "alt=\""],
+          "mustNotContain": ["aria-hidden=\"true\"", "role=\"presentation\""]
+        }
+      ]
+    },
+    {
+      "skill": "tables",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<caption>", "scope=\"col\"", "scope=\"row\""],
+          "mustNotContain": ["summary=", "role=\"presentation\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["scope=\"colgroup\"", "colspan=", "<thead>"],
+          "mustNotContain": ["summary=", "role=\"presentation\""]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["headers=", "id=", "<caption>"],
+          "mustNotContain": ["summary=", "role=\"presentation\""]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["grid", "flex", "<section"],
+          "mustNotContain": ["<table", "role=\"presentation\""]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["<caption>", "<thead>", "<tbody>"],
+          "mustNotContain": ["summary=", "<table border="]
+        }
+      ]
+    },
+    {
+      "skill": "tooltips",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["aria-describedby", "role=\"tooltip\"", "hidden"],
+          "mustNotContain": ["aria-labelledby", "tabindex=\"0\"", "aria-hidden=\"true\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["Escape", "hideTooltip", "hidden"],
+          "mustNotContain": ["preventDefault()", "focus()"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["aria-expanded", "aria-controls", "button"],
+          "mustNotContain": ["hover only", "title="]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["aria-label=\"Delete item\"", "aria-describedby", "aria-hidden=\"true\""],
+          "mustNotContain": ["role=\"tooltip\" on the trigger", "aria-labelledby"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["prefers-reduced-motion", "transition", "role=\"tooltip\""],
+          "mustNotContain": ["animation: infinite", "aria-hidden=\"true\""]
+        }
+      ]
+    },
+    {
+      "skill": "touch-pointer",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<meta name=\"viewport\"", "width=device-width", "initial-scale=1"],
+          "mustNotContain": ["user-scalable=no", "maximum-scale=1"]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["Zoom in", "Zoom out", "aria-label=\"Zoom in\""],
+          "mustNotContain": ["pinch only", "two-finger"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["Move", "up", "down"],
+          "mustNotContain": ["drag only", "swipe only"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["44px", "min-width", "min-height"],
+          "mustNotContain": ["16px only", "touch target under 24x24"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["click", "mouseup", "touchend"],
+          "mustNotContain": ["mousedown", "touchstart"]
+        }
+      ]
+    }
+  ]
+}{
+  "generatedAt": "2026-06-12",
+  "source": "evals/*/evals.json",
+  "skills": [
+    {
+      "skill": "aria-live-regions",
+      "response": "responses/aria-live-regions/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["role=\"status\"", "aria-live=\"polite\"", "announce"],
+          "mustNotContain": ["role=\"alert\"", "aria-live=\"assertive\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["aria-atomic=\"true\"", "results found", "search-status"],
+          "mustNotContain": ["aria-hidden=\"true\"", "display:none"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["role=\"alert\"", "aria-live=\"assertive\"", "session warning"],
+          "mustNotContain": ["aria-live=\"polite\""]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["aria-atomic=\"false\"", "aria-live=\"polite\"", "chat-log"],
+          "mustNotContain": ["aria-atomic=\"true\""]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["visually-hidden", "clip:", "overflow: hidden"],
+          "mustNotContain": ["display:none", "aria-hidden=\"true\""]
+        }
+      ]
+    },
+    {
+      "skill": "color-contrast",
+      "response": "responses/color-contrast/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["--color-text", "prefers-color-scheme: dark", "var(--"],
+          "mustNotContain": ["color: #aaa", "placeholder"]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["border", "3:1", "currentColor"],
+          "mustNotContain": ["box-shadow", "opacity: 0.4"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": [":focus-visible", "forced-colors: active", "outline"],
+          "mustNotContain": ["outline: none", "box-shadow"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["aria-invalid", "icon", "required"],
+          "mustNotContain": ["color only", "red border only"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["contrast", "prefers-color-scheme", "focus ring"],
+          "mustNotContain": ["hardcode", "low contrast"]
+        }
+      ]
+    },
+    {
+      "skill": "forms",
+      "response": "responses/forms/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<label", "type=\"email\"", "required"],
+          "mustNotContain": ["placeholder=", "aria-required=\"true\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["aria-invalid=\"true\"", "aria-describedby", "role=\"alert\""],
+          "mustNotContain": ["invalid input"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["<fieldset", "<legend", "type=\"radio\""],
+          "mustNotContain": []
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["autocomplete=\"bday-day\"", "autocomplete=\"bday-month\"", "autocomplete=\"bday-year\""],
+          "mustNotContain": ["type=\"date\""]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["inputmode=\"numeric\"", "pattern=", "type=\"text\""],
+          "mustNotContain": ["type=\"number\""]
+        }
+      ]
+    },
+    {
+      "skill": "image-alt-text",
+      "response": "responses/image-alt-text/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["alt=\"\"", "decorative"],
+          "mustNotContain": ["alt=\"decorative\"", "alt=\"spacer\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["Go to homepage", "Search", "alt=\""],
+          "mustNotContain": ["image of", "photo of"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["figcaption", "aria-describedby", "Bar chart"],
+          "mustNotContain": ["blue and green", "image of the chart"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["50% off", "Summer Sale", "alt=\""],
+          "mustNotContain": ["sale banner showing", "image of text"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["Rating:", "out of 5 stars", "alt=\"\""],
+          "mustNotContain": ["alt=\"star\"", "alt=\"image\""]
+        }
+      ]
+    },
+    {
+      "skill": "keyboard",
+      "response": "responses/keyboard/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<button", "<a href=", "type=\"button\""],
+          "mustNotContain": ["role=\"button\"", "tabindex=\"0\"", "onclick="]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["Enter", "Space", "tabindex=\"0\""],
+          "mustNotContain": ["mouse only", "click only"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": [":focus-visible", "outline", "focus ring"],
+          "mustNotContain": ["outline: none"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["Escape", "focus", "inert"],
+          "mustNotContain": ["keyboard trap"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["tabindex=\"0\"", "tabindex=\"-1\"", "Arrow"],
+          "mustNotContain": ["positive tabindex"]
+        }
+      ]
+    },
+    {
+      "skill": "light-dark-mode",
+      "response": "responses/light-dark-mode/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": [":root", "prefers-color-scheme: dark", "--color-text"],
+          "mustNotContain": ["user-scalable=no", "#ffffff", "rgb("]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["localStorage", "try", "Switch to dark mode"],
+          "mustNotContain": ["hardcoded colours", "user preference ignored"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["forced-colors: active", "CanvasText", "outline"],
+          "mustNotContain": ["box-shadow", "opacity: 0.4"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["var(--", "--color-", "theme"],
+          "mustNotContain": ["background: #", "color: #", "rgb("]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["prefers-color-scheme", "data-theme", "color-scheme"],
+          "mustNotContain": ["hardcoded values", "inline styles only"]
+        }
+      ]
+    },
+    {
+      "skill": "maps",
+      "response": "responses/maps/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["alt=\"Campus map", "main entrance", "library"],
+          "mustNotContain": ["alt=\"image", "alt=\"map\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["Skip map", "title=\"Interactive map", "map-skip-target"],
+          "mustNotContain": ["role=\"application\"", "no title"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["Zoom in", "Zoom out", "Escape"],
+          "mustNotContain": ["mouse only", "role=\"application\""]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["<table", "<ul", "Accessible library branches"],
+          "mustNotContain": ["map only", "visual only"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["legend", "text labels", "forced-colors"],
+          "mustNotContain": ["colour only", "color only"]
+        }
+      ]
+    },
+    {
+      "skill": "navigation",
+      "response": "responses/navigation/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<nav", "aria-current=\"page\"", "tabindex=\"-1\""],
+          "mustNotContain": []
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["<nav", "<ul", "<a"],
+          "mustNotContain": []
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["aria-label=\"Breadcrumb\"", "<ol", "aria-current=\"page\""],
+          "mustNotContain": []
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["aria-expanded", "aria-controls", "hidden"],
+          "mustNotContain": []
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["<nav", "aria-label=\"Footer\""],
+          "mustNotContain": []
+        }
+      ]
+    },
+    {
+      "skill": "progressive-enhancement",
+      "response": "responses/progressive-enhancement/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<form", "action=", "method=\"get\""],
+          "mustNotContain": ["must use JavaScript", "JS required"]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["<nav", "<a href=", "JavaScript"],
+          "mustNotContain": ["rendered only in JS", "spa only"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["'fetch' in window", "querySelector", "feature detection"],
+          "mustNotContain": ["userAgent", "browser detection"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["serviceWorker", "register", "catch"],
+          "mustNotContain": ["break the page", "must install"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["semantic HTML", "prefers-reduced-motion", "forced-colors"],
+          "mustNotContain": ["display:none", "core content inaccessible"]
+        }
+      ]
+    },
+    {
+      "skill": "svg",
+      "response": "responses/svg/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["aria-hidden=\"true\"", "focusable=\"false\""],
+          "mustNotContain": ["<title>", "<desc>", "role=\"img\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["role=\"img\"", "aria-labelledby", "<title"],
+          "mustNotContain": ["aria-hidden=\"true\"", "<text"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["<desc>", "aria-labelledby", "role=\"img\""],
+          "mustNotContain": ["aria-describedby", "<text"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["prefers-reduced-motion", "animation", "static"],
+          "mustNotContain": ["infinite", "begin=\"indefinite\""]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["<img", "role=\"img\"", "alt=\""],
+          "mustNotContain": ["aria-hidden=\"true\"", "role=\"presentation\""]
+        }
+      ]
+    },
+    {
+      "skill": "tables",
+      "response": "responses/tables/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<caption>", "scope=\"col\"", "scope=\"row\""],
+          "mustNotContain": ["summary=", "role=\"presentation\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["scope=\"colgroup\"", "colspan=", "<thead>"],
+          "mustNotContain": ["summary=", "role=\"presentation\""]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["headers=", "id=", "<caption>"],
+          "mustNotContain": ["summary=", "role=\"presentation\""]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["grid", "flex", "<section"],
+          "mustNotContain": ["<table", "role=\"presentation\""]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["<caption>", "<thead>", "<tbody>"],
+          "mustNotContain": ["summary=", "<table border="]
+        }
+      ]
+    },
+    {
+      "skill": "tooltips",
+      "response": "responses/tooltips/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["aria-describedby", "role=\"tooltip\"", "hidden"],
+          "mustNotContain": ["aria-labelledby", "tabindex=\"0\"", "aria-hidden=\"true\""]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["Escape", "hideTooltip", "hidden"],
+          "mustNotContain": ["preventDefault()", "focus()"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["aria-expanded", "aria-controls", "button"],
+          "mustNotContain": ["hover only", "title=\""]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["aria-label=\"Delete item\"", "aria-describedby", "aria-hidden=\"true\""],
+          "mustNotContain": ["role=\"tooltip\" on the trigger", "aria-labelledby"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["prefers-reduced-motion", "transition", "role=\"tooltip\""],
+          "mustNotContain": ["animation: infinite", "aria-hidden=\"true\""]
+        }
+      ]
+    },
+    {
+      "skill": "touch-pointer",
+      "response": "responses/touch-pointer/all.md",
+      "evalCount": 5,
+      "evals": [
+        {
+          "id": 1,
+          "mustContainAny": ["<meta name=\"viewport\"", "width=device-width", "initial-scale=1"],
+          "mustNotContain": ["user-scalable=no", "maximum-scale=1"]
+        },
+        {
+          "id": 2,
+          "mustContainAny": ["Zoom in", "Zoom out", "aria-label=\"Zoom in\""],
+          "mustNotContain": ["pinch only", "two-finger"]
+        },
+        {
+          "id": 3,
+          "mustContainAny": ["Move", "up", "down"],
+          "mustNotContain": ["drag only", "swipe only"]
+        },
+        {
+          "id": 4,
+          "mustContainAny": ["44px", "min-width", "min-height"],
+          "mustNotContain": ["16px only", "touch target under 24x24"]
+        },
+        {
+          "id": 5,
+          "mustContainAny": ["click", "mouseup", "touchend"],
+          "mustNotContain": ["mousedown", "touchstart"]
+        }
+      ]
+    }
+  ]
+}

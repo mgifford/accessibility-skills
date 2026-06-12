@@ -1,0 +1,110 @@
+{
+  "skill_name": "image-alt-text",
+  "skill_file": "skills/image-alt-text/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write markup for a decorative divider image.",
+      "expected_output": "Uses an empty alt attribute so the decorative image is ignored by assistive technology.",
+      "expectations": [
+        "The decorative image has empty alt text",
+        "The image is not announced to screen readers",
+        "The image does not carry meaning",
+        "The markup explicitly marks it decorative by omission from the accessibility tree"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "alt=\"\"",
+        "decorative"
+      ],
+      "must_not_contain": [
+        "alt=\"decorative\"",
+        "alt=\"spacer\""
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write alt text for a functional image used as the only content of a link.",
+      "expected_output": "Describes the destination or action rather than the visual content.",
+      "expectations": [
+        "The image alternative names the action or destination",
+        "The link remains understandable without the image",
+        "The alt text is not just a file description",
+        "The accessible name is specific enough for screen readers"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "Go to homepage",
+        "Search",
+        "alt=\""
+      ],
+      "must_not_contain": [
+        "image of",
+        "photo of"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write alt text and nearby description for a complex chart image.",
+      "expected_output": "Uses a short alt summary plus an adjacent long description for the detailed data.",
+      "expectations": [
+        "The chart has a concise alt summary",
+        "The chart also has a longer adjacent description",
+        "The description includes the key data points",
+        "The image is not left with summary-only text"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "figcaption",
+        "aria-describedby",
+        "Bar chart"
+      ],
+      "must_not_contain": [
+        "blue and green",
+        "image of the chart"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Write alt text for an image of text in a sale banner.",
+      "expected_output": "Repeats the exact visible text rather than describing the banner visually.",
+      "expectations": [
+        "The alt text matches the visible text",
+        "The text in the image is reproduced for AT users",
+        "The alt text does not describe the image as a banner",
+        "The message is conveyed without visual context"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "50% off",
+        "Summer Sale",
+        "alt=\""
+      ],
+      "must_not_contain": [
+        "sale banner showing",
+        "image of text"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write markup for a star rating made from several images.",
+      "expected_output": "Gives meaningful alt text to the first star and empty alt to the repeated decorative stars.",
+      "expectations": [
+        "The group has one meaningful alternative",
+        "Repeated stars are ignored by AT",
+        "The rating is understandable from the accessible text",
+        "The pattern avoids duplicate announcements"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "Rating:",
+        "out of 5 stars",
+        "alt=\"\""
+      ],
+      "must_not_contain": [
+        "alt=\"star\"",
+        "alt=\"image\""
+      ]
+    }
+  ]
+}

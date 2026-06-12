@@ -1,0 +1,111 @@
+{
+  "skill_name": "tables",
+  "skill_file": "skills/tables/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write HTML for a simple sales table by region and quarter.",
+      "expected_output": "Uses a caption, column headers with scope=\"col\", and row headers with scope=\"row\".",
+      "expectations": [
+        "The table has a caption",
+        "Column headers use scope=\"col\"",
+        "Row headers use scope=\"row\"",
+        "The table is understandable without relying on visual styling"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<caption>",
+        "scope=\"col\"",
+        "scope=\"row\""
+      ],
+      "must_not_contain": [
+        "summary=",
+        "role=\"presentation\""
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write HTML for a table with two levels of column headers for quarterly revenue.",
+      "expected_output": "Uses spanned headers with scope=\"colgroup\" and a second row of column headers.",
+      "expectations": [
+        "The table uses colgroup header cells for grouped columns",
+        "A second header row labels the individual quarters",
+        "The structure can be announced correctly by screen readers",
+        "The table remains simple enough to understand"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "scope=\"colgroup\"",
+        "colspan=",
+        "<thead>"
+      ],
+      "must_not_contain": [
+        "summary=",
+        "role=\"presentation\""
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a highly complex staff schedule table that needs explicit header associations.",
+      "expected_output": "Uses headers and id attributes to map data cells to the correct row and column headers.",
+      "expectations": [
+        "Header cells have stable id values",
+        "Data cells reference their headers with headers=",
+        "The association is explicit rather than inferred",
+        "The structure is only used when scope would be insufficient"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "headers=",
+        "id=",
+        "<caption>"
+      ],
+      "must_not_contain": [
+        "summary=",
+        "role=\"presentation\""
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Refactor a layout table used only for page positioning into accessible markup.",
+      "expected_output": "Replaces the layout table with semantic HTML and CSS layout, rather than keeping a presentational table.",
+      "expectations": [
+        "The solution does not use a table for layout",
+        "Semantics are preserved with non-table elements",
+        "The visual layout is handled by CSS",
+        "The markup remains meaningful when CSS is removed"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "grid",
+        "flex",
+        "<section"
+      ],
+      "must_not_contain": [
+        "<table",
+        "role=\"presentation\""
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write a budget table that will print across multiple pages and keep the headers visible.",
+      "expected_output": "Uses caption plus thead and tbody so the table is structurally clear and print-friendly.",
+      "expectations": [
+        "The table has a caption",
+        "The table includes a thead section",
+        "The table includes a tbody section",
+        "The structure supports repeated headers in print"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<caption>",
+        "<thead>",
+        "<tbody>"
+      ],
+      "must_not_contain": [
+        "summary=",
+        "<table border="
+      ]
+    }
+  ]
+}

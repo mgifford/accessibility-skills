@@ -24,5 +24,10 @@
   "author": "Mike Gifford",
   "files": [
     "skills/**"
-  ]
+  ],
+  "scripts": {
+    "validate:evals": "node scripts/validate-evals.mjs",
+    "run:evals": "node scripts/run-evals.mjs",
+    "report:evals": "node scripts/run-evals.mjs --output-dir reports"
+  }
 }

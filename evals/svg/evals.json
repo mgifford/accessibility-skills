@@ -1,0 +1,111 @@
+{
+  "skill_name": "svg",
+  "skill_file": "skills/svg/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write decorative SVG markup for an icon that is already labelled by adjacent text.",
+      "expected_output": "Uses aria-hidden=\"true\" and focusable=\"false\" without adding a title or desc.",
+      "expectations": [
+        "The SVG is hidden from assistive technology",
+        "The SVG is not focusable",
+        "The icon remains decorative only",
+        "No extra label is added to an already-labelled icon"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-hidden=\"true\"",
+        "focusable=\"false\""
+      ],
+      "must_not_contain": [
+        "<title>",
+        "<desc>",
+        "role=\"img\""
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write an inline SVG icon that needs a simple accessible name.",
+      "expected_output": "Uses role=\"img\" with a title and aria-labelledby tied to the title id.",
+      "expectations": [
+        "The SVG is exposed as an image",
+        "The icon has an accessible name",
+        "The accessible name comes from a title element",
+        "The title is associated by aria-labelledby"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "role=\"img\"",
+        "aria-labelledby",
+        "<title"
+      ],
+      "must_not_contain": [
+        "aria-hidden=\"true\"",
+        "<text"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write an inline SVG chart that needs a longer description than a title alone.",
+      "expected_output": "Uses role=\"img\" with both title and desc, and references them together with aria-labelledby.",
+      "expectations": [
+        "The SVG has both a title and a desc",
+        "The chart is labelled and described programmatically",
+        "The accessible description is more than a short label",
+        "The association is made with aria-labelledby"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<desc>",
+        "aria-labelledby",
+        "role=\"img\""
+      ],
+      "must_not_contain": [
+        "aria-describedby",
+        "<text"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Write CSS and SVG markup so an animated icon respects reduced motion preferences.",
+      "expected_output": "Wraps animation in prefers-reduced-motion and provides a static fallback state.",
+      "expectations": [
+        "Motion is gated by a reduced-motion preference check",
+        "The animation is not always running",
+        "A static fallback is provided",
+        "The SVG remains understandable without animation"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "prefers-reduced-motion",
+        "animation",
+        "static"
+      ],
+      "must_not_contain": [
+        "infinite",
+        "begin=\"indefinite\""
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write an external SVG image that should be announced as a meaningful graphic.",
+      "expected_output": "Uses an img with role=\"img\" and a usable alternative name, or an equivalent accessible labelling pattern.",
+      "expectations": [
+        "The graphic has an accessible name",
+        "The image is not left unlabeled",
+        "The SVG is treated as meaningful content",
+        "The pattern is one of the recommended exposed-image patterns"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<img",
+        "role=\"img\"",
+        "alt=\""
+      ],
+      "must_not_contain": [
+        "aria-hidden=\"true\"",
+        "role=\"presentation\""
+      ]
+    }
+  ]
+}

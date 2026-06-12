@@ -354,7 +354,7 @@ use it on elements that genuinely handle their own touch events.
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TOUCH_POINTER_ACCESSIBILITY_BEST_PRACTICES.md)
-* [Curated resources — touch and pointer](../resources/by-topic/touch-pointer.md)
+* [Curated resources — touch and pointer](../../resources/by-topic/touch-pointer.md)
 * [WCAG 2.2 Understanding 2.5 Input Modalities](https://www.w3.org/WAI/WCAG22/Understanding/input-modalities)
 * [WCAG 2.2 Understanding 2.5.8 Target Size Minimum](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html)
 * [WCAG 2.2 Understanding 2.5.7 Dragging Movements](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html)

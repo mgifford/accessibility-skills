@@ -1,0 +1,1263 @@
+{
+  "generatedAt": "2026-06-12T14:59:14.802Z",
+  "overall": {
+    "totalEvals": 13,
+    "failedEvals": 0,
+    "totalChecks": 128,
+    "passedChecks": 128,
+    "score": 100
+  },
+  "manifests": [
+    {
+      "manifest": "evals/aria-live-regions/evals.json",
+      "skill": "aria-live-regions",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/aria-live-regions/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"role=\\\"status\\\"\", \"aria-live=\\\"polite\\\"\", \"announce\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/aria-live-regions/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-atomic=\\\"true\\\"\", \"results found\", \"search-status\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/aria-live-regions/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"role=\\\"alert\\\"\", \"aria-live=\\\"assertive\\\"\", \"session warning\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/aria-live-regions/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-atomic=\\\"false\\\"\", \"aria-live=\\\"polite\\\"\", \"chat-log\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/aria-live-regions/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"visually-hidden\", \"clip:\", \"overflow: hidden\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/color-contrast/evals.json",
+      "skill": "color-contrast",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/color-contrast/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"--color-text\", \"prefers-color-scheme: dark\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/color-contrast/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"border\", \"currentColor\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/color-contrast/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \":focus-visible\", \"forced-colors: active\", \"outline\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/color-contrast/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-invalid\", \"required\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/color-contrast/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"contrast\", \"prefers-color-scheme\", \"focus ring\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/forms/evals.json",
+      "skill": "forms",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/forms/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<label\", \"type=\\\"email\\\"\", \"required\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/forms/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-invalid=\\\"true\\\"\", \"aria-describedby\", \"role=\\\"alert\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/forms/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<fieldset\", \"<legend\", \"type=\\\"radio\\\"\""
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/forms/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"autocomplete=\\\"bday-day\\\"\", \"autocomplete=\\\"bday-month\\\"\", \"autocomplete=\\\"bday-year\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/forms/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"inputmode=\\\"numeric\\\"\", \"pattern=\", \"type=\\\"text\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/image-alt-text/evals.json",
+      "skill": "image-alt-text",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/image-alt-text/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"alt=\\\"\\\"\", \"decorative\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/image-alt-text/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"Go to homepage\", \"Search\", \"alt=\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/image-alt-text/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"figcaption\", \"aria-describedby\", \"Bar chart\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/image-alt-text/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"50% off\", \"Summer Sale\", \"alt=\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/image-alt-text/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"Rating:\", \"out of 5 stars\", \"alt=\\\"\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/keyboard/evals.json",
+      "skill": "keyboard",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/keyboard/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<button\", \"<a href=\", \"type=\\\"button\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/keyboard/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"Enter\", \"Space\", \"tabindex=\\\"0\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/keyboard/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \":focus-visible\", \"outline\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/keyboard/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"Escape\", \"focus\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/keyboard/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"tabindex=\\\"0\\\"\", \"tabindex=\\\"-1\\\"\", \"Arrow\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/light-dark-mode/evals.json",
+      "skill": "light-dark-mode",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/light-dark-mode/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \":root\", \"prefers-color-scheme: dark\", \"--color-text\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/light-dark-mode/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"localStorage\", \"try\", \"Switch to dark mode\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/light-dark-mode/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"forced-colors: active\", \"CanvasText\", \"outline\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/light-dark-mode/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"var(--\", \"--color-\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/light-dark-mode/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"data-theme\", \"color-scheme\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/maps/evals.json",
+      "skill": "maps",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/maps/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"alt=\\\"Campus map\", \"main entrance\", \"library\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/maps/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"Skip map\", \"title=\\\"Interactive map\", \"map-skip-target\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/maps/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"Zoom in\", \"Zoom out\", \"Escape\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/maps/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<table\", \"<ul\", \"Accessible library branches\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/maps/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"text labels\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/navigation/evals.json",
+      "skill": "navigation",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/navigation/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<nav\", \"aria-current=\\\"page\\\"\", \"tabindex=\\\"-1\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/navigation/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<nav\", \"<ul\", \"<a\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/navigation/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-label=\\\"Breadcrumb\\\"\", \"<ol\", \"aria-current=\\\"page\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/navigation/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-expanded\", \"aria-controls\", \"hidden\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/navigation/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<nav\", \"aria-label=\\\"Footer\\\"\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/progressive-enhancement/evals.json",
+      "skill": "progressive-enhancement",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/progressive-enhancement/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<form\", \"action=\", \"method=\\\"get\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/progressive-enhancement/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<nav\", \"<a href=\", \"JavaScript\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/progressive-enhancement/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"'fetch' in window\", \"querySelector\", \"feature detection\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/progressive-enhancement/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"serviceWorker\", \"register\", \"catch\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/progressive-enhancement/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"prefers-reduced-motion\", \"forced-colors\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/svg/evals.json",
+      "skill": "svg",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/svg/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-hidden=\\\"true\\\"\", \"focusable=\\\"false\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/svg/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"role=\\\"img\\\"\", \"aria-labelledby\", \"<title\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/svg/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-labelledby\", \"role=\\\"img\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/svg/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"prefers-reduced-motion\", \"animation\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/svg/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<img\", \"role=\\\"img\\\"\", \"alt=\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/tables/evals.json",
+      "skill": "tables",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/tables/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<caption>\", \"scope=\\\"col\\\"\", \"scope=\\\"row\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/tables/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"scope=\\\"colgroup\\\"\", \"colspan=\", \"<thead>\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/tables/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"headers=\", \"id=\", \"<caption>\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/tables/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"grid\", \"<section\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/tables/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<caption>\", \"<thead>\", \"<tbody>\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/tooltips/evals.json",
+      "skill": "tooltips",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/tooltips/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-describedby\", \"role=\\\"tooltip\\\"\", \"hidden\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/tooltips/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"Escape\", \"hideTooltip\", \"hidden\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/tooltips/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-expanded\", \"aria-controls\", \"button\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/tooltips/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"aria-label=\\\"Delete item\\\"\", \"aria-describedby\", \"aria-hidden=\\\"true\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/tooltips/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"prefers-reduced-motion\", \"transition\", \"role=\\\"tooltip\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/touch-pointer/evals.json",
+      "skill": "touch-pointer",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/touch-pointer/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"<meta name=\\\"viewport\\\"\", \"width=device-width\", \"initial-scale=1\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/touch-pointer/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"Zoom in\", \"Zoom out\", \"aria-label=\\\"Zoom in\\\"\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/touch-pointer/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"Move\", \"up\", \"down\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "responsePath": "responses/touch-pointer/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"44px\", \"min-width\", \"min-height\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "responsePath": "responses/touch-pointer/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"click\", \"mouseup\", \"touchend\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

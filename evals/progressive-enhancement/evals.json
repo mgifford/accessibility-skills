@@ -1,0 +1,111 @@
+{
+  "skill_name": "progressive-enhancement",
+  "skill_file": "skills/progressive-enhancement/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a search form that works without JavaScript and can be enhanced later.",
+      "expected_output": "Uses a native form action and method so the search still submits when JavaScript is unavailable.",
+      "expectations": [
+        "The search form submits with native browser behaviour",
+        "JavaScript is optional, not required",
+        "The form has a server-side fallback",
+        "The core task is possible with JS disabled"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<form",
+        "action=",
+        "method=\"get\""
+      ],
+      "must_not_contain": [
+        "must use JavaScript",
+        "JS required"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Build navigation that works as plain HTML links and can be enhanced with dropdowns later.",
+      "expected_output": "Uses standard links inside a nav landmark, with enhancements layered on top rather than required for access.",
+      "expectations": [
+        "Navigation works without JavaScript",
+        "Plain links are present in the HTML",
+        "Dropdown behaviour is an enhancement only",
+        "The nav remains meaningful with scripts removed"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "<nav",
+        "<a href=",
+        "JavaScript"
+      ],
+      "must_not_contain": [
+        "rendered only in JS",
+        "spa only"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write feature-detection code that enhances the page only when the browser supports the needed API.",
+      "expected_output": "Uses feature detection instead of browser detection and fails gracefully if the API is unavailable.",
+      "expectations": [
+        "The code checks for capability before enhancing",
+        "The fallback path still works",
+        "No browser sniffing is used",
+        "The enhancement is optional"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "'fetch' in window",
+        "querySelector",
+        "feature detection"
+      ],
+      "must_not_contain": [
+        "userAgent",
+        "browser detection"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Add a service worker registration snippet that does not break the page if registration fails.",
+      "expected_output": "Registers the service worker only when supported and catches registration failures without blocking the page.",
+      "expectations": [
+        "Service worker support is checked first",
+        "Registration failure is handled safely",
+        "The page still works when the worker is unavailable",
+        "The code uses graceful fallback behaviour"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "serviceWorker",
+        "register",
+        "catch"
+      ],
+      "must_not_contain": [
+        "break the page",
+        "must install"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write CSS and HTML so a page remains usable when stylesheets fail to load.",
+      "expected_output": "Keeps the semantic HTML readable and respects user preferences like reduced motion and forced-colors as enhancements only.",
+      "expectations": [
+        "The HTML is understandable without CSS",
+        "The core content is present before enhancements",
+        "User preferences are respected in CSS",
+        "The page does not depend on CSS for access to core content"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "semantic HTML",
+        "prefers-reduced-motion",
+        "forced-colors"
+      ],
+      "must_not_contain": [
+        "display:none",
+        "core content inaccessible"
+      ]
+    }
+  ]
+}

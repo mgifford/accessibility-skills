@@ -138,6 +138,20 @@ Each skill directory contains a `SYNC.md` recording:
 If the current SHA differs from `last_synced_commit`, it posts a diff comment on the PR
 or opens/updates an issue on push to `main`.
 
+## Evaluation Manifests
+
+This repository also keeps repo-local eval manifests in `evals/`.
+They are intentionally separate from `skills/` so they are not bundled into the
+published skill archives.
+
+Each manifest points to the skill file it evaluates and can include prompt,
+expected output, and rule-based expectations. Start with a small pilot set, run
+`npm run validate:evals`, and expand once the schema and review process are stable.
+
+To score model output, place response files under `responses/<skill-name>/` and
+run `npm run run:evals`. The runner looks for `<id>.txt` or `<id>.md` for each
+eval case and reports which checks passed.
+
 ## Design Principle
 
 > Skills are distillations, not mirrors.
@@ -162,7 +176,6 @@ This keeps skills compact and fast for agents to load.
 - [A11y Spec-First Coding](https://github.com/LaurenceRLewis/a11y-spec-first-skill)
 - [ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md) - Paired version of this one.
 - [A11y.md](https://github.com/fecarrico/A11Y.md)
--[iOS Agent Skill]( https://github.com/dadede)
 - [Accessibility Agents](https://github.com/Community-Access/accessibility-agents)
 
 ## Trusted Sources

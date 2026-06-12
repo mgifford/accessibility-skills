@@ -316,7 +316,6 @@ extends well beyond it into security, privacy, e-commerce, and performance.
 
 * [Opquast Digital Quality Checklist](https://checklists.opquast.com/en/digital-quality/) — CC-BY-SA 4.0; rule text may be cited with attribution
 * [opquast.com](https://www.opquast.com/) — authoritative source, training, certification
-* [Curated resources — Opquast digital quality](../resources/by-topic/opquast-digital-quality.md)
 * [TRUSTED_SOURCES.yaml](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TRUSTED_SOURCES.yaml) — `id: opquast`, `id: opquast-checklist`
 * [SUSTAINABILITY.md](https://github.com/mgifford/SUSTAINABILITY.md) — Server/Performance rules align with WSG
 

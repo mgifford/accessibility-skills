@@ -368,7 +368,6 @@ from data (e.g., DataTables.js, AG Grid), verify the library outputs `<th scope=
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TABLES_ACCESSIBILITY_BEST_PRACTICES.md)
-* [Curated resources — tables](../resources/by-topic/tables.md)
 * [WAI Tables Tutorial](https://www.w3.org/WAI/tutorials/tables/) — authoritative; covers one-header through multi-level
 * [WebAIM: Creating Accessible Tables](https://webaim.org/techniques/tables/data) — scope vs headers/id guidance
 * [MDN: HTML table accessibility](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Table_accessibility)

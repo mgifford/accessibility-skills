@@ -325,7 +325,7 @@ Run these checks before publishing:
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/PLAIN_LANGUAGE_ACCESSIBILITY_BEST_PRACTICES.md)
-* [Curated resources — plain language](../resources/by-topic/plain-language.md)
+* [Curated resources — plain language](../../resources/by-topic/plain-language.md)
 * [Plain Language Guidelines — digital.gov](https://digital.gov/guides/plain-language/)
 * [Plainlanguage.gov](https://www.plainlanguage.gov/) — US Plain Writing Act, principles and examples
 * [18F Content Guide — Plain language](https://plainlanguage.18f.gov/)

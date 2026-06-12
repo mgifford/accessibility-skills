@@ -1,0 +1,109 @@
+{
+  "skill_name": "aria-live-regions",
+  "skill_file": "skills/aria-live-regions/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write markup for a polite status message that announces a successful form submission.",
+      "expected_output": "Uses a pre-existing live region with role=\"status\" or aria-live=\"polite\" and avoids assertive announcements for a routine success message.",
+      "expectations": [
+        "The message uses polite live-region behaviour",
+        "The live region exists in the DOM before the message is inserted",
+        "The announcement is suitable for a routine success state",
+        "The message is not unnecessarily interruptive"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "role=\"status\"",
+        "aria-live=\"polite\"",
+        "announce"
+      ],
+      "must_not_contain": [
+        "role=\"alert\"",
+        "aria-live=\"assertive\""
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a live region for search results count updates.",
+      "expected_output": "Keeps the live region in the DOM on page load and updates it with aria-atomic=\"true\" so the full count message is announced.",
+      "expectations": [
+        "The live region is present before content is inserted",
+        "The region uses aria-atomic=\"true\"",
+        "The visible count and announced count stay in sync",
+        "The message is concise enough to be read quickly"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-atomic=\"true\"",
+        "results found",
+        "search-status"
+      ],
+      "must_not_contain": [
+        "aria-hidden=\"true\"",
+        "display:none"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write markup for an urgent session expiry warning that needs immediate attention.",
+      "expected_output": "Uses an assertive live region only for the urgent warning and makes the message short and actionable.",
+      "expectations": [
+        "The warning can interrupt current speech when necessary",
+        "The message is urgent enough to justify assertive behaviour",
+        "The warning copy tells the user what action to take",
+        "The live region is not reused for routine updates"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "role=\"alert\"",
+        "aria-live=\"assertive\"",
+        "session warning"
+      ],
+      "must_not_contain": [
+        "aria-live=\"polite\""
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Build a chat log where each new message should be announced without rereading the whole log.",
+      "expected_output": "Uses aria-atomic=\"false\" on the log so each added message is announced individually.",
+      "expectations": [
+        "The log announces additions individually",
+        "The entire log is not reread on every update",
+        "The live region supports incremental updates",
+        "The implementation is appropriate for message streams"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-atomic=\"false\"",
+        "aria-live=\"polite\"",
+        "chat-log"
+      ],
+      "must_not_contain": [
+        "aria-atomic=\"true\""
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write CSS for a visually hidden live region used only for announcements.",
+      "expected_output": "Hides the region visually without using display:none and does not add aria-hidden=\"true\".",
+      "expectations": [
+        "The live region remains available to assistive technology",
+        "The region is visually hidden using a standard visually-hidden pattern",
+        "display:none is not used on the live region",
+        "aria-hidden=\"true\" is not applied to the live region"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "visually-hidden",
+        "clip:",
+        "overflow: hidden"
+      ],
+      "must_not_contain": [
+        "display:none",
+        "aria-hidden=\"true\""
+      ]
+    }
+  ]
+}
