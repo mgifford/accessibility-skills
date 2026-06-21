@@ -92,6 +92,32 @@ not fully covered unless the test suite explicitly emulates each scheme and
 fails on violations in either mode. If you use visual regression tests, keep the
 baselines separate for light and dark mode.
 
+#### Dual light/dark mode coverage
+
+Use one test body and run it twice, once for each color scheme:
+
+```typescript
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+for (const colorScheme of ['light', 'dark'] as const) {
+  test(`A11y: home page in ${colorScheme} mode`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme });
+    await page.goto('/');
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+
+    expect(results.violations).toEqual([]);
+  });
+}
+```
+
+If the app has visual regression tests, keep separate baselines for each
+scheme. That makes theme-specific failures obvious instead of hiding them in one
+shared snapshot.
+
 ```typescript
 // tests/a11y.spec.ts
 import { test, expect } from '@playwright/test';
