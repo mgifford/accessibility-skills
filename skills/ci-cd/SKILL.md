@@ -87,6 +87,11 @@ module.exports = {
 Run axe-core via Playwright on every pull request to catch WCAG violations in
 dynamic content (menus, modals, theme variants).
 
+Run the same accessibility checks in both light and dark color schemes. A PR is
+not fully covered unless the test suite explicitly emulates each scheme and
+fails on violations in either mode. If you use visual regression tests, keep the
+baselines separate for light and dark mode.
+
 ```typescript
 // tests/a11y.spec.ts
 import { test, expect } from '@playwright/test';
@@ -112,7 +117,9 @@ for (const theme of themes) {
 ```
 
 **Missing axe-core checks on PRs is Critical** — dynamic violations are invisible to
-Lighthouse and reach production silently.
+Lighthouse and reach production silently. Missing one of the color-scheme passes
+is also a coverage gap, because theme-specific regressions often only appear in
+the scheme that was not exercised.
 
 ---
 

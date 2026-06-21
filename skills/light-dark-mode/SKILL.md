@@ -25,6 +25,14 @@ All colour themes **must** meet WCAG 2.2 Level AA contrast in **both** light and
 dark modes, including forced-colours / high contrast modes. Test all three —
 not just the default.
 
+## Modern CSS Color System Best Practices (2026)
+
+1. Use `color-scheme` on `:root`. Start with `color-scheme: light dark;` so native form controls, scrollbars, and built-in surfaces match the active scheme.
+2. Prefer `light-dark()` for theme tokens. Put colour choices in custom properties once and let CSS resolve the current scheme instead of duplicating every component rule.
+3. Use `contrast-color()` for adaptive components that need automatic foregrounds against a known background. Treat it as an enhancement, not a guarantee.
+4. Keep `prefers-color-scheme` for specialized cases, older browsers, and explicit overrides. It is still useful, but it should not be the only theming strategy.
+5. Test with real users and accessibility tools. Verify light mode, dark mode, forced-colors, high contrast, and manual WCAG contrast before shipping.
+
 ---
 
 ## Severity Scale (this skill)
@@ -40,14 +48,15 @@ not just the default.
 
 ## Required: CSS Custom Properties Pattern
 
-Always use CSS custom properties for theme tokens. Never hardcode colour values
-in component styles — hardcoded values cannot be overridden by the theme system
-or user preferences.
+Always use CSS custom properties for theme tokens. Declare `color-scheme: light dark;` on `:root` so the browser can render native controls in the right palette. Prefer `light-dark()` for token values, and use `prefers-color-scheme` only as a fallback or specialized override.
 
 ```css
 :root {
+  color-scheme: light dark;
+
   --color-text:       #1a1a1a;
   --color-background: #ffffff;
+  --color-surface:    #f7f7f7;
   --color-link:       #0066cc;
   --color-focus:      #004499;
   --color-border:     #cccccc;
@@ -57,18 +66,33 @@ or user preferences.
 @media (prefers-color-scheme: dark) {
   :root {
     --color-text:       #e8e8e8;
-    --color-background: #1a1a1a;
+    --color-background: #121212;
+    --color-surface:    #1b1b1b;
     --color-link:       #66aaff;
-    --color-focus:      #99ccff;
+    --color-focus:      #9bd1ff;
     --color-border:     #444444;
-    --color-hover:      #2a2a2a;
+    --color-hover:      #262626;
   }
 }
 
-/* Manual override classes mirror the above values */
-[data-theme="light"] { /* mirror :root light values */ }
-[data-theme="dark"]  { /* mirror prefers-color-scheme dark values */ }
+@supports (color: light-dark(#000, #fff)) {
+  :root {
+    --color-text:       light-dark(#1a1a1a, #e8e8e8);
+    --color-background: light-dark(#ffffff, #121212);
+    --color-surface:    light-dark(#f7f7f7, #1b1b1b);
+    --color-link:       light-dark(#0066cc, #66aaff);
+    --color-focus:      light-dark(#004499, #9bd1ff);
+    --color-border:     light-dark(#cccccc, #444444);
+    --color-hover:      light-dark(#f5f5f5, #262626);
+  }
+}
+
+/* Manual overrides can still narrow the active scheme when a user chooses one. */
+[data-theme="light"] { color-scheme: light; }
+[data-theme="dark"]  { color-scheme: dark; }
 ```
+
+Component styles should continue to read from the tokens above rather than hardcode colour values.
 
 ---
 
@@ -87,17 +111,15 @@ naively.
 
 ---
 
-## Serious: Manual Theme Toggle
+## Optional: Manual Theme Override
 
-If providing a theme toggle button, **it must be keyboard accessible and
-correctly labelled**.
+Most projects should rely on `color-scheme` and `light-dark()` for the default experience. Only add a toggle if users need a persistent override or the product explicitly requires one.
 
-* Default to `prefers-color-scheme`; fall back to `light`
-* Persist user choice — see localStorage section below
-* `aria-label` must describe the **action** ("Switch to dark mode"), not the current state
-* In dark mode: show sun icon (action = switch to light); in light mode: show moon icon (action = switch to dark)
-* Place toggle **after** nav items in DOM order so it does not interrupt navigation
-* Do not make the toggle fixed/sticky
+* Keep the default experience CSS-driven; use JavaScript only for the user-chosen override and persistence.
+* `aria-label` must describe the **action** ("Switch to dark mode"), not the current state.
+* In dark mode: show a sun icon (action = switch to light); in light mode: show a moon icon (action = switch to dark).
+* Place the toggle **after** nav items in DOM order so it does not interrupt navigation.
+* Do not make the toggle fixed or sticky.
 
 ```html
 <button id="theme-toggle" type="button" aria-label="Switch to dark mode">
@@ -121,11 +143,11 @@ correctly labelled**.
 
 `localStorage` is unavailable in some private browsing modes, cross-origin
 iframes, and storage-restricted environments. Always wrap access in `try/catch`
-to prevent a JavaScript error from breaking the theme toggle entirely.
+to prevent a JavaScript error from breaking the override entirely.
 
 ```js
-const toggle  = document.getElementById('theme-toggle');
-const mq      = window.matchMedia('(prefers-color-scheme: dark)');
+const toggle = document.getElementById('theme-toggle');
+const mq = window.matchMedia('(prefers-color-scheme: dark)');
 
 // Safe localStorage helpers
 function getStoredTheme() {
@@ -145,33 +167,36 @@ function setStoredTheme(theme) {
   }
 }
 
-let userOverride = !!getStoredTheme();
-let current      = getStoredTheme() || (mq.matches ? 'dark' : 'light');
+const storedTheme = getStoredTheme();
+let currentTheme = storedTheme || (mq.matches ? 'dark' : 'light');
 
-function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
+function updateToggleLabel(theme) {
   toggle.setAttribute(
     'aria-label',
     theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
   );
 }
 
+if (storedTheme) {
+  document.documentElement.setAttribute('data-theme', storedTheme);
+  updateToggleLabel(storedTheme);
+} else {
+  updateToggleLabel(currentTheme);
+}
+
+if (!storedTheme) {
+  mq.addEventListener('change', (event) => {
+    currentTheme = event.matches ? 'dark' : 'light';
+    updateToggleLabel(currentTheme);
+  });
+}
+
 toggle.addEventListener('click', () => {
-  current      = current === 'light' ? 'dark' : 'light';
-  userOverride = true;
-  setStoredTheme(current);
-  applyTheme(current);
+  currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+  setStoredTheme(currentTheme);
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  updateToggleLabel(currentTheme);
 });
-
-// Follow OS preference if no user override
-mq.addEventListener('change', (e) => {
-  if (!userOverride) {
-    current = e.matches ? 'dark' : 'light';
-    applyTheme(current);
-  }
-});
-
-applyTheme(current);
 ```
 
 ---
@@ -349,6 +374,53 @@ Never auto-animate theme changes based on time of day.
 
 ---
 
+## Moderate: `contrast-color()` for Adaptive Components
+
+Use `contrast-color()` for buttons, badges, tags, status indicators, and other dynamically themed components whose background comes from a token.
+
+```css
+:root {
+  color-scheme: light dark;
+
+  --button-bg:         light-dark(#005fcc, #66aaff);
+  --badge-bg:          light-dark(#0f766e, #14b8a6);
+  --tag-bg:            light-dark(#6d28d9, #8b5cf6);
+  --status-success-bg: light-dark(#166534, #22c55e);
+  --status-warning-bg: light-dark(#b45309, #f59e0b);
+}
+
+.button,
+.badge,
+.tag,
+.status {
+  background-color: var(--component-bg);
+  color: white;
+  border: 1px solid transparent;
+}
+
+.button { --component-bg: var(--button-bg); }
+.badge { --component-bg: var(--badge-bg); }
+.tag { --component-bg: var(--tag-bg); }
+.status-success { --component-bg: var(--status-success-bg); }
+.status-warning { --component-bg: var(--status-warning-bg); }
+
+@supports (color: contrast-color(red)) {
+  .button,
+  .badge,
+  .tag,
+  .status {
+    color: contrast-color(var(--component-bg));
+    border-color: contrast-color(var(--component-bg));
+  }
+}
+```
+
+Practical uses include brand buttons, generated badges, tags, status pills, and cards that receive their background from data or theme tokens.
+
+`contrast-color()` is not a replacement for testing. It currently returns only `black` or `white`, so mid-tone colours can still be problematic in practice. Automating the foreground choice helps, but it is only an enhancement, not a guarantee. Manual WCAG contrast checks still apply.
+
+---
+
 ## Moderate: `color-mix()` for Relative Colour Computation
 
 `color-mix()` lets you compute colours relative to a base token, which is
@@ -391,7 +463,7 @@ and accept the duplication:
 ```
 
 Use `@supports` to apply `color-mix()` only where the browser supports it,
-with explicit values as the universal baseline.
+with explicit values as the universal baseline. This pairs well with `contrast-color()` when you want a softer border or hover state while keeping the binary foreground choice native.
 
 ---
 
@@ -410,11 +482,27 @@ border in your `forced-colors` block to preserve row separation (see above).
 
 ---
 
+## Validation and Testing
+
+Before shipping, verify all of the following:
+
+* Browser support for `light-dark()` and `contrast-color()` in the browsers you target, plus at least one browser that falls back to `prefers-color-scheme`.
+* `color-scheme: light dark;` is declared on `:root` and native controls match the active scheme.
+* `light-dark()` resolves correctly in light mode and dark mode.
+* `contrast-color()` resolves as expected for buttons, badges, tags, status indicators, and other dynamic components.
+* Forced-colors mode and high contrast mode preserve structure, labels, boundaries, and focus indicators.
+* Manual WCAG contrast checks still pass for text, focus rings, and non-text UI.
+* Real user testing and accessibility tools agree with the CSS result.
+
+---
+
 ## Definition of Done Checklist
 
 * [ ] All text/UI elements meet WCAG 2.2 AA contrast in **light** mode
 * [ ] All text/UI elements meet WCAG 2.2 AA contrast in **dark** mode
-* [ ] `prefers-color-scheme` detected and respected by default
+* [ ] `color-scheme: light dark;` declared on `:root`
+* [ ] Theme tokens use `light-dark()` with `prefers-color-scheme` only as fallback or a specialized override
+* [ ] `contrast-color()` used behind `@supports` for adaptive components
 * [ ] Forced-colors mode: content comprehensible; no meaning conveyed by shadow, gradient, or background alone
 * [ ] Focus rings use `outline`, not `box-shadow` alone
 * [ ] Information not conveyed by colour alone — icon + text + colour
@@ -424,7 +512,8 @@ border in your `forced-colors` block to preserve row separation (see above).
 * [ ] `prefers-reduced-motion` respected for theme transitions
 * [ ] Zebra stripes use relative (5–10%) differences; fallback for forced-colors uses `border-bottom`
 * [ ] SVGs use `currentColor`
-* [ ] `color-mix()` gated behind `@supports` with explicit fallback values
+* [ ] `color-mix()` and `contrast-color()` gated behind `@supports` with explicit fallback values
+* [ ] Browser support, forced-colors, high contrast, light mode, dark mode, and manual WCAG contrast are verified
 
 ---
 
@@ -446,11 +535,16 @@ border in your `forced-colors` block to preserve row separation (see above).
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md)
 * [WCAG 2.2 Understanding 1.4.3 Contrast Minimum](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)
 * [WCAG 2.2 Understanding 2.4.11 Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html)
+* [MDN: light-dark()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/light-dark)
+* [MDN: contrast-color()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/contrast-color)
 * [CSS prefers-color-scheme (Media Queries Level 5)](https://www.w3.org/TR/mediaqueries-5/#prefers-color-scheme)
 * [CSS forced-colors (Media Queries Level 5)](https://www.w3.org/TR/mediaqueries-5/#forced-colors)
 * [CSS System Colors (CSS Color Level 4)](https://www.w3.org/TR/css-color-4/#css-system-colors)
 * [MDN: forced-color-adjust](https://developer.mozilla.org/en-US/docs/Web/CSS/forced-color-adjust)
 * [Baseline 2023: color-mix() browser support](https://caniuse.com/mdn-css_types_color_color-mix)
+* [Smashing Magazine: Building Self-Correcting Color Systems With contrast-color()](https://www.smashingmagazine.com/2026/05/building-self-correcting-color-systems-contrast-color/)
+* [CSS-Tricks: Exploring the CSS contrast-color() Function... A Second Time](https://css-tricks.com/exploring-the-css-contrast-color-function-a-second-time/)
+* [Piccalilli: Some CSS only contrast options until contrast-color() is Baseline widely available](https://piccalil.li/blog/some-css-only-contrast-options-until-contrast-color-is-baseline-widely-available/)
 
 > **Standards horizon:** WCAG 3.0's proposed **APCA** (Advanced Perceptual
 > Contrast Algorithm) replaces the current 4.5:1 / 3:1 luminance-ratio model

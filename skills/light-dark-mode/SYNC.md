@@ -1,17 +1,13 @@
 # Sync Metadata
 
-Links this skill to its canonical source. Read by `.github/workflows/skill-sync-check.yml`.
-
-## Source
-
 ```yaml
-canonical_source: examples/CI_CD_ACCESSIBILITY_BEST_PRACTICES.md
+canonical_source: examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md
 last_synced_commit: ""
 last_synced_date: "2026-06-21"
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md.
-  Skill was authored from that file. Set last_synced_commit to the
+  Skill is maintained to match that source. Set last_synced_commit to the
   current commit SHA of mgifford/ACCESSIBILITY.md after verifying sync.
 ```
 
@@ -23,4 +19,4 @@ When the canonical source changes and CI flags drift:
 2. Review the diff linked in the GitHub issue/PR comment
 3. Update `SKILL.md` to reflect new requirements, changed patterns, or removed guidance
 4. Set `last_synced_commit` to the current commit SHA of `mgifford/ACCESSIBILITY.md`
-5. Rebuild: `cd skills && zip -r ci-cd.skill ci-cd/`
+5. Rebuild: `cd skills && zip -r light-dark-mode.skill light-dark-mode/`

@@ -577,28 +577,28 @@
       "evals": [
         {
           "id": 1,
-          "mustContainAny": [":root", "prefers-color-scheme: dark", "--color-text"],
-          "mustNotContain": ["user-scalable=no", "#ffffff", "rgb("]
+          "mustContainAny": ["color-scheme: light dark", "light-dark(", "--color-text"],
+          "mustNotContain": ["theme tokens duplicated", "JS required", "hardcoded colours"]
         },
         {
           "id": 2,
-          "mustContainAny": ["localStorage", "try", "Switch to dark mode"],
-          "mustNotContain": ["hardcoded colours", "user preference ignored"]
+          "mustContainAny": ["contrast-color(", "@supports (color: contrast-color(red))", "button"],
+          "mustNotContain": ["color-contrast(", "JS required"]
         },
         {
           "id": 3,
-          "mustContainAny": ["forced-colors: active", "CanvasText", "outline"],
-          "mustNotContain": ["box-shadow", "opacity: 0.4"]
+          "mustContainAny": ["black or white", "mid-tone", "manual WCAG contrast"],
+          "mustNotContain": ["testing is optional", "guarantee"]
         },
         {
           "id": 4,
-          "mustContainAny": ["var(--", "--color-", "theme"],
-          "mustNotContain": ["background: #", "color: #", "rgb("]
+          "mustContainAny": ["@supports not (color: contrast-color(red))", "prefers-color-scheme", "light-dark("],
+          "mustNotContain": ["JS required", "theme tokens duplicated"]
         },
         {
           "id": 5,
-          "mustContainAny": ["prefers-color-scheme", "data-theme", "color-scheme"],
-          "mustNotContain": ["hardcoded values", "inline styles only"]
+          "mustContainAny": ["browser support", "forced-colors", "manual WCAG contrast"],
+          "mustNotContain": ["automated tools only", "JS required"]
         }
       ]
     },

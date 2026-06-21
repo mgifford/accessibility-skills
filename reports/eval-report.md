@@ -1,6 +1,6 @@
 # Eval Report
 
-Generated: 2026-06-12T14:59:14.802Z
+Generated: 2026-06-21T19:00:43.563Z
 
 ## Overall
 
@@ -271,7 +271,7 @@ Generated: 2026-06-12T14:59:14.802Z
 - Score: 100%
 - Response: responses/light-dark-mode/all.md
 
-- PASS must_contain_any: matched ":root", "prefers-color-scheme: dark", "--color-text"
+- PASS must_contain_any: matched "color-scheme: light dark", "light-dark(", "--color-text"
 - PASS must_not_contain: no forbidden tokens found
 
 #### Eval 2
@@ -280,7 +280,7 @@ Generated: 2026-06-12T14:59:14.802Z
 - Score: 100%
 - Response: responses/light-dark-mode/all.md
 
-- PASS must_contain_any: matched "localStorage", "try", "Switch to dark mode"
+- PASS must_contain_any: matched "contrast-color(", "@supports (color: contrast-color(red))", "button"
 - PASS must_not_contain: no forbidden tokens found
 
 #### Eval 3
@@ -289,7 +289,7 @@ Generated: 2026-06-12T14:59:14.802Z
 - Score: 100%
 - Response: responses/light-dark-mode/all.md
 
-- PASS must_contain_any: matched "forced-colors: active", "CanvasText", "outline"
+- PASS must_contain_any: matched "mid-tone", "manual WCAG contrast"
 - PASS must_not_contain: no forbidden tokens found
 
 #### Eval 4
@@ -298,7 +298,7 @@ Generated: 2026-06-12T14:59:14.802Z
 - Score: 100%
 - Response: responses/light-dark-mode/all.md
 
-- PASS must_contain_any: matched "var(--", "--color-"
+- PASS must_contain_any: matched "@supports not (color: contrast-color(red))", "prefers-color-scheme", "light-dark("
 - PASS must_not_contain: no forbidden tokens found
 
 #### Eval 5
@@ -307,7 +307,7 @@ Generated: 2026-06-12T14:59:14.802Z
 - Score: 100%
 - Response: responses/light-dark-mode/all.md
 
-- PASS must_contain_any: matched "data-theme", "color-scheme"
+- PASS must_contain_any: matched "browser support", "forced-colors"
 - PASS must_not_contain: no forbidden tokens found
 
 ### evals/maps/evals.json

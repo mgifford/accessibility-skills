@@ -4,109 +4,108 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Write the base CSS theme tokens for a site that supports both light and dark mode.",
-      "expected_output": "Uses CSS custom properties on :root and overrides them in a prefers-color-scheme: dark block, without hardcoding colours in component styles.",
+      "prompt": "Write the base CSS theme tokens for a site that supports both light and dark mode using the modern color system.",
+      "expected_output": "Declares color-scheme: light dark; on :root, uses light-dark() for theme tokens, and keeps prefers-color-scheme only as fallback or a specialized override.",
       "expectations": [
         "Theme tokens are defined as CSS custom properties",
-        "Light defaults live on :root",
-        "Dark values are set in a prefers-color-scheme: dark block",
-        "Component styles reference tokens instead of raw colours"
+        "color-scheme is declared on :root",
+        "light-dark() is used for token values",
+        "prefers-color-scheme appears only as a fallback or specialized override"
       ],
       "files": [],
       "must_contain_any": [
-        ":root",
-        "prefers-color-scheme: dark",
+        "color-scheme: light dark",
+        "light-dark(",
         "--color-text"
       ],
       "must_not_contain": [
-        "user-scalable=no",
-        "#ffffff",
-        "rgb("
+        "theme tokens duplicated",
+        "JS required",
+        "hardcoded colours"
       ]
     },
     {
       "id": 2,
-      "prompt": "Add a theme toggle button that remembers the user's choice and updates its label correctly.",
-      "expected_output": "Uses localStorage safely with try/catch, defaults from prefers-color-scheme, and updates the toggle label to describe the action.",
+      "prompt": "Add an adaptive button, badge, tag, and status color pattern using contrast-color() with a fallback.",
+      "expected_output": "Uses contrast-color() behind @supports for dynamic component foregrounds, with explicit fallback colors and practical component examples.",
       "expectations": [
-        "The user's choice is persisted when storage is available",
-        "Storage access is wrapped in try/catch",
-        "The toggle label describes the action, not the current state",
-        "The initial theme follows the OS preference when no override exists"
+        "Adaptive components use contrast-color()",
+        "The contrast-color() usage is behind an @supports check",
+        "Buttons, badges, tags, or status components are included",
+        "Fallback colors are still present"
       ],
       "files": [],
       "must_contain_any": [
-        "localStorage",
-        "try",
-        "Switch to dark mode"
+        "contrast-color(",
+        "@supports (color: contrast-color(red))",
+        "button"
       ],
       "must_not_contain": [
-        "hardcoded colours",
-        "user preference ignored"
+        "color-contrast(",
+        "JS required"
       ]
     },
     {
       "id": 3,
-      "prompt": "Write CSS for buttons and cards that remains understandable in forced-colors mode.",
-      "expected_output": "Uses borders and outline for meaning, and restores key styling with system colours inside a forced-colors: active block.",
+      "prompt": "Explain the accessibility cautions around contrast-color() and how to test modern CSS color functions.",
+      "expected_output": "States that contrast-color() returns only black or white today, warns that mid-tone colors can still be problematic, and requires manual WCAG contrast and browser support testing.",
       "expectations": [
-        "Meaning does not rely on box-shadow alone",
-        "Focus indicators use outline",
-        "Forced-colors mode has explicit overrides",
-        "System colour keywords are used in forced-colors mode"
+        "The output explains that contrast-color() is not a replacement for testing",
+        "The output says contrast-color() returns black or white only",
+        "The output warns about mid-tone background colors",
+        "The output mentions manual WCAG contrast checks"
       ],
       "files": [],
       "must_contain_any": [
-        "forced-colors: active",
-        "CanvasText",
-        "outline"
+        "black or white",
+        "mid-tone",
+        "manual WCAG contrast"
       ],
       "must_not_contain": [
-        "box-shadow",
-        "opacity: 0.4"
+        "testing is optional",
+        "guarantee"
       ]
     },
     {
       "id": 4,
-      "prompt": "Refactor component colour styles so they are theme-aware instead of hardcoded.",
-      "expected_output": "Moves component colours to tokens and keeps the component styles limited to var() references.",
+      "prompt": "Write a progressive enhancement fallback for browsers that do not support light-dark() or contrast-color().",
+      "expected_output": "Uses @supports and prefers-color-scheme fallbacks so unsupported browsers still get readable colors without JavaScript.",
       "expectations": [
-        "Components use var() tokens",
-        "The component styles do not define raw colour values",
-        "Theme values can be swapped without rewriting component CSS",
-        "The approach works in both light and dark modes"
+        "The response uses @supports for modern CSS color functions",
+        "The response keeps a prefers-color-scheme fallback",
+        "The response does not require JavaScript for theming",
+        "The response keeps readable fallback colors"
       ],
       "files": [],
       "must_contain_any": [
-        "var(--",
-        "--color-",
-        "theme"
+        "@supports not (color: contrast-color(red))",
+        "prefers-color-scheme",
+        "light-dark("
       ],
       "must_not_contain": [
-        "background: #",
-        "color: #",
-        "rgb("
+        "JS required",
+        "theme tokens duplicated"
       ]
     },
     {
       "id": 5,
-      "prompt": "Write CSS that respects a user's dark mode preference and updates when the preference changes.",
-      "expected_output": "Uses prefers-color-scheme for the default and a data-theme override or equivalent for manual switching.",
+      "prompt": "Write a compact testing checklist for a theme that uses color-scheme, light-dark(), contrast-color(), and forced-colors.",
+      "expected_output": "Covers browser support, light and dark mode verification, forced-colors and high contrast mode, and manual WCAG contrast checks.",
       "expectations": [
-        "The OS preference is used as the starting point",
-        "Manual switching can override the OS default",
-        "The implementation responds when the OS preference changes",
-        "Theme switching does not require page reloads"
+        "Browser support is checked",
+        "Light mode and dark mode are checked",
+        "Forced-colors and high contrast are checked",
+        "Manual WCAG contrast validation is included"
       ],
       "files": [],
       "must_contain_any": [
-        "prefers-color-scheme",
-        "data-theme",
-        "color-scheme"
+        "browser support",
+        "forced-colors",
+        "manual WCAG contrast"
       ],
       "must_not_contain": [
-        "hardcoded values",
-        "inline styles only"
+        "automated tools only",
+        "JS required"
       ]
     }
   ]

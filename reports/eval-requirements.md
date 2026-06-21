@@ -29,11 +29,11 @@ Detailed token requirements live in [reports/eval-requirements.json](reports/eva
 |keyboard|5|3|`:focus-visible`, `outline`, `focus ring`|`outline: none`|
 |keyboard|5|4|`Escape`, `focus`, `inert`|`keyboard trap`|
 |keyboard|5|5|`tabindex="0"`, `tabindex="-1"`, `Arrow`|`positive tabindex`|
-|light-dark-mode|5|1|`:root`, `prefers-color-scheme: dark`, `--color-text`|`user-scalable=no`, `#ffffff`, `rgb(`|
-|light-dark-mode|5|2|`localStorage`, `try`, `Switch to dark mode`|`hardcoded colours`, `user preference ignored`|
-|light-dark-mode|5|3|`forced-colors: active`, `CanvasText`, `outline`|`box-shadow`, `opacity: 0.4`|
-|light-dark-mode|5|4|`var(--`, `--color-`, `theme`|`background: #`, `color: #`, `rgb(`|
-|light-dark-mode|5|5|`prefers-color-scheme`, `data-theme`, `color-scheme`|`hardcoded values`, `inline styles only`|
+|light-dark-mode|5|1|`color-scheme: light dark`, `light-dark(`, `--color-text`|`theme tokens duplicated`, `JS required`, `hardcoded colours`|
+|light-dark-mode|5|2|`contrast-color(`, `@supports (color: contrast-color(red))`, `button`|`color-contrast(`, `JS required`|
+|light-dark-mode|5|3|`black or white`, `mid-tone`, `manual WCAG contrast`|`testing is optional`, `guarantee`|
+|light-dark-mode|5|4|`@supports not (color: contrast-color(red))`, `prefers-color-scheme`, `light-dark(`|`JS required`, `theme tokens duplicated`|
+|light-dark-mode|5|5|`browser support`, `forced-colors`, `manual WCAG contrast`|`automated tools only`, `JS required`|
 |maps|5|1|`alt="Campus map`, `main entrance`, `library`|`alt="image`, `alt="map"`|
 |maps|5|2|`Skip map`, `title="Interactive map`, `map-skip-target`|`role="application"`, `no title`|
 |maps|5|3|`Zoom in`, `Zoom out`, `Escape`|`mouse only`, `role="application"`|

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-12T14:59:14.802Z",
+  "generatedAt": "2026-06-21T19:00:43.563Z",
   "overall": {
     "totalEvals": 13,
     "failedEvals": 0,
@@ -502,7 +502,7 @@
             {
               "label": "must_contain_any",
               "pass": true,
-              "detail": "matched \":root\", \"prefers-color-scheme: dark\", \"--color-text\""
+              "detail": "matched \"color-scheme: light dark\", \"light-dark(\", \"--color-text\""
             },
             {
               "label": "must_not_contain",
@@ -520,7 +520,7 @@
             {
               "label": "must_contain_any",
               "pass": true,
-              "detail": "matched \"localStorage\", \"try\", \"Switch to dark mode\""
+              "detail": "matched \"contrast-color(\", \"@supports (color: contrast-color(red))\", \"button\""
             },
             {
               "label": "must_not_contain",
@@ -538,7 +538,7 @@
             {
               "label": "must_contain_any",
               "pass": true,
-              "detail": "matched \"forced-colors: active\", \"CanvasText\", \"outline\""
+              "detail": "matched \"mid-tone\", \"manual WCAG contrast\""
             },
             {
               "label": "must_not_contain",
@@ -556,7 +556,7 @@
             {
               "label": "must_contain_any",
               "pass": true,
-              "detail": "matched \"var(--\", \"--color-\""
+              "detail": "matched \"@supports not (color: contrast-color(red))\", \"prefers-color-scheme\", \"light-dark(\""
             },
             {
               "label": "must_not_contain",
@@ -574,7 +574,7 @@
             {
               "label": "must_contain_any",
               "pass": true,
-              "detail": "matched \"data-theme\", \"color-scheme\""
+              "detail": "matched \"browser support\", \"forced-colors\""
             },
             {
               "label": "must_not_contain",
