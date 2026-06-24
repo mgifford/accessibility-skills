@@ -185,7 +185,7 @@ a {
 
 ## Serious: Focus Appearance (WCAG 2.4.13)
 
-WCAG 2.2 **2.4.13 Focus Appearance** (Level AA) requires visible keyboard focus
+WCAG 2.2 **2.4.13 Focus Appearance** (Level AAA) requires visible keyboard focus
 indicators that:
 
 1. Enclose the focused component with an area of at least the **perimeter × 2 CSS px** in thickness.
@@ -403,7 +403,7 @@ axe.run(document, {
 * 1.4.6 Contrast Enhanced (AAA)
 * 1.4.11 Non-text Contrast (AA) — **Serious if failing**
 * 2.4.7 Focus Visible (AA)
-* 2.4.13 Focus Appearance (AA, WCAG 2.2) — **Serious if failing**
+* 2.4.13 Focus Appearance (AAA, WCAG 2.2) — **Serious if failing**
 
 ---
 
