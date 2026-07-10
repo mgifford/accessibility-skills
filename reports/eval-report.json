@@ -1,13 +1,135 @@
 {
-  "generatedAt": "2026-06-21T19:00:43.563Z",
+  "generatedAt": "2026-07-10T19:32:36.016Z",
   "overall": {
-    "totalEvals": 13,
+    "totalEvals": 27,
     "failedEvals": 0,
-    "totalChecks": 128,
-    "passedChecks": 128,
+    "totalChecks": 212,
+    "passedChecks": 212,
     "score": 100
   },
   "manifests": [
+    {
+      "manifest": "evals/ACCESSIBILITY-general/evals.json",
+      "skill": "ACCESSIBILITY-general",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/ACCESSIBILITY-general/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"WCAG 2.2\", \"semantic HTML\", \"ARIA\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/ACCESSIBILITY-general/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"keyboard\", \"screen reader\", \"200%\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/ACCESSIBILITY-general/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"button\", \"native\", \"keyboard\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/anchor-links/evals.json",
+      "skill": "anchor-links",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/anchor-links/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"skip link\", \"#main\", \"focus\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/anchor-links/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"meaningful\", \"fragment\", \"id\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/anchor-links/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"focus indicator\", \"keyboard\", \"visible\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
     {
       "manifest": "evals/aria-live-regions/evals.json",
       "skill": "aria-live-regions",
@@ -106,6 +228,311 @@
       ]
     },
     {
+      "manifest": "evals/audio-video/evals.json",
+      "skill": "audio-video",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/audio-video/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"captions\", \"transcript\", \"audio description\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/audio-video/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"keyboard\", \"focus\", \"label\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/audio-video/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"standalone audio\", \"transcript\", \"required\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/axe-rules/evals.json",
+      "skill": "axe-rules",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/axe-rules/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"rule ID\", \"WCAG\", \"severity\", \"element\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/axe-rules/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"severity\", \"impact\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/axe-rules/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"critical\", \"serious\", \"fail\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/bug-reporting/evals.json",
+      "skill": "bug-reporting",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/bug-reporting/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"URL\", \"XPath\", \"HTML snippet\", \"WCAG\", \"severity\", \"frequency\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/bug-reporting/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"steps\", \"expected\", \"actual\", \"environment\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/bug-reporting/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"impact\", \"block\", \"severity\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/charts-graphs/evals.json",
+      "skill": "charts-graphs",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/charts-graphs/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"text alternative\", \"data table\", \"summary\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/charts-graphs/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"pattern\", \"label\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/charts-graphs/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"keyboard\", \"focus\", \"controls\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/ci-cd/evals.json",
+      "skill": "ci-cd",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/ci-cd/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"Lighthouse\", \"axe-core\", \"fail\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/ci-cd/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"light\", \"dark\", \"coverage\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/ci-cd/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"triage\", \"SLA\", \"issue\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "manifest": "evals/color-contrast/evals.json",
       "skill": "color-contrast",
       "passed": true,
@@ -192,6 +619,67 @@
               "label": "must_contain_any",
               "pass": true,
               "detail": "matched \"contrast\", \"prefers-color-scheme\", \"focus ring\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/content-design/evals.json",
+      "skill": "content-design",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/content-design/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"plain language\", \"clear\", \"instructions\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/content-design/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"descriptive\", \"link text\", \"meaningful\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/content-design/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"heading\", \"hierarchy\", \"logical\""
             },
             {
               "label": "must_not_contain",
@@ -586,6 +1074,67 @@
       ]
     },
     {
+      "manifest": "evals/manual-testing/evals.json",
+      "skill": "manual-testing",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/manual-testing/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"keyboard\", \"screen reader\", \"forced-colors\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/manual-testing/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"tab order\", \"focus\", \"trap\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/manual-testing/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"task\", \"screen reader\", \"document\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "manifest": "evals/maps/evals.json",
       "skill": "maps",
       "passed": true,
@@ -683,6 +1232,67 @@
       ]
     },
     {
+      "manifest": "evals/mermaid/evals.json",
+      "skill": "mermaid",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/mermaid/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"accTitle\", \"accDescr\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/mermaid/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"text alternative\", \"diagram\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/mermaid/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"blocking\", \"accTitle\", \"accDescr\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "manifest": "evals/navigation/evals.json",
       "skill": "navigation",
       "passed": true,
@@ -769,6 +1379,189 @@
               "label": "must_contain_any",
               "pass": true,
               "detail": "matched \"<nav\", \"aria-label=\\\"Footer\\\"\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/opquast-digital-quality/evals.json",
+      "skill": "opquast-digital-quality",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/opquast-digital-quality/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"245\", \"quality\", \"framework\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/opquast-digital-quality/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"accessibility\", \"security\", \"privacy\", \"content\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/opquast-digital-quality/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"checklist\", \"QA\", \"audit\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/plain-language/evals.json",
+      "skill": "plain-language",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/plain-language/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"jargon\", \"plain\", \"clear\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/plain-language/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"acronym\", \"first use\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/plain-language/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"short\", \"action\", \"instruction\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/print/evals.json",
+      "skill": "print",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/print/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"@media print\", \"readable\", \"contrast\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/print/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"link\", \"URL\", \"print\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/print/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"decorative\", \"non-essential\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
             }
           ]
         }
@@ -1249,6 +2042,67 @@
               "label": "must_contain_any",
               "pass": true,
               "detail": "matched \"click\", \"mouseup\", \"touchend\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "manifest": "evals/user-personalization/evals.json",
+      "skill": "user-personalization",
+      "passed": true,
+      "results": [
+        {
+          "id": 1,
+          "responsePath": "responses/user-personalization/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"persist\", \"immediately\", \"preference\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "responsePath": "responses/user-personalization/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"prefers-reduced-motion\", \"prefers-contrast\""
+            },
+            {
+              "label": "must_not_contain",
+              "pass": true,
+              "detail": "no forbidden tokens found"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "responsePath": "responses/user-personalization/all.md",
+          "passed": true,
+          "score": 100,
+          "checks": [
+            {
+              "label": "must_contain_any",
+              "pass": true,
+              "detail": "matched \"user preference\""
             },
             {
               "label": "must_not_contain",

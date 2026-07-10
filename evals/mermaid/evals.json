@@ -1,0 +1,33 @@
+{
+  "skill_name": "mermaid",
+  "skill_file": "skills/mermaid/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "List minimum accessibility metadata for Mermaid diagrams.",
+      "expected_output": "Requires accTitle and accDescr.",
+      "expectations": ["accTitle present", "accDescr present", "Meaningful description"],
+      "files": [],
+      "must_contain_any": ["accTitle", "accDescr"],
+      "must_not_contain": ["diagram without description"]
+    },
+    {
+      "id": 2,
+      "prompt": "What fallback should accompany Mermaid content?",
+      "expected_output": "Includes text alternative summarizing the diagram meaning.",
+      "expectations": ["Text alternative", "Equivalent meaning", "Readable fallback"],
+      "files": [],
+      "must_contain_any": ["text alternative", "summary", "diagram"],
+      "must_not_contain": ["visual only"]
+    },
+    {
+      "id": 3,
+      "prompt": "How should missing accessibility metadata be handled in review?",
+      "expected_output": "Treat missing accTitle/accDescr as a blocking defect.",
+      "expectations": ["Blocking defect", "Clear requirement", "Review enforcement"],
+      "files": [],
+      "must_contain_any": ["blocking", "accTitle", "accDescr"],
+      "must_not_contain": ["optional metadata"]
+    }
+  ]
+}

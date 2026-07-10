@@ -1,15 +1,79 @@
 # Eval Report
 
-Generated: 2026-06-21T19:00:43.563Z
+Generated: 2026-07-10T19:32:36.016Z
 
 ## Overall
 
-- Total eval manifests: 13
+- Total eval manifests: 27
 - Failed eval manifests: 0
-- Passed checks: 128/128
+- Passed checks: 212/212
 - Score: 100%
 
 ## Manifests
+
+### evals/ACCESSIBILITY-general/evals.json
+
+- Skill: ACCESSIBILITY-general
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/ACCESSIBILITY-general/all.md
+
+- PASS must_contain_any: matched "WCAG 2.2", "semantic HTML", "ARIA"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/ACCESSIBILITY-general/all.md
+
+- PASS must_contain_any: matched "keyboard", "screen reader", "200%"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/ACCESSIBILITY-general/all.md
+
+- PASS must_contain_any: matched "button", "native", "keyboard"
+- PASS must_not_contain: no forbidden tokens found
+
+### evals/anchor-links/evals.json
+
+- Skill: anchor-links
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/anchor-links/all.md
+
+- PASS must_contain_any: matched "skip link", "#main", "focus"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/anchor-links/all.md
+
+- PASS must_contain_any: matched "meaningful", "fragment", "id"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/anchor-links/all.md
+
+- PASS must_contain_any: matched "focus indicator", "keyboard", "visible"
+- PASS must_not_contain: no forbidden tokens found
 
 ### evals/aria-live-regions/evals.json
 
@@ -61,6 +125,166 @@ Generated: 2026-06-21T19:00:43.563Z
 - PASS must_contain_any: matched "visually-hidden", "clip:", "overflow: hidden"
 - PASS must_not_contain: no forbidden tokens found
 
+### evals/audio-video/evals.json
+
+- Skill: audio-video
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/audio-video/all.md
+
+- PASS must_contain_any: matched "captions", "transcript", "audio description"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/audio-video/all.md
+
+- PASS must_contain_any: matched "keyboard", "focus", "label"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/audio-video/all.md
+
+- PASS must_contain_any: matched "standalone audio", "transcript", "required"
+- PASS must_not_contain: no forbidden tokens found
+
+### evals/axe-rules/evals.json
+
+- Skill: axe-rules
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/axe-rules/all.md
+
+- PASS must_contain_any: matched "rule ID", "WCAG", "severity", "element"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/axe-rules/all.md
+
+- PASS must_contain_any: matched "severity", "impact"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/axe-rules/all.md
+
+- PASS must_contain_any: matched "critical", "serious", "fail"
+- PASS must_not_contain: no forbidden tokens found
+
+### evals/bug-reporting/evals.json
+
+- Skill: bug-reporting
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/bug-reporting/all.md
+
+- PASS must_contain_any: matched "URL", "XPath", "HTML snippet", "WCAG", "severity", "frequency"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/bug-reporting/all.md
+
+- PASS must_contain_any: matched "steps", "expected", "actual", "environment"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/bug-reporting/all.md
+
+- PASS must_contain_any: matched "impact", "block", "severity"
+- PASS must_not_contain: no forbidden tokens found
+
+### evals/charts-graphs/evals.json
+
+- Skill: charts-graphs
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/charts-graphs/all.md
+
+- PASS must_contain_any: matched "text alternative", "data table", "summary"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/charts-graphs/all.md
+
+- PASS must_contain_any: matched "pattern", "label"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/charts-graphs/all.md
+
+- PASS must_contain_any: matched "keyboard", "focus", "controls"
+- PASS must_not_contain: no forbidden tokens found
+
+### evals/ci-cd/evals.json
+
+- Skill: ci-cd
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/ci-cd/all.md
+
+- PASS must_contain_any: matched "Lighthouse", "axe-core", "fail"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/ci-cd/all.md
+
+- PASS must_contain_any: matched "light", "dark", "coverage"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/ci-cd/all.md
+
+- PASS must_contain_any: matched "triage", "SLA", "issue"
+- PASS must_not_contain: no forbidden tokens found
+
 ### evals/color-contrast/evals.json
 
 - Skill: color-contrast
@@ -109,6 +333,38 @@ Generated: 2026-06-21T19:00:43.563Z
 - Response: responses/color-contrast/all.md
 
 - PASS must_contain_any: matched "contrast", "prefers-color-scheme", "focus ring"
+- PASS must_not_contain: no forbidden tokens found
+
+### evals/content-design/evals.json
+
+- Skill: content-design
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/content-design/all.md
+
+- PASS must_contain_any: matched "plain language", "clear", "instructions"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/content-design/all.md
+
+- PASS must_contain_any: matched "descriptive", "link text", "meaningful"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/content-design/all.md
+
+- PASS must_contain_any: matched "heading", "hierarchy", "logical"
 - PASS must_not_contain: no forbidden tokens found
 
 ### evals/forms/evals.json
@@ -310,6 +566,38 @@ Generated: 2026-06-21T19:00:43.563Z
 - PASS must_contain_any: matched "browser support", "forced-colors"
 - PASS must_not_contain: no forbidden tokens found
 
+### evals/manual-testing/evals.json
+
+- Skill: manual-testing
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/manual-testing/all.md
+
+- PASS must_contain_any: matched "keyboard", "screen reader", "forced-colors"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/manual-testing/all.md
+
+- PASS must_contain_any: matched "tab order", "focus", "trap"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/manual-testing/all.md
+
+- PASS must_contain_any: matched "task", "screen reader", "document"
+- PASS must_not_contain: no forbidden tokens found
+
 ### evals/maps/evals.json
 
 - Skill: maps
@@ -360,6 +648,38 @@ Generated: 2026-06-21T19:00:43.563Z
 - PASS must_contain_any: matched "text labels"
 - PASS must_not_contain: no forbidden tokens found
 
+### evals/mermaid/evals.json
+
+- Skill: mermaid
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/mermaid/all.md
+
+- PASS must_contain_any: matched "accTitle", "accDescr"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/mermaid/all.md
+
+- PASS must_contain_any: matched "text alternative", "diagram"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/mermaid/all.md
+
+- PASS must_contain_any: matched "blocking", "accTitle", "accDescr"
+- PASS must_not_contain: no forbidden tokens found
+
 ### evals/navigation/evals.json
 
 - Skill: navigation
@@ -408,6 +728,102 @@ Generated: 2026-06-21T19:00:43.563Z
 - Response: responses/navigation/all.md
 
 - PASS must_contain_any: matched "<nav", "aria-label=\"Footer\""
+
+### evals/opquast-digital-quality/evals.json
+
+- Skill: opquast-digital-quality
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/opquast-digital-quality/all.md
+
+- PASS must_contain_any: matched "245", "quality", "framework"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/opquast-digital-quality/all.md
+
+- PASS must_contain_any: matched "accessibility", "security", "privacy", "content"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/opquast-digital-quality/all.md
+
+- PASS must_contain_any: matched "checklist", "QA", "audit"
+- PASS must_not_contain: no forbidden tokens found
+
+### evals/plain-language/evals.json
+
+- Skill: plain-language
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/plain-language/all.md
+
+- PASS must_contain_any: matched "jargon", "plain", "clear"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/plain-language/all.md
+
+- PASS must_contain_any: matched "acronym", "first use"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/plain-language/all.md
+
+- PASS must_contain_any: matched "short", "action", "instruction"
+- PASS must_not_contain: no forbidden tokens found
+
+### evals/print/evals.json
+
+- Skill: print
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/print/all.md
+
+- PASS must_contain_any: matched "@media print", "readable", "contrast"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/print/all.md
+
+- PASS must_contain_any: matched "link", "URL", "print"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/print/all.md
+
+- PASS must_contain_any: matched "decorative", "non-essential"
+- PASS must_not_contain: no forbidden tokens found
 
 ### evals/progressive-enhancement/evals.json
 
@@ -657,4 +1073,36 @@ Generated: 2026-06-21T19:00:43.563Z
 - Response: responses/touch-pointer/all.md
 
 - PASS must_contain_any: matched "click", "mouseup", "touchend"
+- PASS must_not_contain: no forbidden tokens found
+
+### evals/user-personalization/evals.json
+
+- Skill: user-personalization
+- Status: PASS
+
+#### Eval 1
+
+- Status: PASS
+- Score: 100%
+- Response: responses/user-personalization/all.md
+
+- PASS must_contain_any: matched "persist", "immediately", "preference"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 2
+
+- Status: PASS
+- Score: 100%
+- Response: responses/user-personalization/all.md
+
+- PASS must_contain_any: matched "prefers-reduced-motion", "prefers-contrast"
+- PASS must_not_contain: no forbidden tokens found
+
+#### Eval 3
+
+- Status: PASS
+- Score: 100%
+- Response: responses/user-personalization/all.md
+
+- PASS must_contain_any: matched "user preference"
 - PASS must_not_contain: no forbidden tokens found

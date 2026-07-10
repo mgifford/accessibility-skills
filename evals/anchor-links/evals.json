@@ -1,0 +1,33 @@
+{
+  "skill_name": "anchor-links",
+  "skill_file": "skills/anchor-links/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Define skip link requirements for a page layout.",
+      "expected_output": "Skip link appears first, points to a valid target, and is keyboard reachable.",
+      "expectations": ["Skip link first", "Valid target", "Keyboard reachable"],
+      "files": [],
+      "must_contain_any": ["skip link", "#main", "focus"],
+      "must_not_contain": ["href=\"#\""]
+    },
+    {
+      "id": 2,
+      "prompt": "List rules for in-page heading anchor links.",
+      "expected_output": "Uses meaningful text and valid fragment IDs.",
+      "expectations": ["Meaningful text", "Fragment IDs exist", "No vague labels"],
+      "files": [],
+      "must_contain_any": ["meaningful", "fragment", "id"],
+      "must_not_contain": ["click here"]
+    },
+    {
+      "id": 3,
+      "prompt": "How should focus visibility be handled for anchor links?",
+      "expected_output": "Focus indicators are visible and persistent enough to track.",
+      "expectations": ["Visible focus", "Keyboard support", "Consistent styling"],
+      "files": [],
+      "must_contain_any": ["focus indicator", "keyboard", "visible"],
+      "must_not_contain": ["outline: none"]
+    }
+  ]
+}

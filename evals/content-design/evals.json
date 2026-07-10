@@ -1,0 +1,33 @@
+{
+  "skill_name": "content-design",
+  "skill_file": "skills/content-design/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "State core rules for accessible interface copy.",
+      "expected_output": "Uses plain language and clear instructions.",
+      "expectations": ["Plain language", "Clear instructions", "Readable wording"],
+      "files": [],
+      "must_contain_any": ["plain language", "clear", "instructions"],
+      "must_not_contain": ["unexplained jargon"]
+    },
+    {
+      "id": 2,
+      "prompt": "What link text guidance should teams follow?",
+      "expected_output": "Link text is descriptive and meaningful out of context.",
+      "expectations": ["Descriptive links", "Out-of-context clarity", "Avoid vague labels"],
+      "files": [],
+      "must_contain_any": ["descriptive", "link text", "meaningful"],
+      "must_not_contain": ["click here"]
+    },
+    {
+      "id": 3,
+      "prompt": "How should heading structure be managed in content design?",
+      "expected_output": "Logical heading hierarchy without level skipping.",
+      "expectations": ["Hierarchy", "No skipping", "Readable structure"],
+      "files": [],
+      "must_contain_any": ["heading", "hierarchy", "logical"],
+      "must_not_contain": ["skip from h1 to h4"]
+    }
+  ]
+}

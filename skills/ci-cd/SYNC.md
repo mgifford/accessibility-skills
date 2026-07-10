@@ -6,8 +6,8 @@ Links this skill to its canonical source. Read by `.github/workflows/skill-sync-
 
 ```yaml
 canonical_source: examples/CI_CD_ACCESSIBILITY_BEST_PRACTICES.md
-last_synced_commit: ""
-last_synced_date: "2026-06-21"
+last_synced_commit: "0bfe3b9"
+last_synced_date: "2026-07-10"
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md.

@@ -25,6 +25,15 @@ accessibility tree testing and, where practical, virtual screen reader testing.
 **Zero-Debt strategy:** target 100 % Lighthouse Accessibility and Performance scores
 on all pages across all devices and user preferences.
 
+## The Strategy: Local-First and AI-Aligned
+
+Automation is the baseline, not the ceiling. Prefer this stack:
+
+* **Lighthouse CI** for high-level quality gates (100 % targets).
+* **Playwright + axe-core** for dynamic interactions, mobile states, and light/dark coverage.
+* **Local audits first** to reduce CI noise and shorten feedback loops.
+* **Structured outputs (JSON artifacts)** so findings are AI-ready for triage and remediation workflows.
+
 ---
 
 ## Severity Scale (this skill)
@@ -417,11 +426,11 @@ No single tool catches everything — use the approaches together.
 
 ---
 
-## Governance
+## Governance and SLAs
 
 * **Critical failures:** any page below 100 % Lighthouse Accessibility blocks the build.
 * **Performance budget:** any page below 100 % Lighthouse Performance blocks the build.
-* **Triage:** scheduled scan failures must be converted to GitHub Issues.
+* **Triage:** scheduled scan findings must be converted to GitHub Issues.
   If an issue remains open, subsequent scheduled scans are paused (alert-fatigue guard).
 * **SLA:** triage critical failures within one business day; serious within one sprint.
 

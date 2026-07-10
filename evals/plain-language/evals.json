@@ -1,0 +1,33 @@
+{
+  "skill_name": "plain-language",
+  "skill_file": "skills/plain-language/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Give plain-language rules for user help text.",
+      "expected_output": "Avoids jargon and keeps wording direct.",
+      "expectations": ["Avoid jargon", "Direct wording", "Broad readability"],
+      "files": [],
+      "must_contain_any": ["jargon", "plain", "clear"],
+      "must_not_contain": ["dense technical language"]
+    },
+    {
+      "id": 2,
+      "prompt": "How should acronyms be handled in public-facing copy?",
+      "expected_output": "Expands acronyms on first use.",
+      "expectations": ["First-use expansion", "Reader clarity", "No ambiguity"],
+      "files": [],
+      "must_contain_any": ["acronym", "first use", "expand"],
+      "must_not_contain": ["unexplained abbreviation"]
+    },
+    {
+      "id": 3,
+      "prompt": "What sentence style improves readability in UI guidance?",
+      "expected_output": "Prefers short sentences and action-oriented instructions.",
+      "expectations": ["Short sentences", "Action language", "Scannable text"],
+      "files": [],
+      "must_contain_any": ["short", "action", "instruction"],
+      "must_not_contain": ["overly complex sentence"]
+    }
+  ]
+}

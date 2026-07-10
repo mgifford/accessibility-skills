@@ -1,0 +1,45 @@
+{
+  "skill_name": "ACCESSIBILITY-general",
+  "skill_file": "skills/ACCESSIBILITY-general/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a baseline accessibility checklist for a new UI component.",
+      "expected_output": "Includes WCAG 2.2 AA, semantic HTML first, and ARIA as a supplement.",
+      "expectations": [
+        "Mentions WCAG 2.2 AA",
+        "Prioritizes semantic HTML",
+        "Uses ARIA only when necessary"
+      ],
+      "files": [],
+      "must_contain_any": ["WCAG 2.2", "semantic HTML", "ARIA"],
+      "must_not_contain": ["ARIA replaces HTML"]
+    },
+    {
+      "id": 2,
+      "prompt": "Describe required manual testing before marking a feature accessible.",
+      "expected_output": "Includes keyboard-only, screen reader, and zoom checks.",
+      "expectations": [
+        "Keyboard-only included",
+        "Screen reader included",
+        "Zoom/scale included"
+      ],
+      "files": [],
+      "must_contain_any": ["keyboard", "screen reader", "200%"],
+      "must_not_contain": ["automated tools are sufficient"]
+    },
+    {
+      "id": 3,
+      "prompt": "State the minimum implementation principle for accessible interaction controls.",
+      "expected_output": "Uses native controls and avoids div/span for button behavior.",
+      "expectations": [
+        "Native controls preferred",
+        "Avoids non-semantic click targets",
+        "Keyboard interaction preserved"
+      ],
+      "files": [],
+      "must_contain_any": ["button", "native", "keyboard"],
+      "must_not_contain": ["div onclick"]
+    }
+  ]
+}

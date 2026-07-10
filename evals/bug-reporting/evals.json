@@ -1,0 +1,33 @@
+{
+  "skill_name": "bug-reporting",
+  "skill_file": "skills/bug-reporting/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Provide required fields for an accessibility bug report.",
+      "expected_output": "Includes URL, XPath, HTML snippet, WCAG SC, rule ID, severity, frequency.",
+      "expectations": ["URL", "XPath", "HTML snippet", "WCAG and severity"],
+      "files": [],
+      "must_contain_any": ["URL", "XPath", "HTML snippet", "WCAG", "severity", "frequency"],
+      "must_not_contain": ["vague issue"]
+    },
+    {
+      "id": 2,
+      "prompt": "What reproduction details make an accessibility issue actionable?",
+      "expected_output": "Includes exact steps, expected behavior, actual behavior, and environment.",
+      "expectations": ["Steps", "Expected", "Actual", "Environment"],
+      "files": [],
+      "must_contain_any": ["steps", "expected", "actual", "environment"],
+      "must_not_contain": ["cannot reproduce"]
+    },
+    {
+      "id": 3,
+      "prompt": "How should severity be assigned in accessibility bug reports?",
+      "expected_output": "Based on user impact and task blockage.",
+      "expectations": ["Impact based", "Task blockage", "Consistent scale"],
+      "files": [],
+      "must_contain_any": ["impact", "block", "severity"],
+      "must_not_contain": ["severity guessed"]
+    }
+  ]
+}

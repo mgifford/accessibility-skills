@@ -1,0 +1,33 @@
+{
+  "skill_name": "print",
+  "skill_file": "skills/print/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Summarize accessibility requirements for print styles.",
+      "expected_output": "Uses print media rules for readability and structure.",
+      "expectations": ["Print media support", "Readable output", "Structured content"],
+      "files": [],
+      "must_contain_any": ["@media print", "readable", "contrast"],
+      "must_not_contain": ["screen styles only"]
+    },
+    {
+      "id": 2,
+      "prompt": "How should links be represented in printed output?",
+      "expected_output": "Expands or exposes link URLs in print.",
+      "expectations": ["URL visible", "Readable formatting", "Print utility"],
+      "files": [],
+      "must_contain_any": ["link", "URL", "print"],
+      "must_not_contain": ["hidden destination"]
+    },
+    {
+      "id": 3,
+      "prompt": "What should be removed from print layouts to reduce clutter?",
+      "expected_output": "Hides decorative or non-essential UI regions.",
+      "expectations": ["Decorative removed", "Non-essential hidden", "Content prioritized"],
+      "files": [],
+      "must_contain_any": ["decorative", "hide", "non-essential"],
+      "must_not_contain": ["print all UI chrome"]
+    }
+  ]
+}

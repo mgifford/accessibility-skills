@@ -1,0 +1,33 @@
+{
+  "skill_name": "manual-testing",
+  "skill_file": "skills/manual-testing/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Define minimum manual test coverage for new UI work.",
+      "expected_output": "Includes keyboard-only, screen reader, and forced-colors checks.",
+      "expectations": ["Keyboard-only", "Screen reader", "Forced-colors"],
+      "files": [],
+      "must_contain_any": ["keyboard", "screen reader", "forced-colors"],
+      "must_not_contain": ["automation is enough"]
+    },
+    {
+      "id": 2,
+      "prompt": "What keyboard checks are mandatory during manual testing?",
+      "expected_output": "Checks tab order, visible focus, and no traps.",
+      "expectations": ["Tab order", "Visible focus", "No keyboard trap"],
+      "files": [],
+      "must_contain_any": ["tab order", "focus", "trap"],
+      "must_not_contain": ["mouse fallback"]
+    },
+    {
+      "id": 3,
+      "prompt": "How should teams validate assistive technology behavior manually?",
+      "expected_output": "Performs key tasks with at least one screen reader and documents results.",
+      "expectations": ["Task-based run", "Screen reader", "Document outcomes"],
+      "files": [],
+      "must_contain_any": ["task", "screen reader", "document"],
+      "must_not_contain": ["untested AT"]
+    }
+  ]
+}

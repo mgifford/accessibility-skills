@@ -1,0 +1,33 @@
+{
+  "skill_name": "charts-graphs",
+  "skill_file": "skills/charts-graphs/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Describe baseline accessibility requirements for a data chart.",
+      "expected_output": "Includes text alternative, data table, and summary insight.",
+      "expectations": ["Text alternative", "Data table", "Summary insight"],
+      "files": [],
+      "must_contain_any": ["text alternative", "data table", "summary"],
+      "must_not_contain": ["visual only"]
+    },
+    {
+      "id": 2,
+      "prompt": "How should charts avoid color-only encoding?",
+      "expected_output": "Uses labels, patterns, or markers in addition to color.",
+      "expectations": ["Non-color cues", "Labels", "Robust interpretation"],
+      "files": [],
+      "must_contain_any": ["pattern", "label", "color"],
+      "must_not_contain": ["color alone"]
+    },
+    {
+      "id": 3,
+      "prompt": "What interaction checks apply to interactive charts?",
+      "expected_output": "Keyboard access and focus visibility for controls and data points.",
+      "expectations": ["Keyboard", "Focus", "Operable controls"],
+      "files": [],
+      "must_contain_any": ["keyboard", "focus", "controls"],
+      "must_not_contain": ["hover only"]
+    }
+  ]
+}

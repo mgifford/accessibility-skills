@@ -1,0 +1,33 @@
+{
+  "skill_name": "ci-cd",
+  "skill_file": "skills/ci-cd/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Define CI accessibility gates for pull requests.",
+      "expected_output": "Uses Lighthouse and axe-core with failure conditions.",
+      "expectations": ["Lighthouse gate", "axe-core on PRs", "Build failures"],
+      "files": [],
+      "must_contain_any": ["Lighthouse", "axe-core", "fail"],
+      "must_not_contain": ["manual checks only"]
+    },
+    {
+      "id": 2,
+      "prompt": "What scheme coverage is required for theme-aware apps?",
+      "expected_output": "Runs checks for both light and dark modes.",
+      "expectations": ["Light mode", "Dark mode", "Explicit coverage"],
+      "files": [],
+      "must_contain_any": ["light", "dark", "coverage"],
+      "must_not_contain": ["single theme only"]
+    },
+    {
+      "id": 3,
+      "prompt": "What governance language should accompany CI findings?",
+      "expected_output": "Includes issue triage and SLA commitments.",
+      "expectations": ["Triage", "SLA", "Issue workflow"],
+      "files": [],
+      "must_contain_any": ["triage", "SLA", "issue"],
+      "must_not_contain": ["no ownership"]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "skill_name": "user-personalization",
+  "skill_file": "skills/user-personalization/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Define baseline requirements for personalization controls.",
+      "expected_output": "Preferences persist and apply immediately.",
+      "expectations": ["Persistence", "Immediate application", "User control"],
+      "files": [],
+      "must_contain_any": ["persist", "immediately", "preference"],
+      "must_not_contain": ["reset every visit"]
+    },
+    {
+      "id": 2,
+      "prompt": "Which OS-level accessibility preferences should be respected?",
+      "expected_output": "Includes reduced motion and contrast preferences.",
+      "expectations": ["Reduced motion", "Contrast settings", "OS preference respect"],
+      "files": [],
+      "must_contain_any": ["prefers-reduced-motion", "prefers-contrast", "respect"],
+      "must_not_contain": ["ignore OS settings"]
+    },
+    {
+      "id": 3,
+      "prompt": "What anti-pattern should teams avoid in personalization systems?",
+      "expected_output": "Do not override explicit user preferences.",
+      "expectations": ["No forced override", "User choice priority", "Consistent behavior"],
+      "files": [],
+      "must_contain_any": ["do not override", "user preference", "consistent"],
+      "must_not_contain": ["force default"]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "skill_name": "opquast-digital-quality",
+  "skill_file": "skills/opquast-digital-quality/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Summarize the purpose of the Opquast framework in web projects.",
+      "expected_output": "References the 245-rule quality framework across disciplines.",
+      "expectations": ["245 rules", "Cross-domain quality", "Governance utility"],
+      "files": [],
+      "must_contain_any": ["245", "quality", "framework"],
+      "must_not_contain": ["a11y only"]
+    },
+    {
+      "id": 2,
+      "prompt": "List categories Opquast can help cover in audits.",
+      "expected_output": "Includes accessibility, security, privacy, and content quality.",
+      "expectations": ["Accessibility", "Security", "Privacy", "Content"],
+      "files": [],
+      "must_contain_any": ["accessibility", "security", "privacy", "content"],
+      "must_not_contain": ["single category"]
+    },
+    {
+      "id": 3,
+      "prompt": "How should teams operationalize Opquast in delivery workflows?",
+      "expected_output": "Use checklist-driven QA gates and recurring audits.",
+      "expectations": ["Checklist use", "QA gates", "Recurring audits"],
+      "files": [],
+      "must_contain_any": ["checklist", "QA", "audit"],
+      "must_not_contain": ["one-time review only"]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "skill_name": "audio-video",
+  "skill_file": "skills/audio-video/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Summarize minimum requirements for published videos.",
+      "expected_output": "Includes captions, transcript, and audio description when needed.",
+      "expectations": ["Captions", "Transcript", "Audio description"],
+      "files": [],
+      "must_contain_any": ["captions", "transcript", "audio description"],
+      "must_not_contain": ["autoplay with sound"]
+    },
+    {
+      "id": 2,
+      "prompt": "What interaction requirements apply to a custom media player?",
+      "expected_output": "Keyboard operable controls with visible focus and labels.",
+      "expectations": ["Keyboard operable", "Visible focus", "Labelled controls"],
+      "files": [],
+      "must_contain_any": ["keyboard", "focus", "label"],
+      "must_not_contain": ["mouse only"]
+    },
+    {
+      "id": 3,
+      "prompt": "When is a transcript required for audio content?",
+      "expected_output": "Transcript is required for standalone audio and supports video accessibility.",
+      "expectations": ["Standalone audio covered", "Transcript required", "Clear guidance"],
+      "files": [],
+      "must_contain_any": ["standalone audio", "transcript", "required"],
+      "must_not_contain": ["optional transcript"]
+    }
+  ]
+}

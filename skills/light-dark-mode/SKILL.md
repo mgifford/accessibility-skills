@@ -111,92 +111,194 @@ naively.
 
 ---
 
-## Optional: Manual Theme Override
+## Optional: Manual Theme Override (Tri-Mode)
 
-Most projects should rely on `color-scheme` and `light-dark()` for the default experience. Only add a toggle if users need a persistent override or the product explicitly requires one.
+Most projects should rely on `color-scheme` and `light-dark()` for defaults. Add
+manual controls only when users need a persistent override.
 
-* Keep the default experience CSS-driven; use JavaScript only for the user-chosen override and persistence.
-* `aria-label` must describe the **action** ("Switch to dark mode"), not the current state.
-* In dark mode: show a sun icon (action = switch to light); in light mode: show a moon icon (action = switch to dark).
-* Place the toggle **after** nav items in DOM order so it does not interrupt navigation.
-* Do not make the toggle fixed or sticky.
+If you provide a control, use a three-option selector: `light`, `dark`, and
+`system`.
+
+* **Control semantics:** use `role="radiogroup"` with three `role="radio"` options so the selected state is explicit via `aria-checked`.
+* **Selected-state management:** implement roving `tabindex` so only the selected option has `tabindex="0"`; all others use `tabindex="-1"`.
+* **Keyboard behavior:** radiogroup is a single Tab stop; support Arrow keys, Home/End, Space, and Enter.
+* **System behavior:** when selected mode is `system`, resolve the visual theme from `prefers-color-scheme` and auto-update on OS/browser preference changes.
+* **DOM order:** place the control after nav/menu items in tab order.
+* **Positioning:** do not make the control fixed or sticky.
+* **Icon safety:** use SVG with `currentColor` so icons stay theme-safe and forced-colors-safe.
 
 ```html
-<button id="theme-toggle" type="button" aria-label="Switch to dark mode">
-  <svg aria-hidden="true" focusable="false" class="sun-icon"
-       viewBox="0 0 24 24" width="20" height="20">
-    <circle cx="12" cy="12" r="5" fill="currentColor"/>
-    <path fill="currentColor"
-          d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12
-             M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
-  </svg>
-  <svg aria-hidden="true" focusable="false" class="moon-icon"
-       viewBox="0 0 24 24" width="20" height="20">
-    <path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-  </svg>
-</button>
+<header>
+  <nav aria-label="Main navigation">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+  </nav>
+
+  <div id="theme-mode-group" role="radiogroup" aria-label="Colour theme">
+    <button
+      type="button"
+      class="theme-mode-btn"
+      role="radio"
+      aria-checked="false"
+      tabindex="-1"
+      data-theme-value="light">
+      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+        <circle cx="12" cy="12" r="5" fill="currentColor"/>
+      </svg>
+      <span>Light</span>
+    </button>
+
+    <button
+      type="button"
+      class="theme-mode-btn"
+      role="radio"
+      aria-checked="false"
+      tabindex="-1"
+      data-theme-value="dark">
+      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+        <path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+      </svg>
+      <span>Dark</span>
+    </button>
+
+    <button
+      type="button"
+      class="theme-mode-btn"
+      role="radio"
+      aria-checked="true"
+      tabindex="0"
+      data-theme-value="system">
+      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+        <path fill="none" stroke="currentColor" stroke-width="2" d="M3 4h18v12H3zM8 20h8"/>
+      </svg>
+      <span>System</span>
+    </button>
+  </div>
+</header>
 ```
 
 ---
 
-## Moderate: Theme Persistence — localStorage with `try/catch`
+## Moderate: Theme Persistence — Safe localStorage + System Mode
 
-`localStorage` is unavailable in some private browsing modes, cross-origin
-iframes, and storage-restricted environments. Always wrap access in `try/catch`
-to prevent a JavaScript error from breaking the override entirely.
+`localStorage` can be unavailable (private browsing, sandboxed iframes,
+storage-restricted environments). Always wrap reads/writes in `try/catch` so
+theme switching never crashes.
 
 ```js
-const toggle = document.getElementById('theme-toggle');
-const mq = window.matchMedia('(prefers-color-scheme: dark)');
+const themeModeButtons = document.querySelectorAll('.theme-mode-btn');
+const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+const modeOrder = ['light', 'dark', 'system'];
 
-// Safe localStorage helpers
-function getStoredTheme() {
+function getStoredMode() {
   try {
-    return localStorage.getItem('theme');
+    return localStorage.getItem('theme-mode');
   } catch {
-    return null; // Private browsing or storage blocked
+    return null;
   }
 }
 
-function setStoredTheme(theme) {
+function setStoredMode(mode) {
   try {
-    localStorage.setItem('theme', theme);
+    localStorage.setItem('theme-mode', mode);
   } catch {
-    // Storage unavailable — preference will not persist across sessions.
-    // The toggle still works for the current session.
+    // Storage unavailable; preference still works for current session.
   }
 }
 
-const storedTheme = getStoredTheme();
-let currentTheme = storedTheme || (mq.matches ? 'dark' : 'light');
+let mode = getStoredMode() || 'system';
 
-function updateToggleLabel(theme) {
-  toggle.setAttribute(
-    'aria-label',
-    theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
-  );
+function resolveTheme(activeMode) {
+  if (activeMode === 'system') {
+    return prefersDarkScheme.matches ? 'dark' : 'light';
+  }
+  return activeMode;
 }
 
-if (storedTheme) {
-  document.documentElement.setAttribute('data-theme', storedTheme);
-  updateToggleLabel(storedTheme);
-} else {
-  updateToggleLabel(currentTheme);
-}
-
-if (!storedTheme) {
-  mq.addEventListener('change', (event) => {
-    currentTheme = event.matches ? 'dark' : 'light';
-    updateToggleLabel(currentTheme);
+function updateSelection(activeMode) {
+  themeModeButtons.forEach((button) => {
+    const checked = button.dataset.themeValue === activeMode;
+    button.setAttribute('aria-checked', checked ? 'true' : 'false');
+    button.setAttribute('tabindex', checked ? '0' : '-1');
   });
 }
 
-toggle.addEventListener('click', () => {
-  currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-  setStoredTheme(currentTheme);
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  updateToggleLabel(currentTheme);
+function applyMode(activeMode) {
+  const resolvedTheme = resolveTheme(activeMode);
+  document.documentElement.setAttribute('data-theme-mode', activeMode);
+  document.documentElement.setAttribute('data-theme', resolvedTheme);
+  updateSelection(activeMode);
+}
+
+function getModeIndex(activeMode) {
+  return modeOrder.indexOf(activeMode);
+}
+
+function focusModeByIndex(index) {
+  const normalizedIndex = (index + modeOrder.length) % modeOrder.length;
+  const nextMode = modeOrder[normalizedIndex];
+  const nextButton = document.querySelector(`[data-theme-value="${nextMode}"]`);
+
+  if (!nextButton) {
+    return;
+  }
+
+  mode = nextMode;
+  setStoredMode(mode);
+  applyMode(mode);
+  nextButton.focus();
+}
+
+themeModeButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    mode = button.dataset.themeValue;
+    setStoredMode(mode);
+    applyMode(mode);
+  });
+
+  button.addEventListener('keydown', (event) => {
+    const currentIndex = getModeIndex(mode);
+
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        event.preventDefault();
+        focusModeByIndex(currentIndex + 1);
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        event.preventDefault();
+        focusModeByIndex(currentIndex - 1);
+        break;
+      case 'Home':
+        event.preventDefault();
+        focusModeByIndex(0);
+        break;
+      case 'End':
+        event.preventDefault();
+        focusModeByIndex(modeOrder.length - 1);
+        break;
+      case ' ':
+      case 'Enter':
+        event.preventDefault();
+        mode = button.dataset.themeValue;
+        setStoredMode(mode);
+        applyMode(mode);
+        break;
+      default:
+        break;
+    }
+  });
 });
+
+prefersDarkScheme.addEventListener('change', () => {
+  if (mode === 'system') {
+    applyMode('system');
+  }
+});
+
+applyMode(mode);
 ```
 
 ---
@@ -507,6 +609,10 @@ Before shipping, verify all of the following:
 * [ ] Focus rings use `outline`, not `box-shadow` alone
 * [ ] Information not conveyed by colour alone — icon + text + colour
 * [ ] Focus indicators visible and meeting 3:1 in all modes
+* [ ] Manual selector exposes `light`, `dark`, and `system` as explicit options when a selector is present
+* [ ] Selector uses radiogroup semantics (`role="radiogroup"`, `role="radio"`, `aria-checked`) with roving `tabindex`
+* [ ] Keyboard support includes single Tab stop plus Arrow keys, Home/End, Space, and Enter
+* [ ] In `system` mode, theme resolves from `prefers-color-scheme` and auto-updates on preference change
 * [ ] `localStorage` access wrapped in `try/catch`
 * [ ] User preference persists across sessions where `localStorage` is available
 * [ ] `prefers-reduced-motion` respected for theme transitions

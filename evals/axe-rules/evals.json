@@ -1,0 +1,33 @@
+{
+  "skill_name": "axe-rules",
+  "skill_file": "skills/axe-rules/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Describe what to capture for each axe violation in CI output.",
+      "expected_output": "Captures rule ID, WCAG mapping, severity, and element context.",
+      "expectations": ["Rule ID", "WCAG mapping", "Severity", "Element context"],
+      "files": [],
+      "must_contain_any": ["rule ID", "WCAG", "severity", "element"],
+      "must_not_contain": ["ignore axe output"]
+    },
+    {
+      "id": 2,
+      "prompt": "How should teams prioritize axe findings?",
+      "expected_output": "Uses severity plus user impact to prioritize remediation.",
+      "expectations": ["Severity used", "User impact used", "Prioritization guidance"],
+      "files": [],
+      "must_contain_any": ["severity", "impact", "prioritize"],
+      "must_not_contain": ["all findings are equal"]
+    },
+    {
+      "id": 3,
+      "prompt": "What is a practical CI fail policy for axe checks?",
+      "expected_output": "Blocks on serious/critical findings with documented exceptions.",
+      "expectations": ["Fail policy", "Criticality", "Exception handling"],
+      "files": [],
+      "must_contain_any": ["critical", "serious", "fail"],
+      "must_not_contain": ["never fail build"]
+    }
+  ]
+}
