@@ -2,8 +2,8 @@
 
 ```yaml
 canonical_source: examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md
-last_synced_commit: "0bfe3b9"
-last_synced_date: "2026-07-10"
+last_synced_commit: "1374d8f"
+last_synced_date: "2026-07-15"
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md.

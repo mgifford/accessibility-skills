@@ -404,6 +404,65 @@ Overusing it defeats the purpose of forced-colours mode.
 
 ---
 
+## Moderate: Complex Scripts and Diacritics
+
+Only apply this section if the project renders text in languages with combining
+diacritics (e.g. Hebrew Nikkud/Ta'amei Hamikra, Arabic Tashkeel). Dark mode
+presents unique accessibility challenges for these scripts because the marks are
+combining Unicode characters that stack vertically.
+
+### CSS requirements for complex-script containers
+
+1. **Irradiation/glow control** — Pure white on pure black causes halation that
+   blurs tiny diacritic dots. Use off-white on dark charcoal instead:
+
+   ```css
+   .complex-script-container {
+     /* prefer #f5f5f5 text on #121212 background, not #ffffff on #000000 */
+     -webkit-font-smoothing: antialiased;
+     -moz-osx-font-smoothing: grayscale;
+   }
+   ```
+
+2. **Line-height & clipping** — Diacritics stack above and below the baseline.
+   Set `line-height` to at least `1.8` or `2.0`. Never apply `overflow: hidden`
+   to a complex-script text container.
+
+3. **Contrast & colour inheritance** — Ensure colour changes apply to
+   pseudo-elements and spans that colourize individual diacritics; they must
+   all switch to a high-contrast colour in dark mode.
+
+4. **RTL preservation** — Dark-mode state toggles must never strip `dir="rtl"`
+   attributes or break bidirectional text isolation (`<bdi>`).
+
+5. **Font-weight thinning** — Light text on a dark background looks bolder.
+   Avoid excessively bold weights in dark mode; diacritics can merge into the
+   base letter and become unreadable blobs.
+
+### Visual regression testing for diacritics
+
+DOM-based text checks cannot catch visual rendering failures of combining
+characters. Use strict pixel-level visual regression tests (Playwright/Cypress):
+
+- Capture a baseline screenshot in light mode with complex-script text.
+- Simulate dark mode (toggle `data-theme` attribute or override
+  `prefers-color-scheme`).
+- Wait for the specialist font (e.g. SBL Hebrew, Tiro Hebrew) to fully render.
+- Perform a pixel-by-pixel diff with a strict threshold (≤ 0.01) to confirm
+  diacritic dots do not blur, disappear, or shift.
+- Run in a standardised container (e.g. Docker) with consistent font
+  rendering to avoid false positives across OS runners.
+
+### Manual checklist for complex scripts in dark mode
+
+- [ ] Tiny diacritic dots (e.g. Dagesh) are distinct against the dark background
+- [ ] Vertical stacking marks remain separate lines, not merged blobs
+- [ ] Highest cantillation accent is fully visible (not clipped at the top)
+- [ ] Font weight has not caused diacritics to blob into the base letter
+- [ ] RTL direction attribute is intact after theme toggle
+
+---
+
 ## Required: Colour Independence
 
 Never convey information by colour alone. Every status indicator needs icon +
