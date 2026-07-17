@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run CSV parsing tests
+        run: npm run test:csv
+
+      - name: Run role normalization tests
+        run: node tests/test-role-normalization.js
+
+      - name: Validate eval manifests
+        run: npm run validate:evals
+
+      - name: Check ARRM role integrity
+        run: node scripts/check-arrm-roles.js
+
+      - name: Verify generated output is up to date
+        run: |
+          npm run generate:arrm-roles
+          git diff --exit-code roles/*/generated/ || (echo "Generated output is stale. Run 'npm run generate:arrm-roles' and commit the changes." && exit 1)

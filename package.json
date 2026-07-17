@@ -28,6 +28,14 @@
   "scripts": {
     "validate:evals": "node scripts/validate-evals.mjs",
     "run:evals": "node scripts/run-evals.mjs",
-    "report:evals": "node scripts/run-evals.mjs --output-dir reports"
+    "report:evals": "node scripts/run-evals.mjs --output-dir reports",
+    "test:csv": "node tests/test-csv-parsing.js",
+    "validate:csv": "node tests/test-csv-parsing.js",
+    "generate:arrm-roles": "node scripts/generate-role-indexes.js",
+    "check:arrm-roles": "node scripts/check-arrm-roles.js"
+  },
+  "dependencies": {
+    "csv-parse": "^5.6.0",
+    "csv-stringify": "^6.8.1"
   }
 }

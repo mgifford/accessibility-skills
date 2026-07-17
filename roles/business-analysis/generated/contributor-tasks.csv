@@ -1,0 +1,7 @@
+<!-- This file is generated from W3C WAI ARRM data. Do not edit manually. -->
+<!-- Source: https://github.com/w3c/wai-arrm/blob/draft/_data/arrm/arrm-all-tasks.csv -->
+<!-- Retrieved: 2025-01-01 -->
+"ID","WCAG SC","Level","Task","Main Role","Primary Ownership","Secondary Ownership","Contributor","Status"
+"FRM-041","3.3.8","AA","Cognitive function tests that do not rely on object recognition or personal content must provide an alternative non-cognitive method or an assistive mechanism.","Design","User Experience (UX) Design","Front-End Development","Business Analysis","TBD"
+"FRM-042","3.3.9","AAA","A cognitive function test during authentication is not required unless an alternative non-cognitive method or an assistive mechanism is provided.","Design","User Experience (UX) Design","Front-End Development","Business Analysis","TBD"
+"ANM-031","2.2.3","AAA","Timing is not an essential part of the event or activity presented by the content.","Design","User Experience (UX) Design","Content Authoring","Business Analysis","Requirement"

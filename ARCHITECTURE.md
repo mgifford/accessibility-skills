@@ -108,6 +108,27 @@ Each perspective represents a disability-related or situational access lens:
 - **environmental contrast**
 - **vestibular and motion access**
 
+### Implemented: Perspective Definitions
+
+The `perspectives/` directory contains compact, agent-actionable definitions for each of the seven perspectives. These definitions provide:
+
+- Scope and common barriers
+- Relevant topic skills to load
+- Questions to ask during review
+- Evidence that can be gathered automatically vs. manually
+- When direct research with disabled users is needed
+- Common false assumptions
+- Limitations of AI analysis
+- Escalation triggers
+
+**These definitions are inputs.** They are structured checklists that humans and the future Perspective Auditor will use. They are not the auditor itself.
+
+### Not Yet Implemented: Perspective Auditor Workflow
+
+The Perspective Auditor AI workflow (described in `ai-workflows/README.md`) will apply these perspective definitions to examine impacts for specific user groups. Today, humans use the perspective definitions directly. The workflow is designed but not yet built.
+
+Key distinction: the perspective definitions (inputs) exist; the automated auditor (workflow) does not.
+
 ## Evidence Requirements
 
 The system requires structured evidence for all findings:
@@ -147,11 +168,14 @@ For each finding, the system evaluates:
 
 ## Next Steps
 
-1. Reference ARRM CSV data source
-2. Implement task-to-role indexing mechanism
-3. Create evaluation framework
-4. Test with the three fixtures
-5. Ensure existing validation passes
+1. ~~Reference ARRM CSV data source~~ — Done (data in `data/arrm/`)
+2. ~~Implement task-to-role indexing mechanism~~ — Done (generated role indexes)
+3. ~~Create evaluation framework~~ — Done (fixtures in `evals/`)
+4. ~~Test with the three fixtures~~ — Done (positive tabindex, chart alternative, auth flow)
+5. ~~Ensure existing validation passes~~ — Done (`npm run validate:evals`)
+6. Build Perspective Auditor workflow using the existing perspective definitions
+7. Integrate perspective auditor output with Bug Reporter
+8. Add perspective-specific evaluation fixtures beyond rejection tests
 
 ## References
 

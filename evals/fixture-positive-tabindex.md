@@ -1,6 +1,7 @@
 # ARRM Task Fixture #1: Positive tabindex
 
 ## Input Scenario
+
 An accessibility scan identifies a UI component with `positive tabindex` but no logical tab order position.
 
 ## Expected Findings
@@ -10,14 +11,13 @@ An accessibility scan identifies a UI component with `positive tabindex` but no 
 id: POS-TAB-001
 title: Positive tabindex without logical position
 arrm:
-  task_id: TBA-001  # TODO: Map to appropriate ARRM task
-  wcag_sc: "2.4.3 Focus Order"
-  level: AA
+  task_id: INP-016
+  wcag_sc: "2.4.3"
+  level: A
   primary: ["Front-End Development"]
   secondary: ["User Experience Design"]
   contributors: []
 ```
-
 ### Decision State Classification
 ```yaml
 decision:

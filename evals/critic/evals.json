@@ -1,0 +1,116 @@
+{
+  "skill_name": "critic",
+  "skill_file": "ai-workflows/critic/SKILL.md",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "A Planner agent proposes adding aria-describedby to reference a description element for a complex image. The description element exists in the DOM with the correct ID. Should the Critic accept this fix?",
+      "expected_output": "The Critic accepts the fix as safe and deterministic, verifying the DOM reference exists and the ARRM task mapping is correct.",
+      "expectations": [
+        "The Critic accepts the fix without blocking it",
+        "The Critic verifies the aria-describedby references an existing element",
+        "The Critic confirms the ARRM task IMG-009 is correctly mapped",
+        "The Critic does not require human judgment for this change"
+      ],
+      "files": ["fixture-critic-safe-fix.md"],
+      "must_contain_any": [
+        "accepted",
+        "IMG-009",
+        "aria-describedby"
+      ],
+      "must_not_contain": [
+        "rejected",
+        "invented",
+        "missing consultation"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "A Planner agent proposes fixing a non-interactive div by adding tabindex=\"0\" to make it keyboard-reachable. Should the Critic accept this auto-fix?",
+      "expected_output": "The Critic rejects the fix as unsafe because it creates a focusable element without keyboard handlers, requiring human judgment from UX Design and Front-End Development.",
+      "expectations": [
+        "The Critic rejects the unsafe auto-fix",
+        "The Critic identifies the keyboard trap risk",
+        "The Critic routes the finding to UX Design and Front-End Development",
+        "The Critic does not accept tabindex on non-interactive elements"
+      ],
+      "files": ["fixture-critic-unsafe-tabindex.md"],
+      "must_contain_any": [
+        "rejected",
+        "keyboard trap",
+        "human judgment"
+      ],
+      "must_not_contain": [
+        "accepted",
+        "auto-fixable",
+        "safe"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "A Planner agent claims that ARRM task 'NAV-099' supports heading hierarchy for screen readers. This task ID does not exist in the ARRM dataset. Should the Critic accept this ARRM mapping?",
+      "expected_output": "The Critic rejects the finding because the ARRM task ID is invented, requiring the Planner to re-map to a real task like SEM-011 or SEM-012.",
+      "expectations": [
+        "The Critic detects the invented ARRM task ID",
+        "The Critic rejects the finding with an invalid mapping",
+        "The Critic suggests valid ARRM alternatives",
+        "The Critic maintains data integrity of the role-based workflow"
+      ],
+      "files": ["fixture-critic-invented-arrm.md"],
+      "must_contain_any": [
+        "rejected",
+        "NAV-099",
+        "does not exist"
+      ],
+      "must_not_contain": [
+        "accepted",
+        "valid mapping",
+        "auto-fixable"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "A Planner agent recommends adding pattern fills to a chart that uses color alone to convey data, but does not consult the Visual Design role (primary owner of IMG-018). Should the Critic accept this fix?",
+      "expected_output": "The Critic weakly accepts the direction but requires consultation with Visual Design before implementation, as they are the primary owner of the ARRM task.",
+      "expectations": [
+        "The Critic identifies the missing cross-role consultation",
+        "The Critic respects ARRM role ownership for Visual Design",
+        "The Critic does not fully accept the fix without design review",
+        "The Critic routes the finding to the correct roles"
+      ],
+      "files": ["fixture-critic-chart-decision.md"],
+      "must_contain_any": [
+        "weak_accept",
+        "Visual Design",
+        "consultation"
+      ],
+      "must_not_contain": [
+        "accepted",
+        "auto-fixable",
+        "no review needed"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "A Planner agent claims 'screen reader users cannot access this feature' without providing any evidence from assistive technology testing. Should the Critic accept this claim?",
+      "expected_output": "The Critic rejects the claim as unsupported, requiring the Planner to provide evidence from screen reader testing before making generalizations about disabled users.",
+      "expectations": [
+        "The Critic detects the unsupported generalization",
+        "The Critic requires evidence from assistive technology testing",
+        "The Critic does not accept the claim without verification",
+        "The Critic prevents assumptions about disabled users"
+      ],
+      "files": ["fixture-critic-claim-disabled.md"],
+      "must_contain_any": [
+        "rejected",
+        "evidence",
+        "unsupported"
+      ],
+      "must_not_contain": [
+        "accepted",
+        "valid claim",
+        "no testing needed"
+      ]
+    }
+  ]
+}

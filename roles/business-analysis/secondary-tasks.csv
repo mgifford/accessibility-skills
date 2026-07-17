@@ -1,6 +1,0 @@
-"ID","WCAG SC","Level","Task","Main Role","Primary Ownership","Secondary Ownership","Contributor","Status"
-"FRM-036","3.3.4","AA","Users are provided with means to prevent and correct form errors when legal, financial, or data information is involved.","Design","User Experience (UX) Design","Business Analysis","none","Requirement"
-"FRM-037","3.3.4","AA","When legal, financial, or data information is involved, confirmation screens are provided prior to any final form submission.","Design","User Experience (UX) Design","Business Analysis","Front-End Development","Best Practice"
-"FRM-039","3.3.6","AAA","Users are provided with means to prevent and correct form errors.","Design","User Experience (UX) Design","Business Analysis","none","Requirement"
-"NAV-004","2.2.1","A","Users are notified when time limits are about to expire.","Design","User Experience (UX) Design","Business Analysis","none","Requirement"
-"NAV-005","2.2.1","A","Options to extend, or even turn off time limits are provided.","Design","User Experience (UX) Design","Business Analysis","none","Requirement"

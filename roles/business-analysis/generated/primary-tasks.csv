@@ -1,0 +1,5 @@
+<!-- This file is generated from W3C WAI ARRM data. Do not edit manually. -->
+<!-- Source: https://github.com/w3c/wai-arrm/blob/draft/_data/arrm/arrm-all-tasks.csv -->
+<!-- Retrieved: 2025-01-01 -->
+"ID","WCAG SC","Level","Task","Main Role","Primary Ownership","Secondary Ownership","Contributor","Status"
+"IMG-016","1.1.1","A","Alternate means of accessing CAPTCHA information are provided, such as audio CAPTCHA, logical question, or other equivalent means.","Design","Business Analysis","User Experience (UX) Design","none","Requirement"

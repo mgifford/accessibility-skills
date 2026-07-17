@@ -1,0 +1,14 @@
+<!-- This file is generated from W3C WAI ARRM data. Do not edit manually. -->
+<!-- Source: https://github.com/w3c/wai-arrm/blob/draft/_data/arrm/arrm-all-tasks.csv -->
+<!-- Retrieved: 2025-01-01 -->
+"ID","WCAG SC","Level","Task","Main Role","Primary Ownership","Secondary Ownership","Contributor","Status"
+"IMG-015","1.1.1","A","Text alternatives of dynamically updated images are simultaneously updated as the images change.","Development","Front-End Development","User Experience (UX) Design","Content Authoring","Requirement"
+"IMG-019","1.4.5","AA","Text content that conveys information is not part of images.","Design","User Experience (UX) Design","Visual Design","Content Authoring","Requirement"
+"FRM-034","3.3.2","AA","Instructions intending to prevent errors are provided in text and available.","Development","Front-End Development","User Experience (UX) Design","Content Authoring","Best Practice"
+"CSS-006","1.3.3","A","Shape and location are never used as the only way to convey information and relationships between page components.","Design","Visual Design","User Experience (UX) Design","Content Authoring","Requirement"
+"CSS-009","1.4.1","A","Color is never used as the only way to convey information, context, indicate selection or the presence of errors.","Design","Visual Design","User Experience (UX) Design","Content Authoring","Requirement"
+"SCT-010","1.3.3","A","Objects that rely on shape to be properly perceived are supported with additional text information.","Design","User Experience (UX) Design","Visual Design","Content Authoring","Requirement"
+"SCT-011","1.3.3","A","Objects that rely on size to be properly perceived are supported with additional text information.","Design","User Experience (UX) Design","Visual Design","Content Authoring","Requirement"
+"SCT-012","1.3.3","A","Objects that rely on visual location to be properly perceived are supported with additional text information.","Design","User Experience (UX) Design","Visual Design","Content Authoring","Best Practice"
+"SCT-013","1.3.3","A","Objects that rely on orientation to be properly perceived are supported with additional text information.","Design","User Experience (UX) Design","Visual Design","Content Authoring","Requirement"
+"SCT-029","3.1.6","AAA","Ambiguous words are supported by a mechanism that helps users identify their specific pronunciation.","Design","User Experience (UX) Design","Front-End Development","Content Authoring","Requirement"
