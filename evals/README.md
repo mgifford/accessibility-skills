@@ -1,46 +1,24 @@
-# Evals
+# Evaluation Manifest
 
-This directory holds repo-local evaluation manifests for accessibility skills.
+This directory contains evaluation fixtures that demonstrate the core functionality of the role-aware accessibility workflow.
 
-The current convention is:
+Each fixture tests the system's ability to:
 
-- one folder per skill, such as `evals/navigation/`
-- one manifest per skill named `evals.json`
-- a `skill_file` field that points to the target `skills/.../SKILL.md`
+1. Map findings to ARRM tasks and role ownership
+2. Distinguish between auto-fixable and judgement-call requirements  
+3. Generate role-specific questions and recommendations
+4. Document conflicts and uncertainty
+5. Route findings to appropriate human processes
 
-Manifest fields currently supported by the local validator:
+Fixtures are intended to be run using the repository's existing evaluation infrastructure.
 
-- `skill_name` - the skill being evaluated
-- `skill_file` - path to the skill file in `skills/`
-- `evals` - array of evaluation cases
-- per-eval fields such as `id`, `prompt`, `expected_output`, `expectations`
-- optional arrays: `files`, `must_contain_any`, `must_not_contain`
+# Evolution Path
 
-Run the validator with:
+The evaluation system is designed to evolve from simple deterministic fixes to complex multi-role decisions. Early fixtures focus on establishing the core mapping and decision-state logic, while later fixtures will test advanced scenario handling.
 
-```bash
-npm run validate:evals
-```
+# Next Steps
 
-Run the scorer with:
-
-```bash
-npm run run:evals
-```
-
-Generate persisted report artifacts with:
-
-```bash
-npm run report:evals
-```
-
-That command writes both `reports/eval-report.json` and `reports/eval-report.md`
-so you can review the current score and missing-response gaps later.
-
-The runner looks for response files in `responses/<skill-name>/` and reads
-`<id>.txt` or `<id>.md` for each eval case. Keep responses separate from the
-manifests so you can generate them locally without changing the checked-in
-eval definitions.
-
-Keep the first eval set small and high-signal. Add more skills only after the
-pilot manifest is stable.
+1. Implement a simple testing framework for evaluating planner output
+2. Add more fixture scenarios covering edge cases
+3. Create tests for integration with other AI workflows
+4. Add evaluation of perspective auditor and bug reporter capabilities

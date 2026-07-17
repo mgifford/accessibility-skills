@@ -1,0 +1,8 @@
+"ID","WCAG SC","Level","Task","Main Role","Primary Ownership","Secondary Ownership","Contributor","Status"
+"FRM-028","3.3.2","A","Form controls are coded to have persistent visual labels.","Development","Front-End Development","User Experience (UX) Design","Visual Design","Requirement"
+"FRM-030","3.3.2","A","Clear text-based instructions are provided on how to use the form controls.","Author","Content Authoring","User Experience (UX) Design","Visual Design","Requirement"
+"CSS-023","2.4.11","AA","Elements that receive keyboard focus are at least partially visible in the viewport, without being covered by other content.","Design","User Experience (UX) Design","Front-End Development","Visual Design","TBD"
+"CSS-024","2.4.12","AAA","Elements that receive keyboard focus are fully visible within the viewport, without being covered by other content.","Design","User Experience (UX) Design","Front-End Development","Visual Design","TBD"
+"NAV-013","2.4.3","A","All active elements receive focus in a logical and predictable order that is prescribed by the visual presentation.","Development","Front-End Development","User Experience (UX) Design","User Experience (UX), Design Visual Design","Requirement"
+"DYN-001","2.4.11","AA","Fixed-position content does not fully cover focused elements.","Design","User Experience (UX) Design","Front-End Development","Visual Design","TBD"
+"DYN-002","2.4.12","AA","Fixed-position content does not cover any part of focused elements.","Design","User Experience (UX) Design","Front-End Development","Visual Design","TBD"

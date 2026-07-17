@@ -1,0 +1,6 @@
+"ID","WCAG SC","Level","Task","Main Role","Primary Ownership","Secondary Ownership","Contributor","Status"
+"FRM-037","3.3.4","AA","When legal, financial, or data information is involved, confirmation screens are provided prior to any final form submission.","Design","User Experience (UX) Design","Business Analysis","Front-End Development","Best Practice"
+"CSS-025","2.4.13","AAA","The keyboard focus indicator is clearly visible and has a minimum area equivalent to a 2 CSS pixel thick border around the focused element, except situations where no visible change is required.","Design","Visual Design","","User Experience (UX) Design, Front-End Development","TBD"
+"CSS-030","2.5.8","AA","Controls with the same functionality or destination are combined within a single target area that is at least 24 by 24 CSS pixels.","Design","User Experience (UX) Design","Visual Design","Front-End Development","TBD"
+"NAV-023","2.4.10","AAA","Content is logically organized using section headings.","Author","Content Authoring","User Experience (UX) Design","Front-End Development","Requirement"
+"SCT-001","1.1.1","A","Emoticons, emojis, ASCII art, and other non-markup language constructs are supported with equivalent text alternatives and conveyed to assistive technologies.","Design","User Experience (UX) Design","Content Authoring","Front-End Development","Requirement"
