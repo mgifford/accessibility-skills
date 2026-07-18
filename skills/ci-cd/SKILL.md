@@ -68,8 +68,8 @@ When implementing these workflows:
    # Instead of:
    uses: actions/checkout@v4
    
-   # Use:
-   uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # v4.1.1
+   # Use (replace with actual SHA from action's release page):
+   uses: actions/checkout@<commit-sha>  # e.g., v4.1.1
    ```
 
 2. **Review action sources** — Only use actions from trusted publishers:
