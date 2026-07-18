@@ -47,6 +47,60 @@ Automation is the baseline, not the ceiling. Prefer this stack:
 
 ---
 
+## Security Considerations
+
+This skill references GitHub Actions that fetch and execute remote code. This
+creates a **supply chain risk** (Snyk W012: Potentially malicious external URL).
+
+### The Risk
+
+GitHub Actions execute code from external repositories:
+- `github/accessibility-scanner@v3` — runs accessibility scans against your site
+- `AGENT_REMEDIATION_WORKFLOW.yml` — runs a Copilot coding agent that applies fixes
+- Any pinned action version could be compromised upstream
+
+### Mitigations
+
+When implementing these workflows:
+
+1. **Pin to commit SHAs, not tags** — Tags can be moved; commit SHAs cannot:
+   ```yaml
+   # Instead of:
+   uses: actions/checkout@v4
+   
+   # Use:
+   uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # v4.1.1
+   ```
+
+2. **Review action sources** — Only use actions from trusted publishers:
+   - `actions/checkout`, `actions/setup-node`, `actions/upload-artifact` (GitHub official)
+   - `github/accessibility-scanner` (GitHub official)
+   - `dequelabs/axe-core-npm` (axe-core maintainers)
+
+3. **Audit before copying workflows** — Review `AGENT_REMEDIATION_WORKFLOW.yml`
+   before copying to your repo. Understand that it grants Copilot write access
+   to create PRs.
+
+4. **Use `permissions:` to limit blast radius** — Always declare minimum permissions:
+   ```yaml
+   permissions:
+     contents: read
+     issues: write  # only if creating issues
+   ```
+
+5. **Review Dependabot PRs** — When Dependabot proposes action updates, review
+   the changelog before approving.
+
+### Acceptance
+
+This pattern is acceptable because:
+- CI/CD automation requires executing external code by design
+- Pinning to SHAs ensures you control exactly which code runs
+- The actions referenced are from established, trusted publishers
+- Repository permissions limit what any action can do
+
+---
+
 ## Critical: Lighthouse CI Quality Gate
 
 Enforce a strict score threshold. A drop to 99 % accessibility or performance **must
