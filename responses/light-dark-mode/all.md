@@ -98,7 +98,134 @@ This keeps `prefers-color-scheme` as a fallback path while `light-dark()` remain
 
 * browser support for `light-dark()` and `contrast-color()` in the browsers you target.
 * Light mode and dark mode rendering with `color-scheme: light dark;` on `:root`.
-* forced-colors and high contrast mode behaviour.
+* forced-colours and high contrast mode behaviour.
 * Manual WCAG contrast checks for text, controls, and focus rings.
 * `@supports` fallbacks still produce readable colours when the modern functions are unavailable.
 ```
+
+## Eval 6
+
+```html
+<div role="group" aria-label="Colour theme">
+  <button type="button" class="theme-mode-btn" aria-pressed="false" data-theme-value="system">
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+      <path fill="none" stroke="currentColor" stroke-width="2" d="M3 4h18v12H3zM8 20h8"/>
+    </svg>
+    <span>System</span>
+  </button>
+
+  <button type="button" class="theme-mode-btn" aria-pressed="false" data-theme-value="light">
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+      <circle cx="12" cy="12" r="5" fill="currentColor"/>
+    </svg>
+    <span>Light</span>
+  </button>
+
+  <button type="button" class="theme-mode-btn" aria-pressed="true" data-theme-value="dark">
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+      <path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+    </svg>
+    <span>Dark</span>
+  </button>
+</div>
+```
+
+## Eval 7
+
+```javascript
+var selectedMode = 'system'; // 'system', 'light', or 'dark'
+var resolvedTheme = 'light'; // 'light' or 'dark'
+
+function resolveTheme(mode) {
+  if (mode === 'system') {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  return mode;
+}
+
+function applyMode(mode) {
+  selectedMode = mode;
+  resolvedTheme = resolveTheme(mode);
+  document.documentElement.setAttribute('data-theme-mode', mode);
+  document.documentElement.setAttribute('data-theme', resolvedTheme);
+}
+
+// Listen for OS changes when in system mode
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+  if (selectedMode === 'system') {
+    applyMode('system');
+  }
+});
+```
+
+## Eval 8
+
+```html
+<script>
+  (function() {
+    var stored = null;
+    try { stored = localStorage.getItem('theme-mode'); } catch (e) {}
+    var mode = (stored === 'light' || stored === 'dark') ? stored : 'system';
+    var resolved = mode === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      : mode;
+    document.documentElement.setAttribute('data-theme-mode', mode);
+    document.documentElement.setAttribute('data-theme', resolved);
+  })();
+</script>
+```
+
+This runs synchronously in `<head>` before any rendering occurs, preventing flash of incorrect theme.
+
+## Eval 9
+
+```css
+@media (forced-colors: active) {
+  .theme-mode-btn {
+    border: 2px solid ButtonText;
+    color: ButtonText;
+    background: ButtonFace;
+  }
+
+  .theme-mode-btn:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .theme-mode-btn[aria-pressed="true"] {
+    border-color: Highlight;
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+}
+```
+
+## Eval 10
+
+When a user selects "system", the stored value MUST be `system`, not the resolved `dark` or `light`. If you store `dark` because the OS happened to be dark at that moment, then:
+
+1. When the user switches their OS to light mode, the page stays dark
+2. The user has no way to get back to true system-following behavior
+3. The preference is no longer "follow the OS" — it's "stay dark forever"
+
+The correct approach:
+
+```javascript
+// Correct: store the mode, not the resolved theme
+function setStoredMode(mode) {
+  try {
+    localStorage.setItem('theme-mode', mode); // 'system', 'light', or 'dark'
+  } catch (e) {}
+}
+
+// When resolving, check the stored mode
+function applyMode(mode) {
+  var resolved = mode === 'system'
+    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    : mode;
+  document.documentElement.setAttribute('data-theme', resolved);
+}
+```
+
+This ensures that future OS changes continue to affect the page when the user has selected system.

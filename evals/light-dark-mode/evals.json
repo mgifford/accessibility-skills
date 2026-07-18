@@ -90,11 +90,11 @@
     {
       "id": 5,
       "prompt": "Write a compact testing checklist for a theme that uses color-scheme, light-dark(), contrast-color(), and forced-colors.",
-      "expected_output": "Covers browser support, light and dark mode verification, forced-colors and high contrast mode, and manual WCAG contrast checks.",
+      "expected_output": "Covers browser support, light and dark mode verification, forced-colours and high contrast mode, and manual WCAG contrast checks.",
       "expectations": [
         "Browser support is checked",
         "Light mode and dark mode are checked",
-        "Forced-colors and high contrast are checked",
+        "Forced-colours and high contrast are checked",
         "Manual WCAG contrast validation is included"
       ],
       "files": [],
@@ -106,6 +106,109 @@
       "must_not_contain": [
         "automated tools only",
         "JS required"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Build a three-option theme selector with System, Light, and Dark using native buttons and aria-pressed.",
+      "expected_output": "Uses a labelled group with three native button elements, aria-pressed for selection state, and no arrow-key navigation between options.",
+      "expectations": [
+        "Uses native button elements with type=\"button\"",
+        "Uses aria-pressed=\"true\" for selected option",
+        "Uses a labelled group (role=\"group\" with aria-label)",
+        "Does NOT use role=\"radio\" or role=\"radiogroup\""
+      ],
+      "files": [],
+      "must_contain_any": [
+        "aria-pressed",
+        "type=\"button\"",
+        "role=\"group\""
+      ],
+      "must_not_contain": [
+        "role=\"radio\"",
+        "role=\"radiogroup\"",
+        "aria-checked"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Write JavaScript that separates the user's selected mode from the resolved theme, storing system/light/dark but rendering only light or dark.",
+      "expected_output": "Maintains selectedMode and resolvedTheme as separate values, applies both as data-theme-mode and data-theme attributes, and listens for prefers-color-scheme changes when system is active.",
+      "expectations": [
+        "Separates selected mode from resolved theme",
+        "Uses data-theme-mode for user selection",
+        "Uses data-theme for rendered scheme",
+        "Listens for prefers-color-scheme changes"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "data-theme-mode",
+        "data-theme",
+        "prefers-color-scheme"
+      ],
+      "must_not_contain": [
+        "storing resolved theme as preference",
+        "localStorage.setItem.*dark.*when.*system"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Write an early initialization script that applies the stored theme before first paint to prevent colour flashing.",
+      "expected_output": "Reads localStorage safely with try/catch, validates the stored value, defaults to system, resolves system using prefers-color-scheme, and sets root attributes before DOMContentLoaded.",
+      "expectations": [
+        "Runs before DOMContentLoaded",
+        "Uses try/catch for localStorage",
+        "Validates stored values",
+        "Sets data-theme-mode and data-theme on documentElement"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "localStorage.getItem",
+        "try",
+        "data-theme-mode"
+      ],
+      "must_not_contain": [
+        "DOMContentLoaded.*apply",
+        "waiting for DOM"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Write CSS that makes a theme selector work in Windows High Contrast Mode with visible button boundaries and distinct selected state.",
+      "expected_output": "Uses forced-colors media query with system colors, ensures button borders remain visible, and distinguishes selected from focused state without relying on background colour alone.",
+      "expectations": [
+        "Uses @media (forced-colors: active)",
+        "Uses system color keywords",
+        "Button boundaries remain visible",
+        "Selected state is identifiable"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "forced-colors: active",
+        "ButtonText",
+        "Highlight"
+      ],
+      "must_not_contain": [
+        "forced-color-adjust: none without justification"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Document the failure pattern where storing dark when the user selected system and the OS happened to be dark causes incorrect persistence.",
+      "expected_output": "Explains that when the user selects system, the stored value must be system, not the resolved dark/light value, so that future OS changes continue to affect the page.",
+      "expectations": [
+        "Identifies the incorrect persistence pattern",
+        "Explains why storing the resolved value is wrong",
+        "Shows the correct approach (storing system)"
+      ],
+      "files": [],
+      "must_contain_any": [
+        "system",
+        "storing",
+        "OS changes"
+      ],
+      "must_not_contain": [
+        "storing dark when system is dark is correct"
       ]
     }
   ]

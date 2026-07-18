@@ -19,36 +19,216 @@ HTML, CSS, or JavaScript.
 
 ---
 
+## Critical Rule: Focus Is Navigation, Not Selection
+
+**A theme must not change until the user explicitly activates an option.**
+
+Moving keyboard focus or pointer hover across theme choices MUST NOT preview,
+select, or apply a theme. Tabbing across System, Light, and Dark MUST leave the
+page colours unchanged until the user presses Enter or Space.
+
+This is a **Critical** requirement. Violations cause colour flashing during
+keyboard navigation and disorient users with vestibular disorders, cognitive
+disabilities, and low vision.
+
+---
+
 ## Core Mandate
 
 All colour themes **must** meet WCAG 2.2 Level AA contrast in **both** light and
 dark modes, including forced-colours / high contrast modes. Test all three —
 not just the default.
 
-## Modern CSS Color System Best Practices (2026)
+## Required: Three-Option Theme Selector Pattern
 
-1. Use `color-scheme` on `:root`. Start with `color-scheme: light dark;` so native form controls, scrollbars, and built-in surfaces match the active scheme.
-2. Prefer `light-dark()` for theme tokens. Put colour choices in custom properties once and let CSS resolve the current scheme instead of duplicating every component rule.
-3. Use `contrast-color()` for adaptive components that need automatic foregrounds against a known background. Treat it as an enhancement, not a guarantee.
-4. Keep `prefers-color-scheme` for specialized cases, older browsers, and explicit overrides. It is still useful, but it should not be the only theming strategy.
-5. Test with real users and accessibility tools. Verify light mode, dark mode, forced-colors, high contrast, and manual WCAG contrast before shipping.
+Use a visible three-option selector that shows all three options at the same time:
+
+* System
+* Light
+* Dark
+
+### Interaction pattern requirements
+
+* MUST use a labelled group containing three native `<button type="button">` elements
+* MUST use `aria-pressed="true"` for the selected option and `aria-pressed="false"` for others
+* MUST NOT use a single cycling button
+* MUST NOT use a two-state light/dark toggle
+* MUST NOT use a menu that hides the available options
+* MUST NOT use custom `role="radio"` elements
+* MUST NOT use a radiogroup that changes theme when arrow-key focus moves
+* MUST NOT use hover or focus previews
+* MUST NOT automatically select when a user merely tabs to an option
+
+### Keyboard requirements
+
+The selector MUST work with standard native button behaviour. Users MUST be able to:
+
+* Tab to each option
+* Use Shift+Tab to move backwards
+* Activate an option with Enter
+* Activate an option with Space
+* Activate an option with mouse, touch, switch device, voice control, or other pointer
+
+Moving focus between the options MUST NOT change the theme. The theme MUST
+change only after deliberate activation.
+
+Do NOT add unnecessary custom keyboard handlers where native button behaviour
+already provides the required functionality.
+
+### Prevent colour flashing during keyboard navigation
+
+Theme changes MUST occur only after explicit activation. Moving keyboard focus
+or pointer hover across theme choices MUST NOT preview, select, or apply a theme.
+
+Tabbing across System, Light, and Dark MUST leave the page colours unchanged
+until the user presses Enter or Space.
 
 ---
 
-## Severity Scale (this skill)
+## Required: HTML Structure
 
-| Level | Meaning |
-| --- | --- |
-| **Critical** | Colour theme makes content or interaction completely inaccessible |
-| **Serious** | Contrast or mode failure significantly impairs access for a disability group |
-| **Moderate** | Theme degrades usability but content remains partially accessible |
-| **Minor** | Best-practice gap; marginal impact |
+Use a group with an accessible label containing three native buttons:
+
+```html
+<div role="group" aria-label="Colour theme">
+  <button
+    type="button"
+    class="theme-mode-btn"
+    aria-pressed="false"
+    data-theme-value="system">
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+      <path fill="none" stroke="currentColor" stroke-width="2" d="M3 4h18v12H3zM8 20h8"/>
+    </svg>
+    <span>System</span>
+  </button>
+
+  <button
+    type="button"
+    class="theme-mode-btn"
+    aria-pressed="false"
+    data-theme-value="light">
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+      <circle cx="12" cy="12" r="5" fill="currentColor"/>
+    </svg>
+    <span>Light</span>
+  </button>
+
+  <button
+    type="button"
+    class="theme-mode-btn"
+    aria-pressed="true"
+    data-theme-value="dark">
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+      <path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+    </svg>
+    <span>Dark</span>
+  </button>
+</div>
+```
+
+---
+
+## Required: Default Behaviour
+
+Use `system` as the default preference when the user has not made an explicit choice.
+
+Do NOT convert the system preference into a stored light or dark preference.
+
+For example, when the user selects system while their operating system is
+currently dark, store:
+
+```
+system
+```
+
+Do NOT store:
+
+```
+dark
+```
+
+This distinction is required so that later operating-system changes continue to
+affect the page.
+
+---
+
+## Required: Storage Requirements
+
+Use a clearly named storage key such as `theme-mode`. Valid stored values are
+only: `system`, `light`, `dark`.
+
+* Validate stored values before using them
+* Wrap all `localStorage` reads and writes in `try/catch`
+* The theme control MUST continue to work for the current page when storage is unavailable
+* Do NOT allow a storage failure to stop script execution
+
+Storage can be unavailable in:
+
+* Privacy-restricted browsers
+* Sandboxed contexts
+* Private browsing modes
+* Environments where storage access throws an exception
+
+---
+
+## Required: Theme Application Model
+
+Maintain separate values for the selected mode and resolved theme:
+
+```javascript
+selectedMode = "system" | "light" | "dark";
+resolvedTheme = "light" | "dark";
+```
+
+Apply both to the root element using explicit attributes:
+
+```html
+<html data-theme-mode="system" data-theme="dark">
+```
+
+* `data-theme-mode` represents the user's actual selection
+* `data-theme` represents the currently rendered light or dark scheme
+
+When system is active, listen for changes to:
+
+```javascript
+window.matchMedia("(prefers-color-scheme: dark)")
+```
+
+Update the resolved theme when that preference changes. Do NOT overwrite the
+stored mode when the system preference changes.
+
+---
+
+## Required: Initial Rendering and Flash Prevention
+
+Provide an early initialization pattern that runs before the primary stylesheet
+or before the page is visibly rendered. The pattern MUST:
+
+1. Safely read the stored preference
+2. Validate the stored value
+3. Default to system
+4. Resolve system using `prefers-color-scheme`
+5. Set the root theme attributes before the first significant paint
+6. Set an appropriate `color-scheme` value
+
+Include early in `<head>`:
+
+```html
+<meta name="color-scheme" content="light dark">
+```
+
+Explain that this early script is intended to reduce a flash of the incorrect
+colour scheme during page load. Do NOT claim that a script can eliminate every
+possible visual transition in every browser. Describe it as reducing or
+preventing the common flash caused by applying the preference too late.
 
 ---
 
 ## Required: CSS Custom Properties Pattern
 
-Always use CSS custom properties for theme tokens. Declare `color-scheme: light dark;` on `:root` so the browser can render native controls in the right palette. Prefer `light-dark()` for token values, and use `prefers-color-scheme` only as a fallback or specialized override.
+Use semantic theme tokens through CSS custom properties. Do NOT hard-code
+component colours independently throughout the example.
 
 ```css
 :root {
@@ -87,559 +267,417 @@ Always use CSS custom properties for theme tokens. Declare `color-scheme: light 
   }
 }
 
-/* Manual overrides can still narrow the active scheme when a user chooses one. */
-[data-theme="light"] { color-scheme: light; }
-[data-theme="dark"]  { color-scheme: dark; }
+/* Manual overrides narrow the active scheme when a user chooses one. */
+[data-theme="light"] {
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+}
 ```
 
-Component styles should continue to read from the tokens above rather than hardcode colour values.
+Component styles MUST read from the tokens above rather than hardcode colour values.
 
 ---
 
-## Serious: Contrast Ratios in Both Modes
+## Required: Selected and Focus State Styling
 
-**Check all of the following in both light and dark modes.** Contrast that
-passes in light mode frequently fails in dark mode when colours are inverted
-naively.
+The selected state MUST NOT be communicated through colour alone. Use multiple
+cues such as:
 
-| Element | Minimum ratio | Severity if failing |
-| --- | --- | --- |
-| Normal text | 4.5:1 | Serious |
-| Large text (18pt+ / 14pt+ bold) | 3:1 | Moderate |
-| UI components and graphical objects | 3:1 | Moderate |
-| Focus indicators | 3:1 against adjacent colours | Serious |
+* `aria-pressed`
+* A visible checkmark or icon
+* A thicker or otherwise distinct border
+* Font-weight
+* Text labels
 
----
-
-## Optional: Manual Theme Override (Tri-Mode)
-
-Most projects should rely on `color-scheme` and `light-dark()` for defaults. Add
-manual controls only when users need a persistent override.
-
-If you provide a control, use a three-option selector: `light`, `dark`, and
-`system`.
-
-* **Control semantics:** use `role="radiogroup"` with three `role="radio"` options so the selected state is explicit via `aria-checked`.
-* **Selected-state management:** implement roving `tabindex` so only the selected option has `tabindex="0"`; all others use `tabindex="-1"`.
-* **Keyboard behavior:** radiogroup is a single Tab stop; support Arrow keys, Home/End, Space, and Enter.
-* **System behavior:** when selected mode is `system`, resolve the visual theme from `prefers-color-scheme` and auto-update on OS/browser preference changes.
-* **DOM order:** place the control after nav/menu items in tab order.
-* **Positioning:** do not make the control fixed or sticky.
-* **Icon safety:** use SVG with `currentColor` so icons stay theme-safe and forced-colors-safe.
-
-```html
-<header>
-  <nav aria-label="Main navigation">
-    <a href="/">Home</a>
-    <a href="/about">About</a>
-    <a href="/contact">Contact</a>
-  </nav>
-
-  <div id="theme-mode-group" role="radiogroup" aria-label="Colour theme">
-    <button
-      type="button"
-      class="theme-mode-btn"
-      role="radio"
-      aria-checked="false"
-      tabindex="-1"
-      data-theme-value="light">
-      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
-        <circle cx="12" cy="12" r="5" fill="currentColor"/>
-      </svg>
-      <span>Light</span>
-    </button>
-
-    <button
-      type="button"
-      class="theme-mode-btn"
-      role="radio"
-      aria-checked="false"
-      tabindex="-1"
-      data-theme-value="dark">
-      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
-        <path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-      </svg>
-      <span>Dark</span>
-    </button>
-
-    <button
-      type="button"
-      class="theme-mode-btn"
-      role="radio"
-      aria-checked="true"
-      tabindex="0"
-      data-theme-value="system">
-      <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
-        <path fill="none" stroke="currentColor" stroke-width="2" d="M3 4h18v12H3zM8 20h8"/>
-      </svg>
-      <span>System</span>
-    </button>
-  </div>
-</header>
-```
-
----
-
-## Moderate: Theme Persistence — Safe localStorage + System Mode
-
-`localStorage` can be unavailable (private browsing, sandboxed iframes,
-storage-restricted environments). Always wrap reads/writes in `try/catch` so
-theme switching never crashes.
-
-```js
-const themeModeButtons = document.querySelectorAll('.theme-mode-btn');
-const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-const modeOrder = ['light', 'dark', 'system'];
-
-function getStoredMode() {
-  try {
-    return localStorage.getItem('theme-mode');
-  } catch {
-    return null;
-  }
-}
-
-function setStoredMode(mode) {
-  try {
-    localStorage.setItem('theme-mode', mode);
-  } catch {
-    // Storage unavailable; preference still works for current session.
-  }
-}
-
-let mode = getStoredMode() || 'system';
-
-function resolveTheme(activeMode) {
-  if (activeMode === 'system') {
-    return prefersDarkScheme.matches ? 'dark' : 'light';
-  }
-  return activeMode;
-}
-
-function updateSelection(activeMode) {
-  themeModeButtons.forEach((button) => {
-    const checked = button.dataset.themeValue === activeMode;
-    button.setAttribute('aria-checked', checked ? 'true' : 'false');
-    button.setAttribute('tabindex', checked ? '0' : '-1');
-  });
-}
-
-function applyMode(activeMode) {
-  const resolvedTheme = resolveTheme(activeMode);
-  document.documentElement.setAttribute('data-theme-mode', activeMode);
-  document.documentElement.setAttribute('data-theme', resolvedTheme);
-  updateSelection(activeMode);
-}
-
-function getModeIndex(activeMode) {
-  return modeOrder.indexOf(activeMode);
-}
-
-function focusModeByIndex(index) {
-  const normalizedIndex = (index + modeOrder.length) % modeOrder.length;
-  const nextMode = modeOrder[normalizedIndex];
-  const nextButton = document.querySelector(`[data-theme-value="${nextMode}"]`);
-
-  if (!nextButton) {
-    return;
-  }
-
-  mode = nextMode;
-  setStoredMode(mode);
-  applyMode(mode);
-  nextButton.focus();
-}
-
-themeModeButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    mode = button.dataset.themeValue;
-    setStoredMode(mode);
-    applyMode(mode);
-  });
-
-  button.addEventListener('keydown', (event) => {
-    const currentIndex = getModeIndex(mode);
-
-    switch (event.key) {
-      case 'ArrowRight':
-      case 'ArrowDown':
-        event.preventDefault();
-        focusModeByIndex(currentIndex + 1);
-        break;
-      case 'ArrowLeft':
-      case 'ArrowUp':
-        event.preventDefault();
-        focusModeByIndex(currentIndex - 1);
-        break;
-      case 'Home':
-        event.preventDefault();
-        focusModeByIndex(0);
-        break;
-      case 'End':
-        event.preventDefault();
-        focusModeByIndex(modeOrder.length - 1);
-        break;
-      case ' ':
-      case 'Enter':
-        event.preventDefault();
-        mode = button.dataset.themeValue;
-        setStoredMode(mode);
-        applyMode(mode);
-        break;
-      default:
-        break;
-    }
-  });
-});
-
-prefersDarkScheme.addEventListener('change', () => {
-  if (mode === 'system') {
-    applyMode('system');
-  }
-});
-
-applyMode(mode);
-```
-
----
-
-## Serious: Forced-Colors / Windows High Contrast Mode
-
-Windows High Contrast Mode (WHCM) is a critical accessibility mode for users
-with low vision and light sensitivity. It overrides all CSS colours and
-backgrounds with a small set of system colours, and removes many visual effects.
-
-### What WHCM removes
-
-The following CSS features are **silently discarded** in forced-colors mode —
-if your UI relies on them to convey meaning, it will be broken for WHCM users:
-
-* `box-shadow` (including focus rings implemented as box-shadow)
-* `text-shadow`
-* `background-image` (gradients, patterns, decorative images)
-* `background-color` on non-interactive elements
-* `border-color` set to `transparent`
-* CSS `filter` and `backdrop-filter`
-* `opacity` partially (elements may become fully opaque)
-
-### Do not use these to convey meaning
-
-Never rely on any of the above to communicate state, boundaries, hierarchy,
-or interactivity. Examples of **problematic patterns**:
+Focus and selected state MUST be visually distinguishable from one another. A
+focused but unselected option MUST NOT look identical to the selected option.
 
 ```css
-/* Bad: focus ring implemented with box-shadow — invisible in WHCM */
-:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px #005fcc;
+.theme-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 0.375rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 1rem;
+  cursor: pointer;
 }
 
-/* Bad: disabled state shown only by reduced opacity */
-button:disabled { opacity: 0.4; }
-
-/* Bad: card boundary shown only by box-shadow */
-.card { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-```
-
-```css
-/* Good: focus ring uses outline — survives forced-colors */
-:focus-visible {
-  outline: 2px solid #005fcc;
+/* Focus indicator — visible outline, not box-shadow */
+.theme-mode-btn:focus-visible {
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
-/* Good: disabled state has both opacity AND border change */
-button:disabled {
-  opacity: 0.4;
-  border: 2px solid currentColor;
+/* Selected state — distinct from focus */
+.theme-mode-btn[aria-pressed="true"] {
+  border-color: var(--color-link);
+  font-weight: 600;
+  background: var(--color-background);
 }
-
-/* Good: card boundary uses border, not shadow */
-.card { border: 1px solid var(--color-border); }
 ```
 
-### Forced-colors CSS
+Use `:focus-visible` with a real outline. Do NOT remove the outline unless it
+is replaced by an equal or stronger visible focus indicator.
 
-Use the `forced-colors` media query to restore meaning lost when colours are
-overridden. Use only [CSS system colour keywords](https://www.w3.org/TR/css-color-4/#css-system-colors):
+---
+
+## Required: Forced-Colours Support
+
+The selector MUST remain usable in Windows High Contrast Mode and other
+forced-colours environments. Do NOT rely only on:
+
+* Background colours
+* Gradients
+* Box shadows
+* Opacity
+* SVG fill colours
+* Colour differences
+
+Use system colours where appropriate within `@media (forced-colors: active)`.
+
+Ensure that:
+
+* Button boundaries remain visible
+* The selected option remains identifiable
+* The focused option remains identifiable
+* Selected and focused states remain distinct
+* Icons using `currentColor` remain visible
+
+Do NOT use `forced-color-adjust: none` unless there is a specific, documented
+reason and the resulting colours are tested.
 
 ```css
 @media (forced-colors: active) {
-  /* Restore card boundaries lost when background-color is overridden */
-  .card {
-    border: 1px solid CanvasText;
+  .theme-mode-btn {
+    border: 2px solid ButtonText;
+    color: ButtonText;
+    background: ButtonFace;
   }
 
-  /* Restore table row separation lost when zebra-stripe backgrounds disappear */
-  tbody tr {
-    border-bottom: 1px solid CanvasText;
-  }
-
-  /* Restore focus ring if it was implemented as box-shadow */
-  :focus-visible {
+  .theme-mode-btn:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
 
-  /* Restore button appearance */
-  button {
-    color: ButtonText;
-    background-color: ButtonFace;
-    border: 1px solid ButtonText;
-    forced-color-adjust: none; /* Opt out for elements needing full control */
+  .theme-mode-btn[aria-pressed="true"] {
+    border-color: Highlight;
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
   }
-
-  /* Status indicators that used background colour */
-  .status-error   { border: 2px solid LinkText; }
-  .status-success { border: 2px solid CanvasText; }
-  .status-warning { border: 2px solid Highlight; }
 }
 ```
 
-### `forced-color-adjust: none`
-
-Use `forced-color-adjust: none` sparingly — only on elements where you need
-to preserve specific colours (e.g., a colour swatch tool, a data visualisation).
-Overusing it defeats the purpose of forced-colours mode.
-
 ---
 
-## Moderate: Complex Scripts and Diacritics
+## Required: Accessible Naming and Status
 
-Only apply this section if the project renders text in languages with combining
-diacritics (e.g. Hebrew Nikkud/Ta'amei Hamikra, Arabic Tashkeel). Dark mode
-presents unique accessibility challenges for these scripts because the marks are
-combining Unicode characters that stack vertically.
+Use visible text labels: System, Light, Dark. Icons MAY supplement the labels
+but MUST NOT replace them.
 
-### CSS requirements for complex-script containers
-
-1. **Irradiation/glow control** — Pure white on pure black causes halation that
-   blurs tiny diacritic dots. Use off-white on dark charcoal instead:
-
-   ```css
-   .complex-script-container {
-     /* prefer #f5f5f5 text on #121212 background, not #ffffff on #000000 */
-     -webkit-font-smoothing: antialiased;
-     -moz-osx-font-smoothing: grayscale;
-   }
-   ```
-
-2. **Line-height & clipping** — Diacritics stack above and below the baseline.
-   Set `line-height` to at least `1.8` or `2.0`. Never apply `overflow: hidden`
-   to a complex-script text container.
-
-3. **Contrast & colour inheritance** — Ensure colour changes apply to
-   pseudo-elements and spans that colourize individual diacritics; they must
-   all switch to a high-contrast colour in dark mode.
-
-4. **RTL preservation** — Dark-mode state toggles must never strip `dir="rtl"`
-   attributes or break bidirectional text isolation (`<bdi>`).
-
-5. **Font-weight thinning** — Light text on a dark background looks bolder.
-   Avoid excessively bold weights in dark mode; diacritics can merge into the
-   base letter and become unreadable blobs.
-
-### Visual regression testing for diacritics
-
-DOM-based text checks cannot catch visual rendering failures of combining
-characters. Use strict pixel-level visual regression tests (Playwright/Cypress):
-
-- Capture a baseline screenshot in light mode with complex-script text.
-- Simulate dark mode (toggle `data-theme` attribute or override
-  `prefers-color-scheme`).
-- Wait for the specialist font (e.g. SBL Hebrew, Tiro Hebrew) to fully render.
-- Perform a pixel-by-pixel diff with a strict threshold (≤ 0.01) to confirm
-  diacritic dots do not blur, disappear, or shift.
-- Run in a standardised container (e.g. Docker) with consistent font
-  rendering to avoid false positives across OS runners.
-
-### Manual checklist for complex scripts in dark mode
-
-- [ ] Tiny diacritic dots (e.g. Dagesh) are distinct against the dark background
-- [ ] Vertical stacking marks remain separate lines, not merged blobs
-- [ ] Highest cantillation accent is fully visible (not clipped at the top)
-- [ ] Font weight has not caused diacritics to blob into the base letter
-- [ ] RTL direction attribute is intact after theme toggle
-
----
-
-## Required: Colour Independence
-
-Never convey information by colour alone. Every status indicator needs icon +
-text label + colour:
+Decorative icons MUST use:
 
 ```html
-<!-- Good: three independent signals -->
-<div class="status status-error">
-  <svg role="img" aria-label="Error" focusable="false">
-    <use href="#icon-warning"/>
-  </svg>
-  <span>Payment failed</span>
-</div>
-
-<!-- Bad: colour is the only signal — invisible in WHCM and to CVD users -->
-<div class="status-error">Payment failed</div>
+<svg aria-hidden="true" focusable="false">...</svg>
 ```
+
+Do NOT dynamically replace stable button labels with phrases such as:
+
+* Switch to dark
+* Current dark mode
+* Use system dark
+
+The button label SHOULD describe the preference the button selects. The
+selected state is communicated through `aria-pressed`.
+
+It is acceptable to include a separate status message explaining the resolved
+system theme, for example:
+
+```html
+<p class="visually-hidden" aria-live="polite" id="theme-status">
+  System preference currently uses dark mode.
+</p>
+```
+
+Do NOT make this announcement excessively verbose. Avoid announcing the same
+state repeatedly when nothing has changed.
 
 ---
 
-## Required: SVG Icons
+## Required: Reduced Motion
 
-Use `currentColor` so icons inherit theme colour and respond to forced-colours:
+Do NOT use animated colour transitions by default. Theme changes can affect
+most of the viewport and may be uncomfortable or disorienting.
 
-```html
-<svg viewBox="0 0 24 24" class="icon" aria-hidden="true" focusable="false">
-  <path fill="currentColor" d="…"/>
-</svg>
-```
+If a transition example is included, it MUST:
 
-For images with transparency that need to work across modes:
+* Be subtle
+* Avoid transitioning every CSS property
+* Respect `prefers-reduced-motion`
+* Not delay the actual state change
+* Not create intermediate low-contrast states
 
-```html
-<picture>
-  <source srcset="logo-dark.svg"
-          media="(prefers-color-scheme: dark)">
-  <img src="logo-light.svg" alt="Company logo">
-</picture>
-```
-
----
-
-## Required: Focus Indicators in All Modes
+Prefer no theme-transition animation in the canonical example.
 
 ```css
-:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-```
-
-* Minimum 3:1 contrast against adjacent colours
-* At least 2px thick
-* Must be visible in light mode, dark mode, and forced-colours mode
-* **Never implement focus rings as `box-shadow` alone** — they vanish in WHCM
-
----
-
-## Required: Motion
-
-```css
-* { transition: background-color 0.2s ease, color 0.2s ease; }
-
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none; }
-}
-```
-
-Never auto-animate theme changes based on time of day.
-
----
-
-## Moderate: `contrast-color()` for Adaptive Components
-
-Use `contrast-color()` for buttons, badges, tags, status indicators, and other dynamically themed components whose background comes from a token.
-
-```css
-:root {
-  color-scheme: light dark;
-
-  --button-bg:         light-dark(#005fcc, #66aaff);
-  --badge-bg:          light-dark(#0f766e, #14b8a6);
-  --tag-bg:            light-dark(#6d28d9, #8b5cf6);
-  --status-success-bg: light-dark(#166534, #22c55e);
-  --status-warning-bg: light-dark(#b45309, #f59e0b);
-}
-
-.button,
-.badge,
-.tag,
-.status {
-  background-color: var(--component-bg);
-  color: white;
-  border: 1px solid transparent;
-}
-
-.button { --component-bg: var(--button-bg); }
-.badge { --component-bg: var(--badge-bg); }
-.tag { --component-bg: var(--tag-bg); }
-.status-success { --component-bg: var(--status-success-bg); }
-.status-warning { --component-bg: var(--status-warning-bg); }
-
-@supports (color: contrast-color(red)) {
-  .button,
-  .badge,
-  .tag,
-  .status {
-    color: contrast-color(var(--component-bg));
-    border-color: contrast-color(var(--component-bg));
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }
 ```
 
-Practical uses include brand buttons, generated badges, tags, status pills, and cards that receive their background from data or theme tokens.
+---
 
-`contrast-color()` is not a replacement for testing. It currently returns only `black` or `white`, so mid-tone colours can still be problematic in practice. Automating the foreground choice helps, but it is only an enhancement, not a guarantee. Manual WCAG contrast checks still apply.
+## Required: Contrast Requirements
+
+The skill MUST continue requiring WCAG 2.2 Level AA contrast testing in every
+relevant state. Test at least:
+
+* System resolving to light
+* System resolving to dark
+* Explicit Light
+* Explicit Dark
+* Forced colours
+* Keyboard focus
+* Selected option
+* Hover
+* Disabled controls (if any)
+* Links
+* Form fields
+* Borders and graphical objects
+
+Do NOT assume that colours which pass in light mode will pass in dark mode. Do
+NOT present experimental CSS functions as substitutes for actual contrast testing.
 
 ---
 
-## Moderate: `color-mix()` for Relative Colour Computation
+## Required: Complete Example Implementation
 
-`color-mix()` lets you compute colours relative to a base token, which is
-especially useful for zebra stripes and hover states that need to adapt to
-both light and dark backgrounds.
+Include a complete example containing:
 
-```css
---color-table-row-even: color-mix(in srgb, var(--color-background) 95%, black);
---color-table-row-odd:  color-mix(in srgb, var(--color-background) 90%, black);
+1. Accessible HTML
+2. CSS
+3. Early anti-flash initialization
+4. Main JavaScript
+5. Safe storage handling
+6. System-preference change handling
+7. Forced-colours styles
+8. Visible focus styles
+9. Selected-state styles
+
+The example MUST be internally consistent. Use the same storage key, data
+attributes, class names, mode names, and selected-state mechanism throughout
+all code samples. Do NOT provide fragments that contradict one another.
+
+### Complete HTML
+
+```html
+<!DOCTYPE html>
+<html lang="en" data-theme-mode="system" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Theme Selector Example</title>
+  <style>
+    /* Anti-flash: set theme as early as possible */
+    html[data-theme="dark"] {
+      color-scheme: dark;
+    }
+    html[data-theme="light"] {
+      color-scheme: light;
+    }
+  </style>
+  <script>
+    /* Early initialization — runs before first paint */
+    (function() {
+      var stored = null;
+      try { stored = localStorage.getItem('theme-mode'); } catch (e) {}
+      var mode = (stored === 'light' || stored === 'dark') ? stored : 'system';
+      var resolved = mode === 'system'
+        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : mode;
+      document.documentElement.setAttribute('data-theme-mode', mode);
+      document.documentElement.setAttribute('data-theme', resolved);
+    })();
+  </script>
+</head>
+<body>
+  <header>
+    <nav aria-label="Main navigation">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+    </nav>
+
+    <div role="group" aria-label="Colour theme" id="theme-selector">
+      <button type="button" class="theme-mode-btn" aria-pressed="false" data-theme-value="system">
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+          <path fill="none" stroke="currentColor" stroke-width="2" d="M3 4h18v12H3zM8 20h8"/>
+        </svg>
+        <span>System</span>
+      </button>
+
+      <button type="button" class="theme-mode-btn" aria-pressed="false" data-theme-value="light">
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+          <circle cx="12" cy="12" r="5" fill="currentColor"/>
+        </svg>
+        <span>Light</span>
+      </button>
+
+      <button type="button" class="theme-mode-btn" aria-pressed="true" data-theme-value="dark">
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+          <path fill="currentColor" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+        <span>Dark</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <h1>Theme Selector Example</h1>
+    <p>This page demonstrates a three-option theme selector with System, Light, and Dark modes.</p>
+  </main>
+
+  <p class="visually-hidden" aria-live="polite" id="theme-status"></p>
+
+  <script>
+    /* Main theme logic — runs after DOM ready */
+    (function() {
+      var STORAGE_KEY = 'theme-mode';
+      var VALID_MODES = ['system', 'light', 'dark'];
+      var buttons = document.querySelectorAll('.theme-mode-btn');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+      var statusEl = document.getElementById('theme-status');
+      var currentMode = 'system';
+
+      function getStoredMode() {
+        try {
+          var stored = localStorage.getItem(STORAGE_KEY);
+          return VALID_MODES.indexOf(stored) !== -1 ? stored : 'system';
+        } catch (e) {
+          return 'system';
+        }
+      }
+
+      function setStoredMode(mode) {
+        try {
+          localStorage.setItem(STORAGE_KEY, mode);
+        } catch (e) {
+          /* Storage unavailable; preference still works for current session. */
+        }
+      }
+
+      function resolveTheme(mode) {
+        if (mode === 'system') {
+          return prefersDark.matches ? 'dark' : 'light';
+        }
+        return mode;
+      }
+
+      function updateButtons(activeMode) {
+        for (var i = 0; i < buttons.length; i++) {
+          var btn = buttons[i];
+          var isActive = btn.getAttribute('data-theme-value') === activeMode;
+          btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        }
+      }
+
+      function applyMode(mode) {
+        currentMode = mode;
+        var resolved = resolveTheme(mode);
+        document.documentElement.setAttribute('data-theme-mode', mode);
+        document.documentElement.setAttribute('data-theme', resolved);
+        updateButtons(mode);
+      }
+
+      function handleActivation(event) {
+        var btn = event.currentTarget;
+        var mode = btn.getAttribute('data-theme-value');
+        setStoredMode(mode);
+        applyMode(mode);
+      }
+
+      /* Attach click handlers — no keyboard handlers needed */
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', handleActivation);
+      }
+
+      /* Listen for OS preference changes */
+      prefersDark.addEventListener('change', function() {
+        if (currentMode === 'system') {
+          applyMode('system');
+        }
+      });
+
+      /* Initialize */
+      applyMode(getStoredMode());
+    })();
+  </script>
+</body>
+</html>
 ```
-
-**Browser support:** `color-mix()` is baseline 2023 (Chrome 111+, Firefox 113+,
-Safari 16.2+). It is **not supported** in older browsers — notably IE 11 and
-older Safari versions still in use on some platforms.
-
-There is no direct polyfill for `color-mix()` because it involves runtime colour
-computation. The practical fallback is to define explicit values for each theme
-and accept the duplication:
-
-```css
-/* Fallback: explicit values for each theme */
-:root {
-  --color-table-row-even: #f2f2f2;
-  --color-table-row-odd:  #e5e5e5;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-table-row-even: #272727;
-    --color-table-row-odd:  #343434;
-  }
-}
-
-/* Progressive enhancement: override with color-mix() where supported */
-@supports (color: color-mix(in srgb, red, blue)) {
-  :root {
-    --color-table-row-even: color-mix(in srgb, var(--color-background) 95%, black);
-    --color-table-row-odd:  color-mix(in srgb, var(--color-background) 90%, black);
-  }
-}
-```
-
-Use `@supports` to apply `color-mix()` only where the browser supports it,
-with explicit values as the universal baseline. This pairs well with `contrast-color()` when you want a softer border or hover state while keeping the binary foreground choice native.
 
 ---
 
-## Moderate: Data Table Zebra Stripes
+## Required: Failure Patterns
 
-Define stripe colours relative to the page background — a 5–10% luminance step.
-Absolute colour values that look right in light mode will look wrong in dark mode.
+The following patterns MUST be rejected:
 
-```css
-tbody tr:nth-child(even) { background-color: var(--color-table-row-even); }
-tbody tr:nth-child(odd)  { background-color: var(--color-table-row-odd);  }
-```
+### Binary toggle
 
-In forced-colours mode, zebra stripe backgrounds are discarded — add a bottom
-border in your `forced-colors` block to preserve row separation (see above).
+A single button that alternates only between light and dark and provides no way
+to return to System.
+
+### Focus-triggered preview
+
+JavaScript that changes the theme in a focus or arrow-key handler.
+
+### Incorrect radio implementation
+
+A radiogroup where arrow keys both move focus and immediately change the entire
+page theme.
+
+### Incorrect persistence
+
+Storing `dark` when the user actually selected `system` and the system happened
+to be dark.
+
+### Colour-only selection
+
+Showing the selected theme only through a different background colour.
+
+### Unsafe storage
+
+Using `localStorage.getItem()` or `setItem()` without exception handling.
+
+### Late initialization
+
+Waiting for `DOMContentLoaded` before applying the stored theme, causing an
+avoidable flash of the wrong theme.
+
+### Dynamic label confusion
+
+Changing the selected option's accessible name instead of keeping its label
+stable and exposing selection with `aria-pressed`.
+
+---
+
+## Severity Scale (this skill)
+
+| Level | Meaning |
+| --- | --- |
+| **Critical** | Colour theme makes content or interaction completely inaccessible |
+| **Serious** | Contrast or mode failure significantly impairs access for a disability group |
+| **Moderate** | Theme degrades usability but content remains partially accessible |
+| **Minor** | Best-practice gap; marginal impact |
 
 ---
 
@@ -647,13 +685,88 @@ border in your `forced-colors` block to preserve row separation (see above).
 
 Before shipping, verify all of the following:
 
-* Browser support for `light-dark()` and `contrast-color()` in the browsers you target, plus at least one browser that falls back to `prefers-color-scheme`.
-* `color-scheme: light dark;` is declared on `:root` and native controls match the active scheme.
-* `light-dark()` resolves correctly in light mode and dark mode.
-* `contrast-color()` resolves as expected for buttons, badges, tags, status indicators, and other dynamic components.
-* Forced-colors mode and high contrast mode preserve structure, labels, boundaries, and focus indicators.
-* Manual WCAG contrast checks still pass for text, focus rings, and non-text UI.
-* Real user testing and accessibility tools agree with the CSS result.
+### Keyboard
+
+1. Load the page.
+2. Tab to the theme selector.
+3. Continue tabbing through System, Light, and Dark.
+4. Confirm that the page theme does NOT change as focus moves.
+5. Press Enter on an unselected option.
+6. Confirm that the theme changes once.
+7. Press Space on another option.
+8. Confirm that the theme changes once.
+9. Confirm that focus remains visible.
+10. Confirm that the selected state and focus state are distinguishable.
+
+### System mode
+
+1. Select System.
+2. Confirm that system is stored.
+3. Change the operating-system colour preference.
+4. Confirm that the page updates without reloading.
+5. Confirm that the stored value remains system.
+
+### Persistence
+
+1. Select Light.
+2. Reload.
+3. Confirm that Light remains selected.
+4. Select Dark.
+5. Reload.
+6. Confirm that Dark remains selected.
+7. Select System.
+8. Reload.
+9. Confirm that System remains selected and resolves correctly.
+
+### Storage failure
+
+Test or simulate `localStorage` throwing an exception. Confirm that:
+
+* The page still renders
+* The selector still works
+* The selected preference works for the current page
+* No uncaught JavaScript error stops execution
+
+### Assistive technology
+
+Test with at least:
+
+* One desktop screen reader
+* Keyboard only
+* Browser zoom at 200% and 400%
+* Forced-colours or Windows High Contrast Mode
+* Touch or mobile interaction where practical
+
+Confirm that assistive technology announces:
+
+* The group label
+* Each button label
+* Pressed or not pressed state
+
+### Visual stability
+
+Record or observe keyboard traversal through the selector. Confirm that no
+colour scheme is previewed while tabbing.
+
+### Automated tests
+
+Inspect the repository's existing testing conventions and add tests where the
+project supports them. Tests SHOULD verify, where practical:
+
+* All three options exist
+* All options are native buttons
+* Only one option has `aria-pressed="true"`
+* Focus alone does not change the theme
+* Click activation changes the theme
+* Keyboard activation changes the theme
+* System tracks `prefers-color-scheme`
+* An explicit Light or Dark selection ignores later system changes
+* Invalid stored values fall back to System
+* Storage exceptions do not crash the control
+* Selected mode and resolved theme use separate root attributes
+
+Do NOT introduce a new test framework unless necessary. Follow the repository's
+existing approach.
 
 ---
 
@@ -662,23 +775,24 @@ Before shipping, verify all of the following:
 * [ ] All text/UI elements meet WCAG 2.2 AA contrast in **light** mode
 * [ ] All text/UI elements meet WCAG 2.2 AA contrast in **dark** mode
 * [ ] `color-scheme: light dark;` declared on `:root`
-* [ ] Theme tokens use `light-dark()` with `prefers-color-scheme` only as fallback or a specialized override
-* [ ] `contrast-color()` used behind `@supports` for adaptive components
-* [ ] Forced-colors mode: content comprehensible; no meaning conveyed by shadow, gradient, or background alone
+* [ ] Theme tokens use `light-dark()` with `prefers-color-scheme` only as fallback
+* [ ] Forced-colours mode: content comprehensible; no meaning conveyed by shadow, gradient, or background alone
 * [ ] Focus rings use `outline`, not `box-shadow` alone
 * [ ] Information not conveyed by colour alone — icon + text + colour
 * [ ] Focus indicators visible and meeting 3:1 in all modes
-* [ ] Manual selector exposes `light`, `dark`, and `system` as explicit options when a selector is present
-* [ ] Selector uses radiogroup semantics (`role="radiogroup"`, `role="radio"`, `aria-checked`) with roving `tabindex`
-* [ ] Keyboard support includes single Tab stop plus Arrow keys, Home/End, Space, and Enter
-* [ ] In `system` mode, theme resolves from `prefers-color-scheme` and auto-updates on preference change
+* [ ] Three-option selector with System, Light, and Dark visible simultaneously
+* [ ] Selector uses native `<button type="button">` with `aria-pressed`
+* [ ] Theme changes only on explicit activation (Enter, Space, click)
+* [ ] Focus alone does NOT change the theme
+* [ ] In `system` mode, theme resolves from `prefers-color-scheme` and auto-updates
 * [ ] `localStorage` access wrapped in `try/catch`
+* [ ] Invalid stored values fall back to system
 * [ ] User preference persists across sessions where `localStorage` is available
 * [ ] `prefers-reduced-motion` respected for theme transitions
-* [ ] Zebra stripes use relative (5–10%) differences; fallback for forced-colors uses `border-bottom`
 * [ ] SVGs use `currentColor`
 * [ ] `color-mix()` and `contrast-color()` gated behind `@supports` with explicit fallback values
-* [ ] Browser support, forced-colors, high contrast, light mode, dark mode, and manual WCAG contrast are verified
+* [ ] Browser support, forced-colours, high contrast, light mode, dark mode, and manual WCAG contrast are verified
+* [ ] Keyboard user can tab across all options without changing page colours
 
 ---
 
@@ -688,10 +802,6 @@ Before shipping, verify all of the following:
 * 1.4.3 Contrast Minimum (AA) — **Serious if failing in either mode**
 * 1.4.11 Non-text Contrast (AA)
 * 2.4.11 Focus Appearance (AA, WCAG 2.2)
-
-> Note: **1.4.12 Text Spacing** is a typography requirement — it belongs in a
-> content-design or typography skill, not here. It is not specific to
-> light/dark mode.
 
 ---
 
@@ -707,9 +817,6 @@ Before shipping, verify all of the following:
 * [CSS System Colors (CSS Color Level 4)](https://www.w3.org/TR/css-color-4/#css-system-colors)
 * [MDN: forced-color-adjust](https://developer.mozilla.org/en-US/docs/Web/CSS/forced-color-adjust)
 * [Baseline 2023: color-mix() browser support](https://caniuse.com/mdn-css_types_color_color-mix)
-* [Smashing Magazine: Building Self-Correcting Color Systems With contrast-color()](https://www.smashingmagazine.com/2026/05/building-self-correcting-color-systems-contrast-color/)
-* [CSS-Tricks: Exploring the CSS contrast-color() Function... A Second Time](https://css-tricks.com/exploring-the-css-contrast-color-function-a-second-time/)
-* [Piccalilli: Some CSS only contrast options until contrast-color() is Baseline widely available](https://piccalil.li/blog/some-css-only-contrast-options-until-contrast-color-is-baseline-widely-available/)
 
 > **Standards horizon:** WCAG 3.0's proposed **APCA** (Advanced Perceptual
 > Contrast Algorithm) replaces the current 4.5:1 / 3:1 luminance-ratio model
