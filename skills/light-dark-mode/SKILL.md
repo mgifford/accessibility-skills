@@ -808,6 +808,7 @@ existing approach.
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md)
+* [Modern CSS Theme Architecture](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/MODERN_CSS_THEME_ARCHITECTURE.md) — complementary guidance on separating design decisions from implementation via semantic design tokens
 * [WCAG 2.2 Understanding 1.4.3 Contrast Minimum](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)
 * [WCAG 2.2 Understanding 2.4.11 Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html)
 * [MDN: light-dark()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/light-dark)

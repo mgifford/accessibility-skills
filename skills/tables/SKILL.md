@@ -20,13 +20,16 @@ Apply these rules when creating or reviewing HTML data tables.
 
 ## Core Mandate
 
-Tables communicate relationships between data. Sighted users scan rows and columns
-visually; screen reader users navigate cell by cell and rely on header announcements
-for context. Without proper markup, every cell is an orphaned data point.
+Use tables for information whose meaning depends on relationships between
+rows and columns. Mark those relationships in HTML so users can identify the
+table, navigate its cells, and hear the relevant headers with each value. The
+complexity of the markup should match the complexity of the information —
+simplifying or splitting a table is often better than adding increasingly
+complicated header associations.
 
-**Never use tables for layout.** Use CSS (Grid, Flexbox) instead.
-Layout tables that remain in a codebase must have `role="presentation"` and
-must linearise without loss of meaning.
+**Never use tables for layout.** Use CSS Grid/Flexbox instead. Do not turn a
+reading-oriented data table into an application-style grid (`role="grid"`)
+unless users genuinely need spreadsheet-like keyboard interaction.
 
 ---
 
@@ -36,54 +39,38 @@ must linearise without loss of meaning.
 |---|---|
 | **Critical** | Table data is completely uninterpretable by screen reader users |
 | **Serious** | Headers missing or misassociated; complex table with no navigation aid |
-| **Moderate** | `<caption>` missing; zebra stripes lost in forced-colours without fallback |
-| **Minor** | `<thead>`/`<tbody>` absent; `summary` attribute used (deprecated) |
+| **Moderate** | No name for the table when multiple tables share a page; zebra stripes lost in forced-colours without fallback |
+| **Minor** | `<thead>`/`<tbody>` absent; obsolete `summary` attribute used |
 
 ---
 
-## Assistive Technology Context
+## Choose the Correct Structure First
 
-Tables are rendered differently across AT combinations. Test with:
+* A **list** — items that don't depend on column relationships
+* A **definition list** — term/description pairs
+* A **data table** — reading and comparing row-column data
+* An **ARIA grid/treegrid** — only for an application-style composite widget
+  with cell navigation or editing
+* **CSS Grid/Flexbox** — page layout
 
-| AT | Browser | Notes |
-|---|---|---|
-| NVDA | Chrome | Reads headers on cell entry; table navigation via `T` key |
-| JAWS | Chrome | Similar to NVDA; `Ctrl+Alt+Arrow` navigates cells |
-| VoiceOver | Safari (macOS) | `VO+Arrow` navigates; announces scope-based headers reliably |
-| VoiceOver | Safari (iOS) | Swipe navigation; complex tables challenging |
-| TalkBack | Chrome (Android) | Linear reading; simpler tables work better |
-| Voice Control | Any | Navigation by table elements less common; focus on operability |
-| Screen magnification | Any | Wide tables require horizontal scroll — use responsive patterns |
-| Reader Mode | Firefox/Edge/Safari | Strips CSS; table structure must be semantically meaningful |
-| Edge Read Aloud | Edge | Reads table content linearly; `<caption>` helps orientation |
-
-**Reader Mode note:** Firefox, Safari, and Edge all have reader modes that
-reformat page content. Tables survive reader mode best when `<caption>` is
-present and structure is simple. Complex multi-level tables may be stripped
-or reflowed unexpectedly — provide a text summary for high-complexity tables.
+Do not use a table merely to align form fields, cards, images, or page regions.
 
 ---
 
 ## Critical: Every Data Table Must Have `<th>` with `scope`
 
 A table with only `<td>` cells is **Critical** — screen readers announce raw
-data with no context about what each cell means.
-
-**All `<th>` elements must have a `scope` attribute.** While screen readers
-may infer `col` or `row` from layout, explicit `scope` is unambiguous and
-required for reliable AT support.
-
-### Simple table — one set of column headers
+data with no context. Use `<th>` for cells that label a row, column, or
+group — never a bolded `<td>` as a visual substitute.
 
 ```html
 <table>
-  <caption>Monthly sales by region, Q1 2024</caption>
+  <caption>Monthly sales by region, first quarter 2025</caption>
   <thead>
     <tr>
       <th scope="col">Region</th>
       <th scope="col">January</th>
       <th scope="col">February</th>
-      <th scope="col">March</th>
     </tr>
   </thead>
   <tbody>
@@ -91,288 +78,541 @@ required for reliable AT support.
       <th scope="row">North</th>
       <td>$12,400</td>
       <td>$14,200</td>
-      <td>$16,800</td>
-    </tr>
-    <tr>
-      <th scope="row">South</th>
-      <td>$9,100</td>
-      <td>$10,300</td>
-      <td>$11,900</td>
     </tr>
   </tbody>
 </table>
 ```
 
-`scope="col"` on column headers; `scope="row"` on row headers.
-When both are present, the screen reader announces both before the data cell.
+For a small, unambiguous table with only one header row or column, browsers
+can sometimes infer header direction from `<th>` alone. Explicit
+`scope="col"`/`scope="row"` remains the dependable authoring convention,
+especially for large or similar-looking data. `<thead>`/`<tbody>`/`<tfoot>`
+support sticky headers, styling, scripting, and repeating headers in print —
+their presence does not by itself repair missing or incorrect header associations.
+
+When a header row has an empty top-left corner cell (no header function),
+leave it as `<td>` — don't add filler text like "blank" just to occupy the cell.
 
 ---
 
-## Critical: `<caption>` on Every Data Table
+## Moderate: Captions and Table Names
 
-A table without `<caption>` is **Moderate** in isolation but **Serious** when
-multiple tables appear on one page — users cannot distinguish which table they
-are in. Make `<caption>` a universal requirement.
+`<caption>` is the native way to identify a table, especially with several
+tables on one page. **WCAG does not require a caption in every case** — an
+immediately associated heading or surrounding text can sometimes adequately
+identify a simple table. Treat `<caption>` as the preferred default, but
+don't force a duplicate name when another tested association already
+supplies one.
 
 ```html
 <table>
-  <caption>2024 budget allocation by department</caption>
-  …
+  <caption>2025 budget allocation by department</caption>
+  <!-- header and data rows -->
 </table>
 ```
 
-`<caption>` is the first child of `<table>` — before `<thead>`. It is
-announced by screen readers when the user enters the table. It also helps
-users in Reader Mode identify the table's purpose after CSS is stripped.
+The caption must be a direct child of `<table>` (before `<thead>`), concise
+and specific. For unusual structure, a short summary can explain row/column
+organization without repeating every value:
+
+```html
+<caption>
+  Availability of holiday accommodation
+  <span class="table-summary">Locations form row groups. Property types form columns.</span>
+</caption>
+```
+
+The obsolete HTML `summary` attribute on `<table>` should not be used — use
+visible caption content or a nearby description instead.
 
 ---
 
 ## Serious: Spanned Headers — `scope="colgroup"` / `scope="rowgroup"`
 
-When a header spans multiple columns or rows, use `colgroup` or `rowgroup`
-scope values:
+Use `colgroup`/`rowgroup` scope values **only when the corresponding group
+actually exists** in the table structure (matching `<colgroup>` or `<tbody>`
+row group):
 
 ```html
 <table>
-  <caption>Quarterly revenue by product line (USD thousands)</caption>
+  <caption>Quarterly revenue by product line, CAD thousands</caption>
+  <colgroup><col></colgroup>
+  <colgroup span="2"></colgroup>
+  <colgroup span="2"></colgroup>
   <thead>
     <tr>
       <th scope="col" rowspan="2">Product</th>
-      <th scope="colgroup" colspan="2">H1</th>
-      <th scope="colgroup" colspan="2">H2</th>
+      <th scope="colgroup" colspan="2">First half</th>
+      <th scope="colgroup" colspan="2">Second half</th>
     </tr>
     <tr>
-      <th scope="col">Q1</th>
-      <th scope="col">Q2</th>
-      <th scope="col">Q3</th>
-      <th scope="col">Q4</th>
+      <th scope="col">Q1</th><th scope="col">Q2</th>
+      <th scope="col">Q3</th><th scope="col">Q4</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">Hardware</th>
-      <td>1,200</td>
-      <td>1,450</td>
-      <td>1,100</td>
-      <td>1,800</td>
-    </tr>
+    <tr><th scope="row">Hardware</th><td>1,200</td><td>1,450</td><td>1,100</td><td>1,800</td></tr>
   </tbody>
 </table>
 ```
 
-**Test spanned tables with NVDA+Chrome and JAWS+Chrome** — some screen readers
-still handle complex spanned headers inconsistently. If testing reveals problems,
-simplify the table structure before reaching for `headers`/`id`.
+For row groups spanning several rows, use `scope="rowgroup"` with `rowspan`
+on the group header. Test grouped headers with the project's actual AT
+combinations — if associations are difficult to understand, split into
+simpler tables rather than adding more complexity.
 
 ---
 
 ## Serious: When to Use `headers` + `id` (Rarely)
 
-The `headers` and `id` approach associates individual cells with specific
-header cells by ID reference. Use it **only** for tables so complex that
-`scope` causes headers to apply to the wrong cells.
+Use only for tables so complex that `scope` causes headers to apply to the
+wrong cells:
 
 ```html
 <table>
-  <caption>Staff schedules by shift and department</caption>
-  <tr>
-    <th id="dept">Department</th>
-    <th id="am">AM shift</th>
-    <th id="pm">PM shift</th>
-  </tr>
-  <tr>
-    <th id="nursing">Nursing</th>
-    <td headers="nursing am">8</td>
-    <td headers="nursing pm">6</td>
-  </tr>
-</table>
-```
-
-**Caution:** Even when `headers`/`id` is technically correct, a table complex
-enough to need it may be functionally inaccessible — reading three or four
-headers before each cell is confusing in practice. Prefer simplifying the table.
-Per WebAIM: "If there are multiple levels of row and/or column headers being
-read, it will not likely be functionally accessible or understandable to a
-screen reader user."
-
----
-
-## Moderate: `<thead>`, `<tbody>`, `<tfoot>`
-
-These semantic elements have no direct AT benefit on their own, but `<thead>`
-enables `display: table-header-group` in print CSS, repeating column headers
-on every printed page — important for multi-page tables.
-
-```html
-<table>
-  <caption>…</caption>
+  <caption>Accommodation availability</caption>
   <thead>
-    <tr><th scope="col">…</th></tr>
+    <tr>
+      <th id="location" scope="col">Location</th>
+      <th id="studio" scope="col">Studio</th>
+    </tr>
   </thead>
   <tbody>
-    <tr><td>…</td></tr>
+    <tr>
+      <th id="paris" scope="row">Paris</th>
+      <td headers="paris studio">11</td>
+    </tr>
   </tbody>
-  <tfoot>
-    <tr><td colspan="4">Total: $45,600</td></tr>
-  </tfoot>
 </table>
 ```
 
+Every ID must be unique in the document; every `headers` token must match a
+real header cell. **Before reaching for `headers`/`id`, consider:** splitting
+one table into several; transposing rows and columns; moving explanatory
+material outside the grid; reducing nested header levels; offering a
+filtered view. Even when technically correct, a table needing three or four
+headers read per cell may be functionally inaccessible in practice — per
+WebAIM, multiple levels of row/column headers are unlikely to be functionally
+understandable to a screen reader user. Validate `headers`/`id` associations
+after every schema or column change.
+
 ---
 
-## Moderate: Responsive Tables
+## Serious: Empty, Missing, and Special Values
 
-Wide tables require horizontal scrolling for low-vision users who zoom.
-Always wrap tables in a scrollable container — never clip overflow silently:
+An empty cell is ambiguous — it can mean zero, not applicable, unknown, not
+reported, or intentionally blank. **Use explicit text where the distinction
+matters:** `0` for a measured zero; `Not applicable`; `No data`; `Not
+reported`; `Suppressed` for intentionally withheld values. Define shortened
+symbols (`N/A`, em dash) in the caption or a nearby note; prefer full text
+when space permits. Do not use `&nbsp;` to make an empty cell appear
+occupied. Explain estimated/rounded/preliminary/revised values — don't rely
+on colour or typographic style alone to identify them.
+
+---
+
+## Serious: Totals, Subtotals, and Footers
+
+Mark total labels as headers when they identify the row's values:
 
 ```html
-<!-- Scrollable container with accessible label -->
-<div role="region"
-     aria-labelledby="table-caption-id"
-     tabindex="0"
-     style="overflow-x: auto;">
+<tfoot>
+  <tr><th scope="row">Total</th><td>$21,500</td><td>$24,500</td></tr>
+</tfoot>
+```
+
+Do not communicate subtotals only through bold text, indentation, or
+background colour — include visible text ("Subtotal") and preserve header
+associations. If a total is calculated dynamically, expose update status
+appropriately and ensure the exported value uses the same calculation.
+
+---
+
+## Moderate: Responsive Tables and Reflow
+
+WCAG 1.4.10 allows two-dimensional scrolling for content that genuinely
+requires it, including data tables — the exception applies to the table
+itself, not the surrounding page.
+
+```html
+<div class="table-scroll" role="region" aria-labelledby="sales-caption" tabindex="0">
   <table>
-    <caption id="table-caption-id">Monthly sales by region</caption>
-    …
+    <caption id="sales-caption">Monthly sales by region</caption>
   </table>
 </div>
 ```
 
-`tabindex="0"` makes the scroll container keyboard-focusable so keyboard users
-can scroll it. `role="region"` + `aria-labelledby` announces it as a landmark.
+```css
+.table-scroll { max-inline-size: 100%; overflow: auto; }
+.table-scroll:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+```
 
-For small screens, consider a card-based alternative layout via CSS:
+Use a labelled region when separate discoverability genuinely helps — don't
+turn every table wrapper into a landmark. Use `tabindex="0"` to make overflow
+keyboard-scrollable, with a visible focus indicator.
+
+**Avoid responsive CSS that changes `table`/`thead`/`tbody`/`tr`/`th`/`td` to
+`display: block`** — browser/AT behavior varies and duplicated `data-label`
+content can drift out of sync with the real headers. When a card presentation
+is genuinely better on small screens, render a real alternative list or
+definition-list view from the same data — expose one view at a time, preserve
+all values and controls, and test both presentations. Test at 200%/400% zoom,
+long translated strings, and narrow viewports.
+
+---
+
+## Moderate: Sticky Headers and Columns
 
 ```css
-@media (max-width: 600px) {
-  table, thead, tbody, th, td, tr { display: block; }
-  thead tr { position: absolute; top: -9999px; left: -9999px; }
-  td::before {
-    content: attr(data-label) ": ";
-    font-weight: bold;
-  }
+thead th {
+  position: sticky;
+  inset-block-start: 0;
+  background: var(--table-header-background);
+  z-index: 1;
 }
 ```
 
-When using the card pattern, add `data-label` attributes to each `<td>`:
-
-```html
-<td data-label="Region">North</td>
-<td data-label="January">$12,400</td>
-```
+Keep the original semantic `<th>` elements — do not create focusable cloned
+headers. If a visual clone is unavoidable, hide it from AT and remove any
+duplicate IDs. Ensure sticky content doesn't obscure focus, headings, or the
+first data row. Test at high zoom and with text-spacing overrides.
 
 ---
 
 ## Moderate: Sortable Columns
 
-Interactive sortable columns must be keyboard operable and announce state:
+Put a native button inside each sortable column header; put `aria-sort` on
+the currently-sorted `<th>` **only** (not the button, not both):
 
 ```html
-<th scope="col">
-  <button type="button"
-          aria-sort="ascending"
-          aria-label="Sort by Region, currently ascending">
-    Region
-    <svg aria-hidden="true" focusable="false"><!-- sort icon --></svg>
+<th scope="col" aria-sort="ascending">
+  <button type="button">
+    Last name
+    <span class="sort-icon" aria-hidden="true">▲</span>
   </button>
 </th>
 ```
 
-`aria-sort` values: `ascending`, `descending`, `none`, `other`.
-Place `aria-sort` on the `<th>`, not the `<button>` — or on both if needed
-for maximum AT compatibility. Test with NVDA and JAWS; announcement varies.
+When sorting changes: sort the complete dataset, not only the visible page,
+unless clearly stated otherwise; move `aria-sort` to the newly sorted `<th>`;
+use `ascending`/`descending`/`other` accurately; update the visible direction
+indicator without depending on colour alone; keep keyboard focus on the
+activated button; preserve header/data-cell associations. Do not replace the
+button with a click handler on `<th>` itself.
 
 ---
 
-## Moderate: Colour in Tables
+## Moderate: Filtering, Search, and Result Counts
 
-Zebra stripes (alternating row backgrounds) are a common pattern that vanishes
-in forced-colours mode and when printing with backgrounds off:
+```html
+<form id="employee-filters">
+  <label for="department-filter">Department</label>
+  <select id="department-filter" name="department">
+    <option value="">All departments</option>
+  </select>
+  <button type="submit">Apply filters</button>
+</form>
+<p id="employee-results" role="status" aria-atomic="true">Showing 24 employees.</p>
+```
+
+Update the visible result count after filtering; use `role="status"` when it
+changes without moving focus; keep active filters visible and
+programmatically determinable; provide a clear way to remove filters; make
+"No results" visible and announced. Do not announce every changed cell
+through a live region. Keep the caption accurate when scope/date range changes.
+
+---
+
+## Moderate: Pagination and Large Datasets
+
+Pagination is often more robust than rendering or virtualizing thousands of rows.
+
+```html
+<nav aria-label="Employees table pages">
+  <a href="?page=1" aria-current="page">1</a>
+  <a href="?page=2" rel="next">Next</a>
+</nav>
+```
+
+Identify the current page with `aria-current="page"`; use links for
+URL-based navigation, buttons for in-place state changes; preserve sort/filter
+parameters; state the displayed range and total ("Rows 51 to 100 of 842");
+move focus only when predictable and helpful. "Load more" controls need a
+clear name, a result update, and predictable focus.
+
+**Virtualization** (rendering only part of a dataset while scrolling) can
+break find-in-page, table navigation, row counts, focus, and reading
+continuity — prefer pagination when it meets the task. If virtualization is
+necessary: expose accurate total row/column counts; expose correct indices
+for rendered items; never recycle the focused row out from under the user;
+preserve selection/editing state when items leave the DOM; keep headers
+correctly associated; support zoom/text resizing/variable row height; test
+continuous reading with screen readers, not just visual scrolling. Do not
+claim thousands of rows are accessible merely because `aria-rowcount` is present.
+
+---
+
+## Serious: Row Selection and Row Actions
+
+Do not make an entire `<tr>` an unnamed clickable control — put a real
+checkbox, link, or button in a cell:
+
+```html
+<p id="select-invoice" class="visually-hidden">Select invoice</p>
+<tr>
+  <td><input type="checkbox" name="invoice" value="1042" aria-labelledby="select-invoice invoice-1042"></td>
+  <th id="invoice-1042" scope="row">1042</th>
+  <td>$1,240</td>
+</tr>
+```
+
+The checkbox's computed name becomes "Select invoice 1042." Keep selected
+state programmatically available and visually distinguishable without colour
+alone. For repeated row actions, include the row's identifier in each
+accessible name — avoid dozens of links announced only as "View" or "Edit."
+
+---
+
+## Serious: Forms and Editing in Tables
+
+Every input needs a unique label including enough row/column context:
+
+```html
+<tr>
+  <th scope="row">Widget A</th>
+  <td>
+    <label class="visually-hidden" for="widget-a-quantity">Quantity for Widget A</label>
+    <input id="widget-a-quantity" name="widget-a-quantity" type="number" min="0" value="2">
+  </td>
+</tr>
+```
+
+Associate validation errors with the specific input; don't remove the input
+from its row context on error; preserve user-entered values after
+validation; make save/cancel/undo explicit; don't autosave on focus movement
+unless users are warned and can recover. If users need spreadsheet-like
+navigation/editing across many cells, evaluate an ARIA grid rather than
+bolting ad hoc keyboard handling onto a data table.
+
+---
+
+## Moderate: Expandable Rows
+
+```html
+<tr>
+  <th scope="row">Invoice 1042</th>
+  <td>$1,240</td>
+  <td>
+    <button type="button" aria-expanded="false" aria-controls="invoice-1042-details">
+      Show details for invoice 1042
+    </button>
+  </td>
+</tr>
+<tr id="invoice-1042-details" hidden>
+  <td colspan="3">
+    <h3>Invoice 1042 details</h3>
+    <p>Issued 4 March 2025. Payment is due 3 April 2025.</p>
+  </td>
+</tr>
+```
+
+Update `aria-expanded`, button text, and `hidden` together. Keep focus on the
+button unless the user's action clearly requests movement into the disclosed content.
+
+---
+
+## Moderate: Colour, Contrast, and Forced Colours
+
+Zebra striping is supplemental, not sufficient on its own. Do not use row
+colour as the only indication of overdue/selected/invalid/changed data — add
+visible text, an icon, or a pattern. Ensure table text and required non-text
+elements (focus indicators, form-control boundaries, sort/state icons) meet
+applicable contrast requirements. Decorative cell borders and zebra stripes
+don't automatically need 3:1.
 
 ```css
-@media print {
-  tbody tr { border-bottom: 1px solid #333; }
-}
-
+tbody tr:nth-child(even) { background: var(--table-stripe-background); }
 @media (forced-colors: active) {
-  tbody tr { border-bottom: 1px solid CanvasText; }
+  th, td { border-block-end: 1px solid CanvasText; }
+  .sort-icon { color: CanvasText; }
 }
 ```
 
-Never use background colour alone to convey meaning (e.g., red rows = overdue).
-Always pair colour with a text label or icon.
+Test selected rows, invalid cells, focus, hover, sorting, and sticky headers
+in every supported theme and forced-colours mode.
+
+---
+
+## Data Tables vs. ARIA Grids
+
+A native `<table>` supports reading/comparison and normally doesn't place
+cells in the Tab sequence — screen readers provide their own table
+navigation. `role="grid"` is a composite widget creating expectations for
+managed focus, arrow-key navigation, selection, editing, and exposed
+row/column structure. Use a grid **only** when: users need spreadsheet-like
+cell navigation/editing; the interaction model is documented and completely
+implemented; only the intended cell/descendant is in the Tab sequence; arrow
+keys/Home/End work predictably; row/column positions and states are
+accurate; it's been tested with relevant AT. **Do not add `role="grid"` just
+to make a table sound more interactive** — sort/filter buttons alone don't
+make a table a grid. Prefer native `<table>`.
 
 ---
 
 ## Layout Tables — What to Do With Them
 
-Layout tables in legacy codebases must be marked to remove them from table
-navigation mode:
+Remove and use CSS whenever practical. When a legacy layout table can't yet
+be removed:
 
 ```html
 <table role="presentation">
-  <!-- layout content -->
+  <tr><td><!-- Layout content --></td></tr>
 </table>
 ```
 
-`role="presentation"` removes table semantics from the AT tree. The content
-must still linearise logically when read top-to-bottom, left-to-right.
-Verify by disabling CSS and reading the page linearly.
+Do not use `<th>`, `<caption>`, or table-specific navigation inside it;
+ensure content has a meaningful DOM order read linearly; ensure forms/
+headings/lists retain their own native semantics; don't make the table
+focusable or give it table-specific ARIA. `role="none"` is equivalent to
+`role="presentation"` here. Treat this as temporary remediation, not a new
+layout pattern.
+
+---
+
+## Print and Export
+
+```css
+@media print {
+  thead { display: table-header-group; }
+  tfoot { display: table-footer-group; }
+  tr { break-inside: avoid; }
+}
+```
+
+For exported PDF/spreadsheet/document/presentation files: preserve table
+structure and header associations; include a title/caption; repeat headers
+across pages/sheets; preserve units/filters/source/date range; explain
+special values and abbreviations; test the exported format independently
+with its own accessibility tools. **Accessible HTML does not guarantee an
+accessible export** — test and remediate each output format separately.
 
 ---
 
 ## CMS and Framework Notes
 
-**Drupal:** The CKEditor rich text editor in Drupal includes a table plugin.
-Configure it to require `<caption>` and `scope` attributes via editor configuration.
-The [Drupal Accessibility Coding Standards](https://www.drupal.org/docs/getting-started/accessibility/accessibility-coding-standards)
-require WCAG 2.1 AA compliance for contributed modules and themes — table
-markup in contrib must follow these rules.
+**Drupal:** CKEditor's table plugin should be configured to require
+`<caption>` and `scope` attributes. The
+[Drupal Accessibility Coding Standards](https://www.drupal.org/docs/getting-started/accessibility/accessibility-coding-standards)
+require WCAG 2.1 AA for contributed modules/themes.
 
-**WordPress, other CMS:** Block editors often generate tables without `<caption>`
-or `scope`. Audit CMS-generated table markup and configure the editor or post-process
-the output to add missing attributes.
+**WordPress/other CMS:** Block editors often generate tables without
+`<caption>` or `scope` — audit CMS-generated markup and configure the editor
+or post-process output to add missing attributes.
 
-**Generated tables (charts/dashboards):** When JS libraries generate tables
-from data (e.g., DataTables.js, AG Grid), verify the library outputs `<th scope="col">`,
-`<caption>`, and `<thead>`. Many do not by default — check configuration options.
+**Generated tables (data-grid libraries, DataTables.js, AG Grid):** verify
+the library outputs `<th scope="col">`, `<caption>`, and `<thead>` — many
+don't by default. Configure or test the exact version to confirm authors can
+create real header cells, captions/summaries can be added, `scope`/`headers`/
+unique IDs are preserved, sanitization doesn't strip required attributes, and
+exported formats preserve structure.
+
+---
+
+## Testing
+
+* **Structural:** confirm the content is genuinely tabular; identify every
+  row/column/row-group/column-group header; from each data cell, verify the
+  headers a user needs; confirm `scope`/`headers` produces those exact
+  associations; check captions, units, source, special-value definitions;
+  validate IDs and `headers` references after sorting or re-rendering
+* **Keyboard/visual:** operate sorting/filtering/pagination/selection/
+  editing/disclosures without a pointer; confirm focus stays visible and
+  doesn't move unexpectedly; scroll wide tables by keyboard; test 200%/400%
+  zoom and narrow viewports; test every theme, forced colours, print, and
+  exported formats
+* **AT:** navigate to the table and confirm name/dimensions are useful; move
+  through representative cells and verify announced headers; test grouped/
+  spanned/irregular headers extensively; confirm sorting state, selected
+  rows, expanded rows, input labels, errors, and result status
+* **Automated:** can detect some missing headers, invalid ARIA, duplicate
+  IDs, empty captions, contrast, and focus issues — usually cannot determine
+  whether a cell is a header in context, whether associations express the
+  intended relationship, or whether a complex table should be simplified.
+  Manual cell-by-cell review remains required.
+
+---
+
+## Common Failures
+
+| Failure | Correction |
+|:---|:---|
+| Bold `<td>` elements visually imitate headers | Use semantic `<th>` with correct associations |
+| "Every `<th>` requires `scope`" stated as an absolute WCAG rule | Use explicit scope as a robust pattern where direction matters; don't misstate the criterion |
+| "Every table requires a caption for conformance" stated as absolute | Use captions by default; recognize other tested associations can identify simple tables |
+| `scope="colgroup"` used without a matching `<colgroup>` | Define the column groups in markup |
+| `headers` values no longer match current IDs | Regenerate and validate associations from the current schema |
+| Empty cells use `&nbsp;` or unexplained dashes | State zero, not applicable, missing, suppressed, or another accurate meaning |
+| Responsive CSS changes all table elements to `display: block` | Preserve table semantics; use contained overflow or a real alternative view |
+| Every scroll wrapper becomes a region landmark | Add a named region only when separate discovery is useful |
+| `aria-sort` placed on the sort button | Put it on the currently sorted `<th>` only |
+| Sorting reorders only the visible page without explanation | Sort the complete result set or clearly explain scope |
+| An entire row is clickable | Put a named native link, button, or checkbox in a cell |
+| Repeated controls announced only as "View"/"Edit" | Include the row identifier in each accessible name |
+| `role="grid"` added without a grid keyboard model | Keep a native table, or implement the complete composite widget |
+| Virtual rows disappear while they contain focus | Preserve focus and state, or use pagination |
+| HTML table passes but exported PDF loses headers | Test and remediate each output format separately |
 
 ---
 
 ## Definition of Done Checklist
 
-* [ ] No tables used for layout — CSS used instead; existing layout tables have `role="presentation"`
-* [ ] Every data table has a `<caption>` as its first child
-* [ ] All `<th>` elements have explicit `scope` attribute (`col`, `row`, `colgroup`, or `rowgroup`)
-* [ ] `<thead>` present; `<tbody>` present
-* [ ] Spanned headers use `colgroup`/`rowgroup` scope values
-* [ ] `headers`/`id` used only where `scope` is genuinely insufficient
-* [ ] Wide tables wrapped in `role="region"` + `aria-labelledby` + `tabindex="0"` scrollable container
-* [ ] Sortable columns use `aria-sort` on `<th>`; sort controls keyboard-operable
-* [ ] Colour-only row distinction has print + forced-colours fallback
-* [ ] `data-label` attributes added for responsive card layout
+* [ ] Content requires row-column relationships and is not a layout table
+* [ ] Every functional header is a `<th>` with the correct association
+* [ ] Table has a useful name, normally via `<caption>` (or a tested alternative)
+* [ ] Complex structure has a concise, discoverable explanation
+* [ ] `scope`, groups, spans, IDs, and `headers` references match the current data
+* [ ] Table simplified or split where complexity impedes understanding
+* [ ] Empty/missing/zero/suppressed/estimated values are distinguishable
+* [ ] Units, dates, currencies, and abbreviations are clear
+* [ ] Wide tables scroll within a contained, keyboard-operable region
+* [ ] Responsive presentation preserves table semantics or provides a real equivalent view
+* [ ] Sticky headers don't duplicate semantics or obscure content
+* [ ] Sort state on the correct `<th>` only; sort controls keyboard-operable
+* [ ] Filtering/pagination/selection/editing/disclosures use named native controls
+* [ ] Colour is not the only indication of meaning or state
+* [ ] `role="grid"` used only with a complete, tested grid interaction model
+* [ ] Virtualization (if used) preserves counts, positions, focus, and reading continuity
+* [ ] Structure and relationships survive print and export
 * [ ] Tested: NVDA+Chrome, JAWS+Chrome, VoiceOver+Safari
-* [ ] Tested: Reader Mode (Firefox or Safari) — structure remains meaningful
 
 ---
 
 ## Key WCAG Criteria
 
-* 1.3.1 Info and Relationships (A) — **Critical if headers absent**
-* 1.3.2 Meaningful Sequence (A) — table must linearise logically
-* 1.4.1 Use of Color (A) — colour not sole encoding in table cells
-* 2.1.1 Keyboard (A) — sortable columns keyboard operable
+* 1.3.1 Info and Relationships (A) — **Critical if headers absent or misassociated**
+* 1.3.2 Meaningful Sequence (A)
+* 1.4.1 Use of Color (A)
+* 1.4.3 Contrast Minimum (AA)
+* 1.4.10 Reflow (AA)
+* 1.4.11 Non-text Contrast (AA)
+* 2.1.1 Keyboard (A)
+* 2.4.3 Focus Order (A)
+* 2.5.3 Label in Name (A)
+* 2.5.8 Target Size Minimum (AA)
+* 3.3.1 Error Identification (A) — editable tables
+* 4.1.2 Name, Role, Value (A)
+* 4.1.3 Status Messages (AA)
 
 ---
 
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TABLES_ACCESSIBILITY_BEST_PRACTICES.md)
-* [WAI Tables Tutorial](https://www.w3.org/WAI/tutorials/tables/) — authoritative; covers one-header through multi-level
-* [WebAIM: Creating Accessible Tables](https://webaim.org/techniques/tables/data) — scope vs headers/id guidance
-* [MDN: HTML table accessibility](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Table_accessibility)
+* [WAI Tables Tutorial](https://www.w3.org/WAI/tutorials/tables/)
+* [WebAIM: Creating Accessible Tables](https://webaim.org/techniques/tables/data)
+* [WAI-ARIA APG sortable table example](https://www.w3.org/WAI/ARIA/apg/patterns/table/examples/sortable-table/)
+* [WAI-ARIA APG grid pattern](https://www.w3.org/WAI/ARIA/apg/patterns/grid/)
 * [Drupal Accessibility Coding Standards](https://www.drupal.org/docs/getting-started/accessibility/accessibility-coding-standards)
-* [WCAG 2.2 Understanding 1.3.1 Info and Relationships](https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html)
 
 > **Standards horizon:** These rules target WCAG 2.2 AA. No significant changes
 > to table accessibility requirements are anticipated in WCAG 3.0.

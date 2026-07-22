@@ -36,6 +36,7 @@ Apply these rules when planning or reviewing manual accessibility testing.
 * Screen reader announcement quality and user experience
 * Keyboard navigation flow and logical sequence
 * Focus management in dynamic interfaces
+* Context and orientation for assistive technology users
 * Forced colors mode (Windows High Contrast) — automated tools cannot simulate OS-level color overrides
 * Real-world usability barriers
 
@@ -51,6 +52,10 @@ Perform manual testing:
 * **When automated tests pass** — validate actual user experience
 * **When accessibility bugs are reported** — reproduce and verify fixes
 
+**Getting started:** test keyboard-only first (easiest entry point), then learn
+basic screen reader commands for your platform. Practice on familiar websites
+before testing your own. Focus on one component or flow at a time.
+
 ---
 
 ## Critical: Keyboard-Only Testing
@@ -64,7 +69,7 @@ Steps:
    - Is focus order logical (follows visual/reading order)?
    - Can you activate it? (Enter for links/buttons, Space for buttons/checkboxes)
 3. Press Shift+Tab to reverse through elements
-4. Confirm there are no keyboard traps
+4. Confirm there are no keyboard traps (can you Tab away from every element?)
 
 Key shortcuts to verify:
 
@@ -80,9 +85,17 @@ Key shortcuts to verify:
 
 **Component-specific checks:**
 
-* **Forms:** all fields reachable; labels announced; errors appear and are announced; Enter submits
-* **Modal dialogs:** focus moves in on open; focus trapped inside; Escape closes; focus returns to trigger on close
-* **Custom widgets (tabs, accordions):** follow WAI-ARIA keyboard patterns; arrow keys work as documented
+* **Forms:** all fields reachable; labels and required state announced; errors
+  appear and are announced; Enter submits; can cancel/reset if applicable
+* **Buttons:** Enter and Space both activate; visual feedback on activation;
+  focus moves appropriately after activation
+* **Links:** Enter activates; destination clear from link text; skip links work
+* **Dropdowns/select menus:** arrow keys navigate options; Escape closes;
+  selected value announced
+* **Modal dialogs:** focus moves in on open; focus trapped inside; Escape
+  closes (unless critical); focus returns to trigger on close
+* **Custom widgets (tabs, accordions, carousels):** follow WAI-ARIA keyboard
+  patterns; arrow keys and Home/End work as documented; state changes are clear
 
 ---
 
@@ -103,6 +116,23 @@ Key shortcuts to verify:
 4. Navigate by form controls (NVDA/JAWS: F / Shift+F) — are labels announced?
 5. Read all content — is order logical? Any missing or confusing announcements?
 
+**Component-specific screen reader checks:**
+
+* **Images:** decorative images ignored (empty alt/`aria-hidden`); informative
+  images have descriptive alt text; complex images have longer descriptions
+* **Links:** purpose clear from announcement alone; text meaningful (not
+  "click here"); external links/new windows indicated
+* **Buttons:** label describes the action; pressed/toggle state announced;
+  disabled state announced
+* **Form fields:** label announced before field type; required state,
+  instructions/hints, error messages, and success messages all announced
+* **Dynamic content:** new/deleted content announced via live regions; loading
+  states and progress communicated
+* **Tables:** navigate by rows/cells (Ctrl+Alt+Arrow in NVDA/JAWS); column and
+  row headers announced with each cell; table purpose clear (caption or `aria-label`)
+* **Custom widgets:** role announced (e.g., "tab", "menu", "dialog"); state
+  announced (e.g., "selected", "expanded"); instructions provided for complex widgets
+
 **For each interactive element, verify:**
 
 * Element type is announced (button, link, heading…)
@@ -116,24 +146,35 @@ Key shortcuts to verify:
 ## Serious: Forced Colors Mode Testing
 
 **Why automated tools miss this:** forced colors is triggered by an OS-level
-setting; browsers cannot simulate the full color override in a headless context.
+setting that replaces all author-defined colors with a constrained system
+palette. Automated tools cannot simulate the OS-level override, detect which
+elements become invisible when custom colors are stripped, or assess whether
+focus indicators/icons/custom controls survive the substitution.
 
 **How to enable:**
 
 * **Windows 11:** Settings → Accessibility → Contrast themes → choose a theme → Apply
-* **Windows 10:** Settings → Ease of Access → High Contrast → turn on
+* **Windows 10:** Settings → Ease of Access → High Contrast → turn on (or `Alt+Left Shift+Print Screen`)
 * **Chrome/Edge DevTools:** F12 → More Tools → Rendering → "Emulate CSS media feature forced-colors" → `active`
-* **Firefox:** `about:config` → `ui.forcedColors` → set to `1`
+* **Firefox:** `about:config` → `ui.forcedColors` → set to `1` (`-1` to reset)
+* **Polypane** includes a forced-colors emulation panel
+
+Always verify with real OS settings before release — DevTools emulation is
+convenient but not fully equivalent.
 
 **What to look for:**
 
-* [ ] All text is readable against its background
-* [ ] Buttons have a visible boundary
+* [ ] All text is readable against its background (`CanvasText` on `Canvas`)
+* [ ] Buttons have a visible boundary; links distinguishable from body text;
+      form fields have visible borders
 * [ ] Keyboard focus outlines are visible (`outline` is preserved; `box-shadow` may not be)
 * [ ] SVG icons are visible (use `currentColor` for `fill`/`stroke`)
-* [ ] Custom checkboxes / radio buttons remain visible and distinguishable
-* [ ] Error states are identifiable without relying on color alone
+* [ ] Custom checkboxes / radio buttons remain visible and distinguishable;
+      toggle state shown via text/ARIA/outline, not color alone
+* [ ] Error states are identifiable without relying on color alone; required
+      fields marked with text or icons, not only color
 * [ ] Background images that convey meaning have a text/ARIA alternative
+* [ ] Charts/data visualizations use pattern/texture/label alternatives
 
 **Common fixes:**
 
@@ -144,6 +185,7 @@ setting; browsers cannot simulate the full color override in a headless context.
 | Custom checkbox invisible | Add visible border; use `forced-color-adjust` override |
 | Error marked by color only | Add icon, text label, or `aria-invalid` |
 | Input invisible (`border: none`) | Add `border: 1px solid ButtonBorder` in `@media (forced-colors: active)` |
+| Background image removed | Add visible text, caption, or `aria-label` |
 
 **CSS system color keywords for patching:**
 
@@ -153,11 +195,22 @@ setting; browsers cannot simulate the full color override in a headless context.
     outline: 3px solid Highlight;
     outline-offset: 2px;
   }
+  .custom-checkbox::before {
+    forced-color-adjust: none;
+    border: 2px solid ButtonBorder;
+    background-color: ButtonFace;
+  }
+  .custom-checkbox[aria-checked="true"]::before {
+    background-color: Highlight;
+  }
 }
 ```
 
 Relevant keywords: `Canvas`, `CanvasText`, `ButtonFace`, `ButtonText`,
-`ButtonBorder`, `Highlight`, `HighlightText`, `LinkText`, `GrayText`.
+`ButtonBorder`, `Highlight`, `HighlightText`, `LinkText`, `VisitedText`, `GrayText`.
+
+Use `forced-color-adjust: none` only as a last resort — it opts the element out
+of forced colors entirely and can negate the user's accessibility settings.
 
 ---
 
@@ -170,19 +223,107 @@ Relevant keywords: `Canvas`, `CanvasText`, `ButtonFace`, `ButtonText`,
 * UI components and graphics: 3:1 minimum
 * Focus indicators: 3:1 against adjacent colors
 
-Test with: WebAIM Contrast Checker, browser DevTools.
+Test with: WebAIM Contrast Checker, browser DevTools. Test light and dark
+color modes separately.
 
-### Zoom at 200 %
+### Zoom at 200%
 
-1. Set browser zoom to 200 % (Ctrl/Cmd + +)
+1. Set browser zoom to 200% (Ctrl/Cmd + +)
 2. Verify all content is readable and not cut off
-3. Verify no horizontal scrolling on a standard 1280 px viewport
+3. Verify no horizontal scrolling on a standard 1280px viewport
+4. Also test with OS-level screen magnification (Windows Magnifier, macOS Zoom)
 
 ### Focus indicator
 
 * [ ] Focus indicator is visible for every focusable element
 * [ ] Contrast meets 3:1 requirement against adjacent colors
 * [ ] Focus indicator is not removed or replaced with something less visible
+* [ ] Focus indicator doesn't obscure content
+
+---
+
+## Testing Workflows by Component Type
+
+**Forms:** navigate to form with keyboard only → fill all fields (check Tab
+order) → trigger validation errors → verify errors appear and are announced →
+correct and revalidate → submit with Enter/Space → verify success message is
+announced. With a screen reader, also confirm field labels/instructions/types
+are announced and errors are in logical reading order.
+
+**Modal dialogs:** activate trigger → verify focus moves into modal → Tab
+through all elements → verify Tab doesn't leave modal (focus trap) → Escape or
+close button dismisses → verify focus returns to trigger. With a screen
+reader, confirm the modal is announced (`role="dialog"`, `aria-labelledby`)
+and content is in logical reading order.
+
+**Single Page Applications:** click a navigation link → verify content changes
+→ verify focus moves to main heading/content → verify page title changes →
+verify the route change is announced or focus provides context. Confirm the
+back button works and new page structure (landmarks, headings) is clear.
+
+---
+
+## Documenting Test Results
+
+For each issue found, record: component/page tested (URL or name), issue
+description, expected behavior, numbered steps to reproduce, assistive
+technology name/version, browser name/version, OS name/version, and severity.
+Optionally include a screenshot/recording and the WCAG success criterion violated.
+
+```markdown
+## Accessibility Issue: [Brief Description]
+
+**Component:** [URL or component name]
+**Issue:** [Description of what doesn't work]
+**Expected:** [What should happen]
+**Severity:** [Critical/High/Medium/Low]
+
+**Steps to Reproduce:**
+1. [Step 1]
+2. [Step 2]
+
+**Testing Environment:**
+- **Screen Reader:** [Name and version]
+- **Browser:** [Name and version]
+- **OS:** [Operating system and version]
+
+**WCAG Criterion:** [If applicable]
+**Suggested Fix:** [If you have one]
+```
+
+(For structured findings, use `skills/bug-reporting/SKILL.md`.)
+
+---
+
+## Encouraging Participation from People with Disabilities
+
+People with disabilities are the experts in identifying barriers and
+validating solutions — their lived experience surfaces issues automated tools
+and non-disabled testers miss, and validates that fixes actually work.
+
+* Remove barriers to participation: clear jargon-free instructions, flexible
+  timeframes, asynchronous feedback, compensation for testing time, accessible
+  issue-reporting formats
+* Invite diverse testers: screen reader users, keyboard-only users, voice
+  control users, users with cognitive disabilities, users with multiple disabilities
+* Credit and compensate testers fairly; create opportunities for ongoing involvement
+
+---
+
+## Quick Reference Checklists
+
+**30-minute keyboard-only test:** Tab start to end; focus visible everywhere;
+activate all buttons (Enter/Space) and links (Enter); fill and submit a form;
+open/close a modal; use custom widgets; navigate menus; check for keyboard traps.
+
+**30-minute screen reader test:** navigate by headings, landmarks, and form
+fields; read full page content; activate buttons/links; fill and submit a
+form; test a custom widget; verify images have alt text; verify dynamic
+content updates are announced.
+
+**Visual accessibility quick check:** 200% zoom; focus indicator visibility;
+color contrast (text and UI components); content readable without color
+alone; light and dark modes; forced colors mode.
 
 ---
 
@@ -196,7 +337,8 @@ Test with: WebAIM Contrast Checker, browser DevTools.
 * [ ] Dynamic content changes are announced by screen reader
 * [ ] Color contrast verified for text and UI components
 * [ ] Forced colors mode tested for all custom UI components
-* [ ] Zoom at 200 % tested; no content cut off or horizontally scrolling
+* [ ] Zoom at 200% tested; no content cut off or horizontally scrolling
+* [ ] Component workflow tests run for forms, modals, and SPA navigation where applicable
 * [ ] Findings documented with URL, element, WCAG SC, severity, and steps to reproduce
 
 ---
@@ -223,8 +365,11 @@ Test with: WebAIM Contrast Checker, browser DevTools.
 * [Full guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/MANUAL_ACCESSIBILITY_TESTING_GUIDE.md)
 * [WebAIM: Testing with NVDA](https://webaim.org/articles/nvda/)
 * [WebAIM: Using VoiceOver](https://webaim.org/articles/voiceover/)
+* [WebAIM: Screen Reader Testing](https://webaim.org/articles/screenreader_testing/)
 * [Deque: Screen Reader Keyboard Shortcuts](https://dequeuniversity.com/screenreaders/)
 * [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
+* [W3C: Easy Checks - First Review](https://www.w3.org/WAI/test-evaluate/preliminary/)
+* [MDN: forced-colors media feature](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/forced-colors)
 
 > **Standards horizon:** These rules target WCAG 2.2 AA.
 > Monitor: <https://www.w3.org/TR/wcag-3.0/>

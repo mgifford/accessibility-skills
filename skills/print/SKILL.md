@@ -23,7 +23,10 @@ Apply these rules when implementing or reviewing print stylesheets.
 Printing is an accessibility feature. Users with cognitive disabilities may
 find printed material easier to process; users with low vision may enlarge it;
 users without reliable internet need offline copies. Print styles must keep
-content useful, readable, and free of colour-only meaning.
+content useful, readable, and free of colour-only meaning. Print CSS should be
+a progressive enhancement — write screen styles first, then layer `@media print`
+on top, and confirm the content is still comprehensible in the browser's
+default print mode before adding custom styles.
 
 ---
 
@@ -51,7 +54,8 @@ content useful, readable, and free of colour-only meaning.
 ```
 
 A site with no `@media print` block at all may print navigation, cookie banners,
-and sidebars while omitting content — **Critical**.
+and sidebars while omitting content — **Critical**. Prefer the inline approach
+to keep styles co-located and reduce HTTP requests.
 
 ---
 
@@ -70,8 +74,10 @@ and sidebars while omitting content — **Critical**.
 ```
 
 Utility classes:
-* `.print-hide` — elements to suppress in print only
-* `.print-show` — elements hidden on screen but needed in print (e.g., postal address)
+* `.print-hide` — elements to suppress in print only (navigation buttons,
+  interactive controls)
+* `.print-show` — elements hidden on screen but needed in print (e.g., postal
+  address, expanded content, supplementary notes)
 
 ---
 
@@ -79,14 +85,22 @@ Utility classes:
 
 When browsers print with backgrounds off (the default in most browsers), any
 information conveyed via background colour is lost. This is **Serious** for
-data tables or status indicators that use colour alone.
+data tables or status indicators that use colour alone. Ink colour rendering
+also varies significantly between printers — always test print output in
+grayscale mode.
 
 ```css
-/* Add a text fallback for colour-coded states */
 @media print {
   .status-error::after   { content: " [Error]"; }
   .status-success::after { content: " [OK]"; }
   .status-warning::after { content: " [Warning]"; }
+
+  /* Remove colour-coded highlights; use borders instead */
+  .status-warning {
+    border: 2pt solid #000;
+    color: #000;
+    background: none;
+  }
 }
 ```
 
@@ -102,6 +116,13 @@ Force-print backgrounds only when the SVG/image requires it:
   }
 }
 ```
+
+**Grayscale testing checklist:**
+
+* [ ] All text is legible in black-and-white output
+* [ ] Charts and graphs include patterns, shapes, or labels in addition to colour
+* [ ] Status indicators (warnings, errors, successes) use text labels, not colour alone
+* [ ] Links remain distinguishable (underline or URL disclosure)
 
 ---
 
@@ -159,6 +180,12 @@ wrapping issues:
     orphans: 3; /* Minimum lines at bottom of page */
     widows: 3;  /* Minimum lines at top of next page */
   }
+  blockquote {
+    border-left: 3pt solid #555;
+    padding-left: 12pt;
+    margin-left: 0;
+    font-style: italic;
+  }
 }
 ```
 
@@ -177,11 +204,34 @@ and `widows` to prevent isolated single lines.
 @page :first {
   margin-top: 3cm;
 }
+@page :left  { margin-left: 3cm; }
+@page :right { margin-right: 3cm; }
 ```
 
 Avoid specifying `size: A4` unless the document is specifically designed for A4.
 US readers use Letter (8.5×11in). Omit `size` and let the printer/user decide,
 or document the choice explicitly.
+
+Running headers/footers can be added via `@page` margin boxes:
+
+```css
+@page {
+  @top-center {
+    content: "Document Title — " string(doc-title);
+    font-size: 9pt;
+    color: #555;
+  }
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-size: 9pt;
+    color: #555;
+  }
+}
+```
+
+`@page` margin boxes are primarily supported in paged-media renderers (Prince,
+WeasyPrint, Paged.js), not all browsers. For cross-browser page numbers, use
+JavaScript or server-side PDF generation.
 
 ---
 
@@ -204,6 +254,9 @@ or document the choice explicitly.
 }
 ```
 
+Use both `page-break-*` (legacy) and `break-*` (modern) properties for broad
+browser support.
+
 ---
 
 ## Moderate: Tables
@@ -212,8 +265,8 @@ or document the choice explicitly.
 @media print {
   table { border-collapse: collapse; width: 100%; }
   th, td {
-    border: 1px solid #333;
-    padding: 4pt;
+    border: 1pt solid #333;
+    padding: 6pt;
     text-align: left;
   }
   thead { display: table-header-group; } /* Repeat header on each page */
@@ -231,16 +284,45 @@ multi-page tables unreadable. **Missing this is Serious for data-heavy tables.**
 
 ```css
 @media print {
-  img {
+  img, svg {
     max-width: 100% !important;
+    height: auto;
     page-break-inside: avoid;
-  }
-  /* Ensure PNG images with transparency render on white */
-  img {
-    background: #fff;
+    break-inside: avoid;
   }
 }
 ```
+
+Browsers typically suppress CSS background images in print output by default.
+Ensure meaningful images use `<img>` elements with descriptive `alt` text
+rather than CSS backgrounds — do not rely on `alt` text appearing only for
+broken images.
+
+---
+
+## Minor: Print Button and Testing
+
+Offering a dedicated "Print this page" button improves discoverability:
+
+```html
+<button type="button" class="print-trigger print-hide" onclick="window.print()">
+  Print this page
+</button>
+```
+
+* Use `type="button"` to prevent accidental form submission
+* Include visible button text (not icon-only) for screen reader users
+* Hide the button in print output itself (`.print-hide`)
+
+**Browser testing:**
+
+* Chrome/Edge: DevTools → More tools → Rendering → "Emulate CSS media type" → `print`
+* Firefox: DevTools → Inspector → toggle the print media icon
+* `Ctrl+P` / `Cmd+P` for native print preview across paper sizes and orientations
+
+**Automated testing:** run axe-core against the print-rendered DOM by activating
+print media emulation before scanning. Lighthouse does not directly test print
+styles, but screen-version violations also affect print output.
 
 ---
 
@@ -256,15 +338,19 @@ multi-page tables unreadable. **Missing this is Serious for data-heavy tables.**
 * [ ] Headings: `break-after: avoid`
 * [ ] Figures and tables: `break-inside: avoid`
 * [ ] `thead { display: table-header-group }` for multi-page tables
+* [ ] Tested in grayscale for colour-independent readability
 * [ ] Tested using browser Print Preview: Chrome, Firefox, Safari
 
 ---
 
 ## Key WCAG Criteria
 
+* 1.1.1 Non-text Content (A) — images must have `alt` text when backgrounds are suppressed
 * 1.3.1 Info and Relationships (A) — structure preserved in print
+* 1.3.2 Meaningful Sequence (A) — reading order logical when print layout differs from screen
 * 1.4.1 Use of Color (A) — **Serious if colour-only meaning lost when backgrounds stripped**
 * 1.4.3 Contrast Minimum (AA) — text readable on white paper
+* 1.4.6 Contrast Enhanced (AAA) — target 7:1 for printed documents where fine text is common
 * 2.4.4 Link Purpose (AA) — URLs exposed for printed links
 
 ---
@@ -275,6 +361,9 @@ multi-page tables unreadable. **Missing this is Serious for data-heavy tables.**
 * [MDN: @media print](https://developer.mozilla.org/en-US/docs/Web/CSS/@media#media_types)
 * [MDN: print-color-adjust](https://developer.mozilla.org/en-US/docs/Web/CSS/print-color-adjust)
 * [MDN: orphans / widows](https://developer.mozilla.org/en-US/docs/Web/CSS/orphans)
+* [CSS Paged Media Module Level 3](https://www.w3.org/TR/css-page-3/)
+* [Paged.js](https://pagedjs.org/) — paged content rendering in the browser
+* [WeasyPrint](https://weasyprint.org/) — HTML/CSS to PDF with Paged Media support
 
 > **Standards horizon:** These rules target WCAG 2.2 AA. No significant
 > changes anticipated for print accessibility in WCAG 3.0.

@@ -9,8 +9,11 @@ description: >
 
 # Axe-Core Rules Reference Skill
 
-> **Canonical source**: `examples/AXE_RULES_REFERENCE.md` in `mgifford/ACCESSIBILITY.md`
-> This skill is derived from that file. When in doubt, the example is authoritative.
+> **Canonical source**: `examples/AXE_RULES_REFERENCE.md` and `examples/AXE_RULES_COVERAGE.md` in `mgifford/ACCESSIBILITY.md`
+> This skill is derived from those files. When in doubt, the example is authoritative.
+> **Note:** the canonical files are organized around a specific test-fixture scanner
+> project (numbered test pages). This skill re-presents the same rule set and
+> severities as a general-purpose reference, independent of any particular fixture.
 
 Apply these rules when writing, reviewing, or debugging axe-core scans.
 
@@ -18,7 +21,7 @@ Apply these rules when writing, reviewing, or debugging axe-core scans.
 
 ## Core Principle
 
-Axe-core catches ~30–40 % of WCAG issues automatically. It is the baseline,
+Axe-core catches ~30–40% of WCAG issues automatically. It is the baseline,
 not the ceiling. Always pair automated scanning with manual keyboard and screen
 reader testing.
 
@@ -27,6 +30,12 @@ reader testing.
 ```typescript
 .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
 ```
+
+Axe-core 4.11 includes 100+ automated checks across these categories: WCAG 2.0
+A/AA (68 rules), WCAG 2.1 A/AA (26 rules), WCAG 2.2 A/AA (1 rule, disabled by
+default), Best Practices (30+ rules), WCAG AAA (3 rules, disabled by default),
+Experimental (9 rules, disabled by default), and Deprecated (7 rules, disabled
+by default).
 
 ---
 
@@ -46,6 +55,7 @@ reader testing.
 | Rule ID | Category | Description |
 |---|---|---|
 | `image-alt` | Text alternatives | `<img>` missing `alt` attribute |
+| `area-alt` | Text alternatives | Image map `<area>` missing alt text |
 | `input-image-alt` | Text alternatives | `<input type="image">` missing alt |
 | `video-caption` | Text alternatives | `<video>` without captions |
 | `aria-allowed-attr` | ARIA | Element has unsupported ARIA attributes for its role |
@@ -71,13 +81,23 @@ reader testing.
 |---|---|---|
 | `object-alt` | Text alternatives | `<object>` without accessible text |
 | `svg-img-alt` | Text alternatives | SVG with `role="img"` and no accessible name |
+| `role-img-alt` | Text alternatives | Element with `role="img"` lacks alt text |
 | `aria-braille-equivalent` | ARIA | Braille label without non-braille equivalent |
-| `aria-command-name` | ARIA | Button or link without accessible name |
+| `aria-command-name` | ARIA | Button, link, or menu item without accessible name |
+| `aria-conditional-attr` | ARIA | ARIA attribute used contrary to role spec |
 | `aria-hidden-focus` | ARIA | `aria-hidden` element contains focusable content |
 | `aria-input-field-name` | ARIA | ARIA input field without accessible name |
+| `aria-meter-name` | ARIA | ARIA `meter` element without accessible name |
+| `aria-progressbar-name` | ARIA | ARIA `progressbar` element without accessible name |
 | `aria-prohibited-attr` | ARIA | Prohibited ARIA attribute used |
+| `aria-toggle-field-name` | ARIA | ARIA toggle field without accessible name |
+| `aria-tooltip-name` | ARIA | ARIA tooltip without accessible name |
+| `aria-dialog-name` | ARIA | Dialog without accessible name |
+| `aria-treeitem-name` | ARIA | Tree item without accessible name |
 | `color-contrast` | Color | Text contrast below 4.5:1 (normal) or 3:1 (large) |
 | `frame-title` | Frames | `<iframe>` without accessible name |
+| `frame-title-unique` | Frames | Frame titles are not unique |
+| `frame-focusable-content` | Frames | Frame with focusable content is `tabindex="-1"` |
 | `html-has-lang` | Language | `<html>` missing `lang` attribute |
 | `html-lang-valid` | Language | `lang` attribute has invalid BCP 47 value |
 | `valid-lang` | Language | Inline `lang` value is invalid |
@@ -94,6 +114,10 @@ reader testing.
 | `autocomplete-valid` | Forms | `autocomplete` attribute invalid or missing |
 | `tabindex` | Best practices | `tabindex` value > 0 used |
 | `label-title-only` | Best practices | Form field labeled only via `title` attribute |
+| `label-content-name-mismatch` | Best practices (experimental) | Visible label text doesn't match accessible name |
+| `td-has-header` | Tables (experimental) | Large table cells lack associated headers |
+| `table-fake-caption` | Tables (experimental) | Table caption not marked up with `<caption>` |
+| `p-as-heading` | Best practices (experimental) | Paragraph styled to look like a heading |
 
 ---
 
@@ -102,16 +126,37 @@ reader testing.
 | Rule ID | Category | Description |
 |---|---|---|
 | `heading-order` | Headings | Heading levels skipped (e.g., h1 → h3) |
+| `empty-heading` | Headings | Heading has no discernible text |
 | `th-has-data-cells` | Tables | Table headers have no associated data cells |
 | `td-headers-attr` | Tables | Table cells reference invalid header IDs |
-| `table-duplicate-name` | Tables | `<caption>` text duplicates `summary` attribute |
 | `meta-viewport` | Meta | Viewport `user-scalable=no` disables zoom |
 | `html-xml-lang-mismatch` | Language | `lang` and `xml:lang` attributes disagree |
 | `form-field-multiple-labels` | Forms | Form field has multiple conflicting labels |
 | `landmark-one-main` | Best practices | Page has no `<main>` landmark |
+| `landmark-banner-is-top-level` | Best practices | `banner` landmark not at top level |
+| `landmark-contentinfo-is-top-level` | Best practices | `contentinfo` landmark not at top level |
+| `landmark-main-is-top-level` | Best practices | `main` landmark not at top level |
+| `landmark-no-duplicate-banner` | Best practices | More than one `banner` landmark |
+| `landmark-no-duplicate-contentinfo` | Best practices | More than one `contentinfo` landmark |
+| `landmark-no-duplicate-main` | Best practices | More than one `main` landmark |
 | `region` | Best practices | Content exists outside landmark regions |
 | `page-has-heading-one` | Best practices | Page has no `<h1>` |
 | `scope-attr-valid` | Best practices | `scope` attribute has invalid value |
+| `accesskeys` | Best practices | `accesskey` values are not unique |
+
+---
+
+## Minor Rules
+
+| Rule ID | Category | Description |
+|---|---|---|
+| `table-duplicate-name` | Tables | `<caption>` text duplicates `summary` attribute |
+| `aria-deprecated-role` | ARIA | Deprecated ARIA role used |
+| `server-side-image-map` | Keyboard | Server-side image map used |
+| `aria-text` | ARIA (best practice) | `role="text"` on an element with focusable descendants |
+
+Disabled-by-default rules (deprecated `marquee`/`blink`/`audio-caption`) are not
+listed above — flag them if encountered, but they are not enabled in a default scan.
 
 ---
 
@@ -167,13 +212,14 @@ test('No WCAG 2.x AA violations', async ({ page }) => {
 * 4.1.2 Name, Role, Value (A)
 * 4.1.3 Status Messages (AA) — partial coverage
 
-> Automation covers ~30–40 % of WCAG issues. Always pair with manual testing.
+> Automation covers ~30–40% of WCAG issues. Always pair with manual testing.
 
 ---
 
 ## References
 
 * [Full axe rules reference](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/AXE_RULES_REFERENCE.md)
+* [Axe rules coverage summary](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/AXE_RULES_COVERAGE.md)
 * [axe-core rule descriptions](https://dequeuniversity.com/rules/axe/)
 * [@axe-core/playwright](https://github.com/dequelabs/axe-core-npm/tree/develop/packages/playwright)
 * [axe-core GitHub](https://github.com/dequelabs/axe-core)

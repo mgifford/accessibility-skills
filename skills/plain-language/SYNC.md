@@ -1,13 +1,23 @@
 # Sync Metadata
 
 ```yaml
-canonical_source: examples/PLAIN_LANGUAGE_BEST_PRACTICES.md
-last_synced_commit: ""
-last_synced_date: "2026-03-29"
+canonical_source: examples/PLAIN_LANGUAGE_ACCESSIBILITY_BEST_PRACTICES.md
+last_synced_commit: "bb235f3"
+last_synced_date: "2026-07-22"
 skill_maintainer: ""
 notes: >
-  Canonical example file does not yet exist in mgifford/ACCESSIBILITY.md.
-  Skill was authored first; create the example file then update last_synced_commit.
+  Fixed stale metadata: this file previously referenced a nonexistent
+  PLAIN_LANGUAGE_BEST_PRACTICES.md and said the canonical file "does not yet
+  exist" -- the canonical file exists at
+  examples/PLAIN_LANGUAGE_ACCESSIBILITY_BEST_PRACTICES.md (matching
+  sync-check.sh's already-correct mapping). Content overlap was already ~90%
+  at sync time (content-only, ignoring frontmatter/blank lines), so no
+  rewrite was needed beyond correcting this metadata.
+
+  DIVERGENCE: This skill's format (YAML frontmatter, severity-tagged
+  sections, condensed Definition of Done checklist) intentionally differs
+  from the canonical file's prose structure. Content substance is synced;
+  presentation format is not expected to match verbatim.
 ```
 
 ## How to Update

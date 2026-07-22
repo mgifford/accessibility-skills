@@ -1,20 +1,19 @@
 # Sync Metadata
 
-Links this skill to its canonical source. Read by `.github/workflows/skill-sync-check.yml`.
-
-## Source
-
 ```yaml
-canonical_source: examples/IMAGE_ALT_TEXT_ACCESSIBILITY_BEST_PRACTICES.md
+canonical_source: examples/OPQUAST_DIGITAL_QUALITY_BEST_PRACTICES.md
 last_synced_commit: "bb235f3"
 last_synced_date: "2026-07-21"
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md.
-  Skill content resynced, folding in new sections: identity/sensitive-attribute
-  guidance (do not guess race, disability, emotion, etc.), CMS/authoring
-  workflow requirements, AI-assisted alt text guidance, image maps, and
-  responsive image/art-direction guidance.
+  Skill content resynced.
+  GAP FOUND: SKILL.md previously referenced `references/rules-part1.md` and
+  `references/rules-part2.md` for the full 245-rule text, but these files do
+  not exist anywhere in this skill directory (confirmed via `find`). Removed
+  that dangling reference and pointed to the canonical guide / official
+  checklist directly instead. If the intent was to ship a full rules
+  reference alongside SKILL.md, those reference files still need to be authored.
 
   DIVERGENCE: This skill's format (YAML frontmatter, severity-tagged
   sections, condensed Definition of Done checklist) intentionally differs
@@ -30,4 +29,4 @@ When the canonical source changes and CI flags drift:
 2. Review the diff linked in the GitHub issue/PR comment
 3. Update `SKILL.md` to reflect new requirements, changed patterns, or removed guidance
 4. Set `last_synced_commit` to the current commit SHA of `mgifford/ACCESSIBILITY.md`
-5. Rebuild: `cd skills && zip -r image-alt-text.skill image-alt-text/`
+5. Rebuild: `cd skills && zip -r opquast-digital-quality.skill opquast-digital-quality/`

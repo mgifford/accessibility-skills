@@ -17,22 +17,22 @@ description: >
 
 Apply these rules when implementing any interactive UI that users touch, click,
 tap, drag, or gesture with.
-**Load alongside `keyboard/SKILL.md` — pointer and keyboard requirements are complementary.**
+**Load alongside `keyboard/SKILL.md` — pointer and keyboard requirements are complementary, not interchangeable.**
 
 ---
 
 ## Core Mandate
 
-WCAG 2.5.x criteria (introduced in WCAG 2.1 and extended in 2.2) address pointer,
-touch, and motion-based interaction. These criteria exist because:
+Build interfaces that work with touchscreens, mice, trackpads, pens, head
+pointers, switch-controlled pointers, and other pointing devices. Do not
+infer a person's abilities from the device they use — a touchscreen user may
+also use a keyboard, speech input, a screen reader, or a mouse.
 
-- Motor disabilities affect both keyboard use and pointer/touch precision
-- Touch screens have different interaction affordances than mouse
-- Many users alternate between keyboard and touch (tablets, convertibles)
-- Voice control users activate elements by speaking visible labels — these must match
-
-The full WCAG 2.5 set is listed in the criteria table. This skill covers the
-most implementation-relevant patterns.
+**A keyboard-only alternative does not by itself satisfy pointer-gesture
+(2.5.1) or dragging (2.5.7) requirements** — the alternative must work with a
+single pointer, without a path-based gesture or drag, even though keyboard
+operability is separately required by 2.1.1. Native buttons conveniently
+satisfy both at once.
 
 ---
 
@@ -41,312 +41,462 @@ most implementation-relevant patterns.
 | Level | Meaning |
 |---|---|
 | **Critical** | Functionality only available via multi-point gesture with no single-pointer alternative; `user-scalable=no` prevents zoom |
-| **Serious** | Drag-to-reorder with no keyboard/single-pointer alternative; touch target under 24×24px for primary actions |
+| **Serious** | Drag-to-reorder with no single-pointer alternative; touch target under 24×24px for primary actions |
 | **Moderate** | Mousedown/touchdown action with no up-event cancellation; motion gesture without UI alternative |
 | **Minor** | Target under 44×44px for non-primary actions; spacing between targets too small |
 
+Prioritize by actual user impact, task criticality, reach, and frequency —
+don't assign severity solely from a success-criterion number or tool output.
+
 ---
 
-## Assistive Technology Context
+## Start With an Input-Agnostic Base
 
-| AT | How pointer/touch requirements apply |
-|---|---|
-| NVDA / JAWS | Primarily keyboard users — see `keyboard/SKILL.md`. Pointer events don't affect screen reader operation directly |
-| VoiceOver (iOS) | Touch-based AT; uses tap, double-tap, swipe — standard HTML interactive elements work natively |
-| TalkBack (Android) | Touch-based AT; double-tap to activate; swipe to navigate |
-| Voice Control (iOS/macOS) | Activates elements by speaking visible labels; target size matters less than label accuracy |
-| Dragon NaturallySpeaking | Click by number or by name; label accuracy critical |
-| Switch access | Scans interactive elements; target size and order matter |
-| Screen magnification | Small targets are harder to hit at high zoom; spacing prevents mis-taps |
-| Stylus / eye gaze | Precision varies; larger targets with more spacing reduce error rate |
+Use native HTML controls and links — their built-in `click` activation works
+across mouse, touch, pen, keyboard, and many AT.
+
+```html
+<!-- Incorrect -->
+<div class="button" ontouchend="saveChanges()">Save changes</div>
+
+<!-- Correct -->
+<button type="button" id="save-button">Save changes</button>
+<script>
+  document.querySelector("#save-button").addEventListener("click", saveChanges);
+</script>
+```
+
+Use Pointer Events for custom direct-manipulation components rather than
+maintaining separate mouse/touch implementations. Do not gate core
+functionality on `pointerType` — a pen user shouldn't lose a function a mouse user gets.
 
 ---
 
 ## Critical: Never Block Zoom (`user-scalable=no`)
 
-Blocking browser zoom is **Critical** — it prevents low-vision users from
-enlarging content to a usable size.
-
 ```html
 <!-- Critical violation — never do this -->
-<meta name="viewport" content="width=device-width, initial-scale=1,
-      maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <!-- Correct -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 ```
 
-Some libraries and frameworks add `user-scalable=no` automatically (Bootstrap
-historically did this in mobile CSS). Audit your viewport meta tag on every
-project.
+Some libraries/frameworks add `user-scalable=no` automatically — audit the
+viewport meta tag on every project. Do not rely on browsers ignoring
+restrictive viewport settings; remove the restriction from the source. Test
+text at 200% and layout at 400% zoom.
 
 ---
 
-## Critical: Single-Pointer Alternatives for Multi-Point Gestures (WCAG 2.5.1)
+## Critical: Single-Pointer Alternatives for Multi-Point/Path Gestures (WCAG 2.5.1)
 
-Any functionality that uses multi-point gestures (pinch-to-zoom, two-finger
-rotate, three-finger swipe) **must** also be available via a single-pointer
-interaction.
+A **multipoint gesture** uses two or more contact points (pinch zoom). A
+**path-based gesture** depends on the route/direction/shape traced, not just
+start/end points. When content defines such a gesture, provide a way to
+perform the same function with a single pointer and no path-based gesture —
+the alternative must exist **in the content**, not just as a keyboard command.
 
 ```html
-<!-- Map with pinch zoom — provide button alternatives -->
-<div role="group" aria-label="Map controls">
-  <button type="button" aria-label="Zoom in">+</button>
-  <button type="button" aria-label="Zoom out">−</button>
+<div class="map-controls" aria-label="Map controls">
+  <button type="button" data-map-action="zoom-in">Zoom in</button>
+  <button type="button" data-map-action="zoom-out">Zoom out</button>
+  <button type="button" data-map-action="north">Pan north</button>
 </div>
 ```
 
-Path-based gestures (swipe, draw) must also have a single-tap or button
-alternative. Examples:
-- **Swipe-to-delete:** also provide a delete button
-- **Swipe-to-reveal:** also provide a menu or button
-- **Draw to sign:** also accept typed name as an alternative where legally permitted
+Examples: buttons for zooming/panning a map; previous/next buttons for a
+swipe carousel; a menu command alongside drawing a shape; visible rotate/
+resize controls. Gestures required by the browser or AT itself (a mobile
+screen reader's navigation gestures) are outside the author's control — don't
+reproduce or interfere with them.
 
 ---
 
-## Critical: Drag with No Alternative (WCAG 2.5.7 — WCAG 2.2)
+## Critical: Non-Dragging Alternatives (WCAG 2.5.7 — WCAG 2.2)
 
-Drag-and-drop interfaces must provide a single-pointer (click/tap) or keyboard
-alternative. **Drag with no alternative is Serious to Critical.**
+If a function uses dragging, provide a way to complete it with a **single
+pointer without dragging** — a keyboard-only alternative does not by itself
+satisfy 2.5.7. Native buttons satisfy both the pointer requirement and
+keyboard access at once.
 
 ```html
-<!-- Reorderable list — provide up/down buttons as drag alternative -->
-<ul id="priority-list">
+<ul id="task-list">
   <li>
-    <span class="drag-handle" aria-hidden="true">⠿</span>
-    Task A
-    <button type="button" aria-label="Move Task A up">↑</button>
-    <button type="button" aria-label="Move Task A down">↓</button>
+    <span>Review content</span>
+    <button type="button" data-move="up" aria-label="Move up: Review content">Move up</button>
+    <button type="button" data-move="down" aria-label="Move down: Review content">Move down</button>
   </li>
 </ul>
+<p id="reorder-status" role="status" aria-atomic="true"></p>
 ```
 
-The alternative does not need to look like the drag — it just needs to
-provide the same result (reordering, moving between columns, etc.).
-
----
-
-## Serious: Target Size Minimum (WCAG 2.5.8 — WCAG 2.2)
-
-Interactive targets must be at least **24×24 CSS pixels** (AA requirement).
-**Below 24×24 is Serious.** The recommended size for primary actions is **44×44px**.
-
-```css
-/* Minimum — WCAG 2.5.8 AA */
-button, a, [role="button"], input[type="checkbox"], input[type="radio"] {
-  min-width:  24px;
-  min-height: 24px;
-}
-
-/* Recommended for primary controls */
-.primary-action {
-  min-width:  44px;
-  min-height: 44px;
-}
+```js
+taskList.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-move]");
+  if (!button) return;
+  const item = button.closest("li");
+  const label = item.querySelector("span").textContent;
+  const direction = button.dataset.move;
+  if (direction === "up" && item.previousElementSibling) item.previousElementSibling.before(item);
+  else if (direction === "down" && item.nextElementSibling) item.nextElementSibling.after(item);
+  else return;
+  updateMoveButtons();
+  reorderStatus.textContent = `${label} moved ${direction}.`;
+});
 ```
 
-When a target is smaller than 44×44px, ensure its **offset** (the spacing
-around it) makes up the difference — a 20×20px icon button with 12px padding
-on all sides meets the 44×44 guideline.
-
-```css
-/* Small icon button — padding provides target space */
-.icon-btn {
-  width: 20px;
-  height: 20px;
-  padding: 12px; /* Total clickable area: 44×44px */
-}
-```
-
-For inline text links, target size exceptions apply — the WCAG exception
-covers inline links in a sentence (where requiring 44px height would break
-text flow).
+Drag-and-drop may remain as an enhancement. The non-dragging controls must
+expose the same result, remain visible/discoverable, and preserve focus and
+state after the move. Other patterns: select item + destination + activate
+Move; tap a map control to pan; enter a value or click the track alongside
+dragging a slider thumb.
 
 ---
 
 ## Serious: Pointer Cancellation (WCAG 2.5.2)
 
-Actions triggered on `mousedown` or `touchstart` (the "down" event) cannot
-be cancelled. Actions must complete on the "up" event (`mouseup`, `touchend`,
-`click`) so users can abort by moving the pointer away.
+Activate ordinary controls on `click`, not `pointerdown`/`mousedown`/`touchstart`.
 
 ```js
-// Wrong — fires on mousedown, cannot be cancelled
-button.addEventListener('mousedown', () => deleteItem());
-
-// Right — fires on click (mouseup equivalent); user can drag away to cancel
-button.addEventListener('click', () => deleteItem());
+// Right — fires on click; user can drag away to cancel
+deleteButton.addEventListener("click", deleteItem);
 ```
 
-For drag operations, completion on `drop` (the up-event equivalent) is correct.
-Custom gesture libraries should use up-events for final action.
+WCAG permits several patterns: (1) the down event doesn't execute the
+function; (2) the function completes on the up event and the user can abort
+before releasing or undo after; (3) releasing reverses the down event's
+outcome; (4) completing on down is essential. For destructive or
+hard-to-reverse actions, also confirm or provide Undo:
+
+```html
+<button type="button" id="archive-button">Archive message</button>
+<p id="archive-status" role="status"></p>
+<button type="button" id="undo-archive" hidden>Undo archive</button>
+```
+
+---
+
+## Serious: Target Size Minimum (WCAG 2.5.8 — WCAG 2.2)
+
+Pointer targets must be at least **24×24 CSS pixels**, except when:
+
+* **Spacing** — a 24px-diameter circle centered on the target doesn't
+  intersect another target's equivalent circle (this is a specific geometric
+  test, not just "add some margin")
+* **Equivalent** — another control on the same page performs the same
+  function and meets the size requirement
+* **Inline** — the target is in a sentence, size constrained by line height
+* **User agent control** — the browser determines the size, unmodified by the author
+* **Essential** — the specific presentation is essential or legally required
+
+**44×44 CSS pixels is the recommended default** for important/frequent
+controls — easier to implement and test than relying on the spacing
+exception, and it's also the WCAG 2.5.5 (AAA) Target Size Enhanced threshold.
+
+```css
+.icon-button {
+  display: inline-grid;
+  min-inline-size: 2.75rem;  /* 44px at default 16px root */
+  min-block-size: 2.75rem;
+  padding: 0.625rem;
+  place-items: center;
+}
+.icon-button svg { inline-size: 1.5rem; block-size: 1.5rem; }
+```
+
+Use `rem` so the target grows with the user's default text size. **Put
+padding on the interactive element itself, not a non-interactive wrapper** —
+the whole padded area must be clickable:
+
+```html
+<a class="nav-link" href="/account/">Account</a>
+```
+```css
+.nav-link { display: inline-flex; min-block-size: 2.75rem; padding: 0.625rem 0.875rem; align-items: center; }
+```
+
+Do not apply a blanket minimum width/height to every `<a>` — inline prose
+links have a defined exception and forcing them into square boxes damages
+reading and wrapping. Associate checkboxes/radios with visible `<label>`
+elements so the label extends the operable area.
 
 ---
 
 ## Serious: Motion Actuation Alternative (WCAG 2.5.4)
 
-Functionality activated by device motion (shake, tilt) must have a UI alternative.
-Users must also be able to disable the motion trigger to prevent accidental activation.
+If shaking, tilting, or gesturing toward a camera performs a function:
+provide a conventional UI control for the same function; let the user
+disable motion actuation; request sensor permission only in response to a
+clear user action.
+
+```html
+<button type="button" id="undo-button">Undo last change</button>
+<label><input type="checkbox" id="shake-toggle"> Enable shake to undo</label>
+```
+
+Keep the conventional button available whether motion input is enabled or
+not — default the sensor feature to off.
+
+---
+
+## Serious: Do Not Depend on Hover
+
+Every function revealed on hover must also be available through a persistent
+control or keyboard focus — touch devices may not support hover reliably.
+
+```html
+<button type="button" aria-expanded="false" aria-controls="account-menu">Account menu</button>
+<ul id="account-menu" hidden>…</ul>
+```
+
+Content on hover/focus must be dismissible, hoverable, and persistent (WCAG
+1.4.13) unless an exception applies. A visible button/disclosure is usually
+more reliable than a tooltip for essential instructions.
+
+---
+
+## Moderate: Use `pointer`/`hover` Media Features Carefully
+
+`pointer`/`hover` describe the *primary* device; `any-pointer`/`any-hover`
+report capabilities across all available devices. **These do not detect
+keyboard use, identify a disability, or reliably classify every pen as
+coarse or every touchscreen as primary** — hybrid devices can report several
+capabilities that change while the page is open.
+
+```css
+.toolbar button { min-inline-size: 2.75rem; min-block-size: 2.75rem; }
+@media (any-pointer: coarse) { .toolbar { gap: 0.75rem; } }
+```
+
+**Never hide essential controls behind an accurate-pointer query:**
+
+```css
+/* Incorrect: touch and keyboard users may lose the controls */
+@media (pointer: fine) { .editing-controls { display: flex; } }
+```
+
+Start with an accessible base layout, then use media queries only for enhancements.
+
+---
+
+## Moderate: Prefer Pointer Events for Custom Interaction
 
 ```js
-// Device motion — always provide UI alternative
-if (window.DeviceMotionEvent) {
-  window.addEventListener('devicemotion', handleShake);
-}
-
-// UI alternative — always present regardless of motion support
-document.getElementById('undo-btn').addEventListener('click', undoLastAction);
-
-// Allow user to disable motion trigger
-document.getElementById('disable-motion').addEventListener('change', (e) => {
-  if (e.target.checked) {
-    window.removeEventListener('devicemotion', handleShake);
-  }
+surface.addEventListener("pointerdown", (event) => {
+  if (activePointerId !== null) return;
+  activePointerId = event.pointerId;
+  surface.setPointerCapture(event.pointerId);
+  beginPreview(event.clientX, event.clientY);
+});
+surface.addEventListener("pointerup", (event) => {
+  if (event.pointerId !== activePointerId) return;
+  activePointerId = null;
+  commitInteraction(event.clientX, event.clientY);
+});
+surface.addEventListener("pointercancel", (event) => {
+  if (event.pointerId === activePointerId) cancelInteraction();
+});
+surface.addEventListener("lostpointercapture", () => {
+  if (activePointerId !== null) cancelInteraction();
 });
 ```
 
+Track the active `pointerId`; finish on `pointerup`; cancel cleanly on
+`pointercancel`; account for `lostpointercapture`; don't assume every pointer
+reports pressure/tilt/dimensions; still provide non-gesture, non-dragging
+controls for the same function. Do not register both `touchend` and `click`
+for the same action without preventing duplicate activation.
+
 ---
 
-## Moderate: Adaptive Target Sizing with CSS Media Queries
-
-Use `pointer` media query to provide larger targets on coarse-pointer (touch)
-devices and tighter targets on fine-pointer (mouse) devices:
+## Moderate: Preserve Browser Panning/Zooming With `touch-action`
 
 ```css
-/* Base: fine pointer (mouse) */
-.nav-item a {
-  padding: 4px 8px;
-}
-
-/* Touch/coarse pointer: expand hit area */
-@media (pointer: coarse) {
-  .nav-item a {
-    padding: 12px 16px;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-  }
-}
+/* A horizontal carousel handles horizontal movement;
+   preserve vertical page scroll and pinch zoom */
+.carousel-viewport { touch-action: pan-y pinch-zoom; }
 ```
 
-`@media (pointer: coarse)` targets touch screens and styluses.
-`@media (pointer: fine)` targets mouse and trackpad.
-`@media (any-pointer: coarse)` also matches when a coarse pointer is *available*
-(e.g., a laptop with a touchscreen) — use when you want to offer touch-friendly
-sizing even on hybrid devices.
+Use `touch-action` only on the smallest custom surface that needs it. **Never
+broadly apply `touch-action: none` to `html`, `body`, page containers, maps,
+canvases, or carousels** — it suppresses browser panning/zooming starting on
+that element. Before restricting a gesture, confirm: the component genuinely
+needs to handle it; page scrolling still works from the component; pinch
+zoom remains available; a simple control provides the same function.
+`touch-action` is preferable to non-passive `preventDefault()` on every touch move.
 
 ---
 
-## Moderate: Touch Target Spacing
+## Component Patterns
 
-Adjacent small targets need spacing to prevent mis-taps — particularly
-important for users with tremor, motor difficulties, or at high magnification.
+| Component | Required approach |
+|:---|:---|
+| Carousel | Prev/next/pause controls; don't require swiping; preserve scrolling and reduced-motion |
+| Map | Named zoom/pan controls; address/coordinates/list alternative when the visual map alone isn't sufficient |
+| Slider | Prefer `<input type="range">`; provide numeric input or click-the-track alongside thumb dragging |
+| Sortable list | Move up/down/to controls in addition to drag-and-drop; announce result, preserve focus |
+| Swipe action | Expose via a visible button/menu; swipe must not be the only way to delete/archive/reveal |
+| Long press | Provide an ordinary button/menu; must not be the only route to a function |
+| Drawing/signature | Avoid requiring fine path accuracy when not essential; offer typed/uploaded alternatives where the task allows |
+| Canvas control | Provide an accessible DOM interface for all operations, names, values, and results — canvas pixels alone create no semantics |
 
-```css
-/* Spacing between adjacent icon buttons */
-.toolbar button + button {
-  margin-left: 8px;
-}
-
-/* Checkbox/radio spacing */
-.option-group label {
-  display: block;
-  padding: 8px 0; /* vertical spacing between options */
-}
-```
-
-WCAG 2.5.8 allows targets smaller than 24×24px if the offset (spacing to
-adjacent targets) ensures the total space per target is at least 24×24px.
+Do not depend on double-tap, pressure, tilt, edge swipes, or device-specific
+gestures for essential functions.
 
 ---
 
-## Moderate: Touch-Specific Interaction Patterns
+## Serious: Keep the Visible Label in the Accessible Name (WCAG 2.5.3)
 
-**Swipe carousels:** must have prev/next button alternatives; auto-advancing
-must pause on focus/hover/touch; `prefers-reduced-motion` must disable animation.
-
-**Pull-to-refresh:** must have a button alternative; must not be the only
-way to refresh content.
-
-**Long-press context menus:** must have a right-click or button alternative
-for desktop users; must not be the only way to access important actions.
-
-**Custom touch gestures (swipe, pinch in a non-map context):** document them
-clearly; always provide single-pointer alternatives.
-
----
-
-## Moderate: Label in Name for Voice Control (WCAG 2.5.3)
-
-Voice Control users (Dragon NaturallySpeaking, iOS Voice Control) activate
-elements by speaking their visible label. **The accessible name must contain
-the visible text.**
+Speech-input users (Dragon, iOS Voice Control) often activate a control by
+saying its visible label — the accessible name must contain that text.
 
 ```html
-<!-- Serious violation: aria-label overrides visible text -->
-<button aria-label="Submit application">Send</button>
-<!-- User says "click Send" — does not work because accessible name is "Submit application" -->
+<!-- Good -->
+<button type="button">Send</button>
+<button type="button" aria-label="Send application">Send</button>
 
-<!-- Correct: accessible name contains visible text -->
-<button aria-label="Send application form">Send</button>
-<!-- Or simply: -->
-<button>Send</button>
-<!-- If context makes "Send" clear, no aria-label needed -->
+<!-- Incorrect: visible text absent from accessible name -->
+<button type="button" aria-label="Submit application">Send</button>
 ```
 
-The accessible name must **begin with** or **contain** the visible text string.
-Adding context before or after is fine: "Send application" ✓, "Submit" when
-visible text is "Send" ✗.
+Putting the visible label at the **start** of a longer accessible name is a
+useful convention for speech input. An icon-only button has no visible label
+to compare under 2.5.3, but still needs a clear accessible name under 4.1.2 —
+use familiar icons and a visible label where space allows; a tooltip is not a
+substitute for a reliably available label.
 
 ---
 
-## Minor: `touch-action` CSS Property
+## Preserve Orientation, Reflow, and Reachability
 
-Explicitly declare `touch-action` on elements that handle their own touch
-events to prevent browser interference:
+Support portrait and landscape unless one orientation is essential — don't
+use orientation locks to compensate for an inflexible layout. At narrow
+widths and high zoom: keep controls in a meaningful order; wrap toolbars
+instead of shrinking targets below minimum size; prevent sticky
+headers/banners/chat widgets from obscuring focused controls; keep dialogs/
+menus within the viewport; avoid horizontal page scrolling except where
+genuinely 2D content requires it. When an on-screen keyboard opens, focused
+inputs/errors/submit controls must remain visible or scrollable into view.
 
-```css
-/* Allow vertical scroll but prevent horizontal swipe (carousel) */
-.carousel { touch-action: pan-y; }
+---
 
-/* Custom drag element — prevent default browser panning */
-.draggable { touch-action: none; }
+## Account for Touch Screen Readers
 
-/* Do not suppress all touch actions on interactive elements */
-button { touch-action: auto; /* default */ }
-```
+Mobile screen readers change how touch input reaches the page — users may
+explore by touch, swipe through the accessibility tree, and use a
+screen-reader activation gesture instead of directly tapping. Use native
+elements and accurate accessible names; keep the accessible target aligned
+with the visible control; expose current state (expanded/selected/checked/
+value); avoid custom gestures conflicting with AT gestures; don't require
+spatial knowledge ("tap the shape in the upper-right corner"). Test both
+direct touch with the screen reader off and touch exploration with it on —
+passing one doesn't establish the other works.
 
-Overusing `touch-action: none` can block scrolling on touch devices — only
-use it on elements that genuinely handle their own touch events.
+---
+
+## Prevent Accidental Activation and Data Loss
+
+Touch input can be imprecise or interrupted. For consequential actions:
+separate adjacent destructive/constructive actions; use clear labels instead
+of ambiguous icons; don't execute on pointer-down; confirm hard-to-reverse
+actions; offer Undo when practical; preserve entered data after validation
+errors, orientation changes, or temporary disconnection. Target size is not
+the only safeguard — a large Delete button next to Save with no recovery
+path can still cause harm.
+
+---
+
+## Testing
+
+* **Review:** inventory all controls/gestures; identify multipoint, path-
+  based, dragging, swipe, long-press, pressure, tilt, and motion
+  interactions; confirm each has the required single-pointer alternative
+  (not just keyboard); measure actual target boxes in CSS pixels; search for
+  restrictive viewport settings and broad `touch-action` rules; verify
+  visible labels are in accessible names
+* **Input:** complete every task with touch alone, mouse/trackpad alone, pen
+  (if supported), and keyboard alone; test speech input for visible labels;
+  test touch exploration and activation with mobile screen readers; test a
+  hybrid device switching between input modes. **Use physical devices for
+  final testing** — emulation doesn't reproduce hand occlusion, reach,
+  accidental contact, or sensor permissions reliably
+* **Visual/layout:** portrait/landscape; 200%/400% zoom; smallest supported
+  viewport with on-screen keyboard; sticky/fixed content not obscuring
+  controls; pinch zoom and page scroll from every custom gesture surface
+* **Interaction state:** press down, move away, release — confirm
+  cancellation works where required; interrupt a direct-manipulation
+  interaction with scrolling/orientation change/loss of pointer capture;
+  confirm drag alternatives produce the same result and preserve focus;
+  confirm motion input can be disabled with its alternative still available
+
+**Automated checks** can identify some small targets, invalid names,
+restrictive viewport settings, and duplicate event patterns — cannot
+determine whether a gesture is essential, whether an alternative is
+equivalent/discoverable, or whether touch screen-reader interaction is
+understandable. Manual testing remains required.
+
+---
+
+## Common Failures
+
+| Failure | Correction |
+|:---|:---|
+| Browser zoom disabled because the layout breaks | Fix the responsive layout; remove viewport scaling restrictions |
+| A keyboard command is the only alternative to a pinch/path gesture | Add controls that work with a single pointer without a path gesture |
+| Keyboard reordering offered as the only drag alternative | Add single-pointer Move controls that don't require dragging |
+| Action fires on `pointerdown` for perceived responsiveness | Complete on `click`/`pointerup`, with cancellation or Undo |
+| "Every target requires 24×24px, no exceptions" | Apply the exact 2.5.8 rule and its defined exceptions |
+| Vague spacing claimed to make an undersized target conform | Evaluate the actual 24px circle test |
+| Every link forced into a square target | Leave inline prose links in normal flow |
+| Padding placed on a wrapper around a small icon button | Put padding on the interactive element itself |
+| Controls appear only on hover | Provide persistent or focus-triggered controls, touch-operable disclosure |
+| `pointer: coarse` treated as a reliable touchscreen/stylus detector | Treat media features as capabilities; keep the base experience input-agnostic |
+| Essential controls hidden unless `pointer: fine` matches | Keep core controls in the base layout |
+| Separate touch and mouse handlers double-activate | Use native `click` or a unified Pointer Events implementation |
+| `touch-action: none` applied to a whole page/component | Preserve panning/zooming; restrict only the necessary gesture axis |
+| Motion input is always active with no way to disable | Provide a conventional alternative and a user-controlled disable |
+| Mobile emulator is the only touch test | Test physical devices, hybrid inputs, and mobile screen readers |
+| Passing keyboard tests treated as proof of pointer accessibility | Test gestures, dragging, cancellation, and target size separately |
 
 ---
 
 ## Definition of Done Checklist
 
 * [ ] `user-scalable=no` and `maximum-scale` not in viewport meta tag
-* [ ] All multi-point gesture functionality has single-pointer alternative
-* [ ] All drag functionality has button/keyboard alternative
-* [ ] Interactive targets: minimum 24×24px; primary controls 44×44px recommended
-* [ ] Small targets have offset spacing to reach 24px effective area
-* [ ] Actions fire on up-event (`click`, `mouseup`, `touchend`); not down-event
-* [ ] Device motion functionality has UI alternative and can be disabled
-* [ ] `@media (pointer: coarse)` used for adaptive touch-friendly sizing
-* [ ] Swipe carousels have prev/next buttons; auto-advance pauses on focus
-* [ ] Voice Control tested: all interactive elements activatable by speaking visible text
-* [ ] `aria-label` values begin with or contain visible label text (WCAG 2.5.3)
-* [ ] `touch-action` set only on elements that handle their own touch events
-* [ ] Tested: iOS VoiceOver (touch), TalkBack (Android), iOS Voice Control
+* [ ] All multi-point/path-based gesture functionality has a **single-pointer**
+      alternative in the content (not just a keyboard command)
+* [ ] All drag functionality has a **single-pointer, non-dragging** alternative
+* [ ] Interactive targets: minimum 24×24px (with valid exception if smaller);
+      44×44px recommended for primary controls
+* [ ] Padding for small targets is on the interactive element, not a wrapper
+* [ ] Actions fire on up-event (`click`, `pointerup`); destructive actions
+      confirmable/undoable
+* [ ] Device motion functionality has a UI alternative and can be disabled
+* [ ] `pointer`/`hover` media queries only enhance an already-accessible base
+      — never hide essential controls
+* [ ] Custom interactions use Pointer Events and handle `pointercancel`/`lostpointercapture`
+* [ ] `touch-action` scoped narrowly; page scroll and pinch zoom preserved elsewhere
+* [ ] `aria-label` values begin with or contain the visible label text (WCAG 2.5.3)
+* [ ] Sticky/fixed/overlay content doesn't obscure focused or operable controls
+* [ ] Tested on physical devices: iOS VoiceOver (touch), TalkBack (Android),
+      mouse/trackpad, keyboard alone
 
 ---
 
 ## Key WCAG Criteria
 
+* 1.3.4 Orientation (AA)
 * 1.4.4 Resize Text (AA) — **Critical if zoom blocked**
-* 2.5.1 Pointer Gestures (A) — **Serious if multi-point gesture has no alternative**
+* 1.4.10 Reflow (AA)
+* 1.4.13 Content on Hover or Focus (AA)
+* 2.1.1 Keyboard (A) — separately required alongside pointer alternatives
+* 2.5.1 Pointer Gestures (A) — **Serious if multi-point gesture has no single-pointer alternative**
 * 2.5.2 Pointer Cancellation (A) — **Serious if actions fire on down-event**
 * 2.5.3 Label in Name (A) — **Serious for voice control users**
 * 2.5.4 Motion Actuation (A)
-* 2.5.7 Dragging Movements (AA, WCAG 2.2) — **Serious if drag has no alternative**
+* 2.5.5 Target Size Enhanced (AAA) — 44×44px
+* 2.5.7 Dragging Movements (AA, WCAG 2.2) — **Serious if drag has no single-pointer alternative**
 * 2.5.8 Target Size Minimum (AA, WCAG 2.2) — **Serious below 24×24px**
 
 ---
@@ -354,17 +504,12 @@ use it on elements that genuinely handle their own touch events.
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TOUCH_POINTER_ACCESSIBILITY_BEST_PRACTICES.md)
-* [Curated resources — touch and pointer](../../resources/by-topic/touch-pointer.md)
 * [WCAG 2.2 Understanding 2.5 Input Modalities](https://www.w3.org/WAI/WCAG22/Understanding/input-modalities)
-* [WCAG 2.2 Understanding 2.5.8 Target Size Minimum](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html)
 * [WCAG 2.2 Understanding 2.5.7 Dragging Movements](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html)
+* [WCAG 2.2 Understanding 2.5.8 Target Size Minimum](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html)
+* [Pointer Events Level 3](https://www.w3.org/TR/pointerevents3/)
 * [MDN — Pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events)
 * [MDN — touch-action](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action)
-* [AODA — Web accessibility guidelines for pointer gestures](https://www.aoda.ca/web-accessibility-guidelines-for-pointer-gestures/)
-* [ESDC — Touch input accessibility (Government of Canada)](https://bati-itao.github.io/learning/esdc-self-paced-web-accessibility-course/module10/touch-input.html)
-* [SitePoint — Touch targets and web accessibility](https://www.sitepoint.com/touch-targets-and-web-accessibility/)
-* [Apple HIG — Accessibility](https://developer.apple.com/accessibility/ios/)
-* [Android — Accessibility developer guide](https://developer.android.com/guide/topics/ui/accessibility)
 
 > **Standards horizon:** WCAG 2.5.x criteria are recent additions (2.1 and 2.2).
 > WCAG 3.0 is expected to extend pointer and touch requirements further.

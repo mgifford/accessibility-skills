@@ -1,20 +1,20 @@
 # Sync Metadata
 
-Links this skill to its canonical source. Read by `.github/workflows/skill-sync-check.yml`.
-
-## Source
-
 ```yaml
-canonical_source: examples/IMAGE_ALT_TEXT_ACCESSIBILITY_BEST_PRACTICES.md
+canonical_source: examples/USER_PERSONALIZATION_ACCESSIBILITY_BEST_PRACTICES.md
 last_synced_commit: "bb235f3"
-last_synced_date: "2026-07-21"
+last_synced_date: "2026-07-22"
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md.
-  Skill content resynced, folding in new sections: identity/sensitive-attribute
-  guidance (do not guess race, disability, emotion, etc.), CMS/authoring
-  workflow requirements, AI-assisted alt text guidance, image maps, and
-  responsive image/art-direction guidance.
+  Substantial resync. CORRECTION: Notable correction: canonical explicitly flags "force
+  all animations to 0.01ms !important" as a common failure (it can break
+  state-change logic depending on transitionend/animationend) -- prior skill
+  version used exactly this blanket pattern as its recommended approach.
+  Also corrected prefers-contrast handling to cover more/less/custom (prior
+  version only handled "more"), and added the System -> explicit override ->
+  Reset precedence model, validated-allowlist persistence pattern, and
+  privacy/fingerprinting guidance.
 
   DIVERGENCE: This skill's format (YAML frontmatter, severity-tagged
   sections, condensed Definition of Done checklist) intentionally differs
@@ -30,4 +30,4 @@ When the canonical source changes and CI flags drift:
 2. Review the diff linked in the GitHub issue/PR comment
 3. Update `SKILL.md` to reflect new requirements, changed patterns, or removed guidance
 4. Set `last_synced_commit` to the current commit SHA of `mgifford/ACCESSIBILITY.md`
-5. Rebuild: `cd skills && zip -r image-alt-text.skill image-alt-text/`
+5. Rebuild: `cd skills && zip -r user-personalization.skill user-personalization/`

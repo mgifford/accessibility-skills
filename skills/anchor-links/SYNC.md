@@ -1,20 +1,17 @@
 # Sync Metadata
 
-Links this skill to its canonical source. Read by `.github/workflows/skill-sync-check.yml`.
-
-## Source
-
 ```yaml
-canonical_source: examples/IMAGE_ALT_TEXT_ACCESSIBILITY_BEST_PRACTICES.md
+canonical_source: examples/ANCHOR_LINKS_ACCESSIBILITY_BEST_PRACTICES.md
 last_synced_commit: "bb235f3"
 last_synced_date: "2026-07-21"
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md.
-  Skill content resynced, folding in new sections: identity/sensitive-attribute
-  guidance (do not guess race, disability, emotion, etc.), CMS/authoring
-  workflow requirements, AI-assisted alt text guidance, image maps, and
-  responsive image/art-direction guidance.
+  Skill content resynced.
+  CORRECTION: scroll-spy current-section marker is aria-current="location",
+  not aria-current="true" as the prior skill version used. Also added
+  heading permalinks, back-to-top pattern, SPA/router fragment-navigation
+  guidance, and a common-failures table.
 
   DIVERGENCE: This skill's format (YAML frontmatter, severity-tagged
   sections, condensed Definition of Done checklist) intentionally differs
@@ -30,4 +27,4 @@ When the canonical source changes and CI flags drift:
 2. Review the diff linked in the GitHub issue/PR comment
 3. Update `SKILL.md` to reflect new requirements, changed patterns, or removed guidance
 4. Set `last_synced_commit` to the current commit SHA of `mgifford/ACCESSIBILITY.md`
-5. Rebuild: `cd skills && zip -r image-alt-text.skill image-alt-text/`
+5. Rebuild: `cd skills && zip -r anchor-links.skill anchor-links/`

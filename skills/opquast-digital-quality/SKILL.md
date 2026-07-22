@@ -5,6 +5,9 @@ description: Apply the Opquast Digital Quality Framework (245 rules, 14 categori
 
 # Opquast Digital Quality Best Practices
 
+> **Canonical source**: `examples/OPQUAST_DIGITAL_QUALITY_BEST_PRACTICES.md` in `mgifford/ACCESSIBILITY.md`
+> This skill is derived from that file. When in doubt, the example is authoritative.
+
 Apply the [Opquast Digital Quality Checklist](https://checklists.opquast.com/en/digital-quality/)
 (Version 5, 2025-2030) when building or reviewing web projects. The framework
 contains 245 rules across 14 categories covering content, privacy, e-commerce,
@@ -18,9 +21,6 @@ forms, accessibility, security, performance, and more.
 ---
 
 ## Severity Scale (this skill)
-
-Opquast covers 245 rules across 14 categories. Use this scale when reporting
-issues found during review:
 
 | Level | Meaning |
 |---|---|
@@ -51,24 +51,24 @@ Category-level severity guidance:
 
 ---
 
-## Quick Reference: AI-Enforceable Requirements
+## Quick Reference by Category (245 rules across 14 categories)
 
-| Category | Key Requirements |
-|---|---|
-| Content | `<meta name="description">` + OG tags, explicit dates, `<abbr>` for acronyms, data tables for charts |
-| Privacy | Privacy link in footer, generic auth-failure messages, HTTPS for sensitive data, no sensitive data in URLs |
-| E-Commerce | No pre-checked opt-ins, availability before checkout, explicit pricing, two+ payment methods |
-| Forms | `<label for="...">`, `required` attribute (not `aria-required` alone), `aria-invalid`, `aria-describedby`, correct `input type`, `autocomplete` |
-| Identification | Unique page titles (`Page \| Site`), `lang` attribute, favicon, two+ contact methods |
-| Images/Media | Meaningful `alt`, empty `alt=""` for decorative, captions + transcripts for AV, no autoplay |
-| Internationalisation | `lang` on `<html>`, `hreflang` for translations, international dialling codes |
-| Links | Descriptive anchor text (no "click here"), `tel:` protocol, file type + size for downloads |
-| Navigation | Skip links, visible `:focus-visible`, logical tab order, consistent nav placement, breadcrumbs |
-| Presentation | Contrast 4.5:1 normal / 3:1 large text, no colour-only info, no blocked zoom, responsive, print styles |
-| Security | HTTPS everywhere, HSTS, CSP, SRI, no plain-text passwords, security headers |
-| Server/Performance | `robots.txt`, `sitemap.xml`, gzip/Brotli, cache headers, minified CSS/JS |
-| Structure/Code | UTF-8, unique IDs, no `meta refresh`, tagged PDFs, heading hierarchy `h1>h2>h3` |
-| Newsletter | Confirmed opt-in, unsubscribe link, archives online, state frequency |
+| Category | Rules | Key Requirements |
+|---|---|---|
+| Content | 1–14 | Metadata (description + OG tags), explicit dates, `<abbr>` for acronyms, data tables for charts, labelled ads, moderation/abuse-report mechanisms |
+| Personal Data / Privacy | 15–29 | Privacy link in footer, documented data access/modification process, no third-party-only login, generic auth-failure messages, `Referrer-Policy`, HTTPS for sensitive data, no sensitive data in URLs |
+| E-Commerce | 30–68 | No pre-checked opt-ins, availability/delivery time/cost before checkout, explicit pricing incl. tax, two+ payment methods, order confirmation email, invoices online |
+| Forms | 69–98 | `<label for="...">`, format/case-sensitivity hints, required indicated in text, password strength + show/hide, `aria-invalid`, `aria-describedby`, preserve data on error, correct `input type`/`autocomplete`, paste not blocked, disabled buttons not `aria-hidden` |
+| Identification | 99–115 | Unique page titles (`Page \| Site`), `lang` attribute, favicon, address/phone in footer, two+ contact methods, response-time/hours stated |
+| Images/Media | 116–127 | Meaningful `alt`, empty `alt=""` for decorative, image-link alt describes destination, transcripts + synchronised captions, no autoplay, pausable media |
+| Internationalisation | 128–135 | International dialling codes, country in addresses, `hreflang`/visible language indicator, `lang` on `<html>` and inline changes, translated-language link labels |
+| Links | 136–152 | Descriptive anchor text (no "click here"), `tel:` protocol, new-tab warning, file type + size for downloads, no broken internal links |
+| Navigation | 153–172 | Public content without forced login, no nav pop-ups, homepage link, breadcrumbs, consistent nav placement, visible icon labels, skip links, visible `:focus-visible`, logical tab order, internal search, sitemap |
+| Newsletter | 173–179 | Confirmed opt-in, unsubscribe link, one-click unsubscribe, archives online, stated frequency |
+| Presentation | 180–196 | Consistent visual identity, no colour-only info, contrast 4.5:1 normal / 3:1 large text, meaning survives with styles off, 24×24px+ touch targets, no zoom blocking, responsive layout, print styles |
+| Security | 197–217 | HTTPS everywhere + HSTS, no mixed content, self-service password reset, no plain-text passwords, `X-Content-Type-Options`, `X-Frame-Options`/`frame-ancestors`, CSP, SRI on third-party scripts, no exposed server versions, SPF/DKIM/DMARC |
+| Server/Performance | 218–230 | `robots.txt`, `sitemap.xml`, proper 404 status (not 200), custom error page with nav, gzip/Brotli, cache-control headers, minified CSS/JS |
+| Structure/Code | 231–244 | Machine-readable dates (`<time datetime>`), UTF-8, unique IDs, no `meta refresh`, heading hierarchy `h1>h2>h3`, tagged (not scanned) PDFs, `<caption>`/`<th scope>` on data tables |
 
 ---
 
@@ -81,17 +81,15 @@ Not all 14 categories apply to every project:
 - **All web projects**: Content, Forms, Identification, Images/Media, Links,
   Navigation, Presentation, Security, Server/Performance, Structure/Code
 - **Add if applicable**: E-Commerce (online sales), Newsletter (email marketing),
-  Internationalisation (multi-language), Privacy (user accounts/data collection)
+  Internationalisation (multi-language), Personal Data/Privacy (user accounts/data collection)
 
-### 2. Load Detailed Rules
+### 2. Consult the Full Rule Text
 
-Read the relevant reference file for the full rules with code examples:
-
-- **Rules 1-172** (Content, Privacy, E-Commerce, Forms, Identification,
-  Images/Media, Internationalisation, Links, Navigation):
-  See `references/rules-part1.md`
-- **Rules 173-244** (Newsletter, Presentation, Security, Server/Performance,
-  Structure/Code): See `references/rules-part2.md`
+For the complete rule text, code examples, and rule numbers, consult the
+[canonical Opquast guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/OPQUAST_DIGITAL_QUALITY_BEST_PRACTICES.md)
+or the [official checklist](https://checklists.opquast.com/en/digital-quality/)
+directly — this skill summarizes the categories and highest-value patterns
+rather than reproducing all 245 rules verbatim.
 
 ### 3. Apply During Development
 
@@ -149,16 +147,31 @@ After implementation, verify against applicable rules. Common automated checks:
 ### Accessible Form Field
 
 Use native `required` on native inputs. `aria-required` is redundant when
-`required` is present and should be omitted to avoid accessibility tree noise.
-Use `aria-required` only on custom widgets (`role="combobox"` etc.).
+`required` is present and should be omitted to avoid accessibility tree noise
+(rule 98 principle: don't add ARIA states that duplicate native semantics).
+Use `aria-required` only on custom widgets (`role="combobox"` etc.). Also
+indicate required state in visible text — an asterisk alone is insufficient
+unless the convention is explained (rule 71).
 
 ```html
 <label for="email">
-  Email address <span aria-hidden="true">*</span>
-  <span class="hint" id="email-hint">Required. Example: user@example.com</span>
+  Email address <span aria-hidden="true">*</span> <span class="hint">(required)</span>
+  <span class="hint" id="email-hint">Example: user@example.com</span>
 </label>
 <input id="email" type="email" autocomplete="email"
   required aria-describedby="email-hint" />
+```
+
+### Password Field (rules 75–76, 202–205)
+
+```html
+<label for="password">Password</label>
+<div class="password-wrapper">
+  <input id="password" type="password" aria-describedby="password-hint" />
+  <button type="button" aria-controls="password" aria-pressed="false">
+    Show password
+  </button>
+</div>
 ```
 
 ### Security Headers (Server Config)
@@ -169,6 +182,15 @@ X-Content-Type-Options: nosniff
 X-Frame-Options: SAMEORIGIN
 Content-Security-Policy: default-src 'self';
 Referrer-Policy: strict-origin-when-cross-origin
+```
+
+Do not expose server software versions in response headers (rule 213) —
+remove or obfuscate `Server` and `X-Powered-By`. Apply Subresource Integrity
+to third-party scripts/stylesheets (rule 214):
+
+```html
+<script src="https://cdn.example.com/library.min.js"
+  integrity="sha384-<hash>" crossorigin="anonymous"></script>
 ```
 
 ### Focus and Contrast Styles
@@ -194,6 +216,20 @@ body {
 }
 ```
 
+### Accessible Data Table (rules 242–243)
+
+```html
+<table>
+  <caption>Quarterly revenue by region (USD thousands)</caption>
+  <thead>
+    <tr><th scope="col">Region</th><th scope="col">Q1</th></tr>
+  </thead>
+  <tbody>
+    <tr><th scope="row">North America</th><td>1,200</td></tr>
+  </tbody>
+</table>
+```
+
 ---
 
 ## WCAG Relationship
@@ -212,7 +248,7 @@ Opquast complements WCAG 2.2 rather than replacing it. Key mappings:
 | 166 (keyboard operable) | 2.1.1 Keyboard (A) |
 | 167 (logical tab order) | 2.4.3 Focus Order (A) |
 | 181 (not colour alone) | 1.4.1 Use of Color (A) |
-| 182 (contrast) | 1.4.3, 1.4.11 Contrast (AA) |
+| 182 (contrast) | 1.4.3, 1.4.6, 1.4.11 Contrast |
 | 186 (touch targets 24×24px min) | 2.5.8 Target Size Minimum (AA, WCAG 2.2) |
 | 193 (no zoom block) | 1.4.4 Resize Text (AA) |
 | 69-70 (labels, instructions) | 1.3.1, 3.3.2 |
@@ -256,42 +292,44 @@ Apply to every project; skip categories not in scope:
 **Forms**
 * [ ] Every field has programmatically associated `<label>`
 * [ ] Native `required` used; `aria-required` omitted on native inputs
+* [ ] Required state indicated in visible text, not asterisk/colour alone
 * [ ] `aria-invalid="true"` set on invalid fields
-* [ ] Error messages associated via `aria-describedby`
+* [ ] Error messages associated via `aria-describedby`; prior data preserved on error
 * [ ] Correct `input type` and `autocomplete` values
-* [ ] Paste not blocked
+* [ ] Paste not blocked; disabled buttons not hidden via `aria-hidden`
 
 **Images & Media**
 * [ ] Decorative images have `alt=""`
-* [ ] Informative images have descriptive `alt`
+* [ ] Informative images have descriptive `alt`; image links describe the destination
 * [ ] All video has synchronised captions
 * [ ] All audio has text transcript
-* [ ] No autoplay (audio or video)
-* [ ] All media pausable
+* [ ] No autoplay (audio or video); all media pausable
 
 **Navigation & Keyboard**
 * [ ] Skip link present and functional
 * [ ] `:focus-visible` styles defined; `outline: none` not used without replacement
-* [ ] All content keyboard operable
-* [ ] Logical tab order
+* [ ] All content keyboard operable; logical tab order
+* [ ] Breadcrumbs or equivalent location indicator present
 
 **Presentation**
 * [ ] Contrast ≥ 4.5:1 for normal text; ≥ 3:1 for large text and UI components
 * [ ] Information not conveyed by colour alone
 * [ ] `user-scalable=no` and `maximum-scale` not used
+* [ ] Touch targets ≥ 24×24px (44×44 recommended)
 * [ ] Print styles hide navigation; reveal link URLs
 
 **Security**
-* [ ] HTTPS on all pages; HTTP redirects to HTTPS
+* [ ] HTTPS on all pages; HTTP redirects to HTTPS; no mixed content
 * [ ] HSTS header present
 * [ ] `X-Content-Type-Options: nosniff` present
 * [ ] `X-Frame-Options` or CSP `frame-ancestors` present
 * [ ] CSP header present
 * [ ] SRI on all third-party scripts/stylesheets
+* [ ] Server/framework version headers not exposed
 
 **Server/Performance**
-* [ ] `robots.txt` present
-* [ ] `sitemap.xml` present
+* [ ] `robots.txt` present; `sitemap.xml` present
+* [ ] Proper `404` status for missing pages (not `200`)
 * [ ] Compression enabled (gzip or Brotli)
 * [ ] Cache-control headers on static assets
 * [ ] CSS and JS minified
@@ -302,6 +340,7 @@ Apply to every project; skip categories not in scope:
 * [ ] No `<meta http-equiv="refresh">`
 * [ ] Heading hierarchy correct (`h1` > `h2` > `h3`, no skips)
 * [ ] Data tables have `<caption>` and `<th scope="...">`
+* [ ] Internal PDFs are tagged (selectable text), not scanned images
 
 ---
 
@@ -314,6 +353,7 @@ extends well beyond it into security, privacy, e-commerce, and performance.
 
 ## References
 
+* [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/OPQUAST_DIGITAL_QUALITY_BEST_PRACTICES.md)
 * [Opquast Digital Quality Checklist](https://checklists.opquast.com/en/digital-quality/) — CC-BY-SA 4.0; rule text may be cited with attribution
 * [opquast.com](https://www.opquast.com/) — authoritative source, training, certification
 * [TRUSTED_SOURCES.yaml](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TRUSTED_SOURCES.yaml) — `id: opquast`, `id: opquast-checklist`

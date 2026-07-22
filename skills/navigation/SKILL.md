@@ -22,9 +22,11 @@ dropdowns, breadcrumbs, pagination, mobile menus, and in-page navigation.
 
 ## Core Mandate
 
-Navigation is how users find content. Screen reader users rely on landmark
-structure to orient themselves; keyboard users rely on predictable tab order and
-dropdown behaviour; voice control users rely on visible, correctly-labelled
+Navigation must remain understandable and operable with keyboards, touch,
+speech input, screen readers, screen magnification, text resizing, and
+browser zoom. Screen reader users rely on landmark structure to orient
+themselves; keyboard users rely on predictable tab order and dropdown
+behaviour; voice control users rely on visible, correctly-labelled
 interactive elements; magnification users rely on nav that reflows without
 breaking. Get navigation wrong and everything downstream is harder.
 
@@ -39,6 +41,12 @@ breaking. Get navigation wrong and everything downstream is harder.
 | **Moderate** | Missing `aria-label` on secondary nav; breadcrumb not labelled |
 | **Minor** | Nav item count exceeds 7; inconsistent `aria-expanded` update |
 
+Do not assign severity from the pattern alone — determine the actual effect
+on navigation and task completion. Consider whether users can reach main
+content, whether a menu can be opened/operated/closed/left, whether focus
+becomes trapped or lost, and whether the defect affects every page through a
+shared component (a shared nav trap can block an entire site).
+
 ---
 
 ## Assistive Technology Context
@@ -52,238 +60,221 @@ Navigation behaves differently across AT. Test with:
 | VoiceOver | Safari (macOS) | `VO+U` rotor for landmarks and links; announces nav label |
 | VoiceOver | Safari (iOS) | Swipe to navigate; nav landmark accessible via rotor |
 | TalkBack | Chrome (Android) | Linear swipe navigation; landmarks via local context menu |
-| Voice Control | Any | Users navigate by visible link text; all interactive elements need accurate visible labels. `aria-label` that differs from visible text breaks voice control. |
-| Screen magnification | Any | Sticky/fixed navbars shrink the visible viewport. Ensure nav does not obscure content at high zoom (200%, 400%). |
-| Reader Mode | Firefox/Edge/Safari | Strips nav from the article view — acceptable. Main content must make sense without it. |
-| Edge Read Aloud | Edge | Reads page linearly; nav at top means it is read first — skip link is critical. |
+| Voice Control | Any | Users navigate by visible link text; all interactive elements need accurate visible labels. `aria-label` that differs from visible text breaks voice control |
+| Screen magnification | Any | Sticky/fixed navbars shrink the visible viewport at high zoom (200%, 400%) |
+| Reader Mode | Firefox/Edge/Safari | Strips nav from the article view — acceptable; main content must make sense without it |
 
-**Voice Control note:** Dragon NaturallySpeaking and iOS Voice Control navigate
-by speaking visible link text. If `aria-label` differs from or overrides visible
-text, the user cannot activate the link by speaking what they see. **The accessible
-name must contain the visible text.** (WCAG 2.5.3 Label in Name.)
+**Voice Control note:** Dragon and iOS Voice Control navigate by speaking
+visible link text. If `aria-label` differs from visible text, users cannot
+activate the link by speaking what they see — **the accessible name must
+contain the visible text** (WCAG 2.5.3 Label in Name).
 
 ---
 
 ## Critical: Landmark Structure
 
-Every page must have navigational landmarks. **Missing `<nav>` landmark is Serious**
-— screen reader users cannot jump to navigation via the rotor or landmarks list.
-
 ```html
-<!-- Skip link — always first in <body> -->
-<a class="skip-link" href="#main">Skip to main content</a>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
-<!-- Primary navigation -->
-<header role="banner">
-  <nav aria-label="Main">
+<header>
+  <a href="/">Service name</a>
+  <nav aria-label="Primary">
     <ul>
-      <li><a href="/" aria-current="page">Home</a></li>
-      <li><a href="/about">About</a></li>
       <li><a href="/services">Services</a></li>
+      <li><a href="/guidance">Guidance</a></li>
     </ul>
   </nav>
 </header>
 
-<!-- Main content -->
-<main id="main" tabindex="-1">…</main>
+<main id="main-content" tabindex="-1">
+  <h1>Page title</h1>
+</main>
 
-<!-- Secondary navigation (if present) -->
-<nav aria-label="Footer">…</nav>
+<footer>
+  <nav aria-label="Footer">…</nav>
+</footer>
 ```
 
-Rules:
-- `<nav>` wraps every navigation region
-- When multiple `<nav>` elements are present, **every one** needs a unique
-  `aria-label` — without it, screen readers announce "navigation" for each
-  with no way to distinguish them
-- `aria-label` must be short and descriptive: "Main", "Footer", "Breadcrumb",
-  "Pagination" — not "Navigation menu" or "Main navigation menu"
+* `<nav>` wraps every major group of links that help users navigate the site,
+  page, or process — don't wrap every incidental link list in a nav landmark;
+  excess landmarks make region navigation harder
+* When multiple `<nav>` elements are present, **every one** needs an
+  understandable name so users can distinguish them: `aria-label="Primary"`,
+  `"Footer"`, `"On this page"` — do not include the role word ("Primary
+  navigation landmark" is redundant since the role is already exposed)
+* Use `aria-labelledby` when a visible heading already names the region
+* Use the **same** name for repeated navigation landmarks containing the same
+  links; use **different** names when landmarks serve different purposes
+* Do not add redundant `role="navigation"` to `<nav>`
+
+**Missing `<nav>` landmark is Serious** — screen reader users cannot jump to
+navigation via the rotor or landmarks list.
 
 ---
 
 ## Critical: Skip Link
 
-The skip link must be the **first focusable element** in the document and must
-be **visible when focused**. A permanently hidden skip link (via `display:none`)
-is a Serious issue — it defeats WCAG 2.4.1.
+Must be at or near the beginning of the body, before the content it bypasses,
+and must be one of the first useful keyboard stops (not necessarily the
+literal first DOM node). A permanently hidden skip link (`display:none`,
+`visibility:hidden`, or `hidden`) is a Serious issue — it defeats WCAG 2.4.1.
 
 ```css
 .skip-link {
-  position: absolute;
-  top: -100%;
-  left: 1rem;
-  padding: 0.5rem 1rem;
-  background: #000;
-  color: #fff;
-  font-weight: bold;
-  text-decoration: none;
-  z-index: 9999;
+  position: fixed;
+  z-index: 1000;
+  inset-block-start: 0.5rem;
+  inset-inline-start: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: #ffffff;
+  background: #000000;
+  transform: translateY(-200%);
 }
-.skip-link:focus { top: 1rem; }
+.skip-link:focus { transform: translateY(0); }
 ```
 
-The skip link target (`#main`) needs `tabindex="-1"` so focus can be moved
-to it programmatically even though it is not natively focusable.
+Ensure activation moves both viewport and keyboard focus to the destination;
+use `tabindex="-1"` on `<main>` for reliable programmatic focus; ensure sticky
+headers don't obscure the destination. WCAG also permits other conforming
+bypass mechanisms (headings, landmarks) depending on the conformance approach.
 
 ---
 
-## Serious: `aria-current="page"`
-
-The current page link must be identified programmatically.
-**Missing `aria-current` is Serious** — screen reader users cannot determine
-where they are in the site without it.
+## Serious: Current Location (`aria-current`)
 
 ```html
-<nav aria-label="Main">
+<nav aria-label="Primary">
   <ul>
-    <li><a href="/" aria-current="page">Home</a></li>
-    <li><a href="/about">About</a></li>
-    <li><a href="/contact">Contact</a></li>
+    <li><a href="/">Home</a></li>
+    <li><a href="/guidance" aria-current="page">Guidance</a></li>
   </ul>
 </nav>
 ```
 
-`aria-current="page"` is the correct value for navigation items linking to
-the current page. Use `aria-current="true"` for other current states (current
-step in a wizard, current item in a list).
+Use the value matching the relationship — not always `"true"`:
 
-Also provide a **visual** current-page indicator — never rely on `aria-current`
-alone (sighted users cannot see ARIA).
+* `aria-current="page"` — the current page
+* `aria-current="step"` — the current step in a process
+* `aria-current="location"` — current location within an environment (e.g., scroll-spy TOC)
+* `aria-current="date"` / `"time"` — where applicable
+* `aria-current="true"` — only when no more specific token applies
+
+Do not use `aria-selected` for ordinary navigation links — reserve it for
+widgets whose selected state is part of their role (tabs, listboxes). Always
+also provide a **visual** current-item indicator that doesn't rely on colour
+alone. **Missing `aria-current` on a current-location indicator is Serious**
+— screen reader users cannot determine where they are without it.
 
 ---
 
-## Serious: Do Not Use `role="menu"` for Site Navigation
+## Serious: Site Navigation Is Not an Application Menu
 
-**Using `role="menu"` on site navigation is Serious.** This is one of the most
-common navigation ARIA mistakes.
-
-`role="menu"` signals a desktop-application-style menu (like a File menu in a
-word processor). It puts screen readers into application-menu interaction mode:
-- Arrow keys navigate items (not Tab)
-- Tab exits the menu entirely
-- Users who expect standard link navigation are confused
-
-Standard site navigation uses native `<a>` elements in `<ul>` lists inside
-`<nav>`. No ARIA menu roles needed.
+**Using `role="menu"`/`"menuitem"`/`"menubar"` on ordinary site navigation is
+Serious.** Those roles put screen readers into application-menu interaction
+mode (arrow keys navigate, Tab exits the whole menu) — a mismatch with what
+users expect from web navigation.
 
 ```html
-<!-- Wrong — creates wrong AT interaction model -->
-<nav>
-  <ul role="menu">
-    <li role="menuitem"><a href="/about">About</a></li>
-  </ul>
-</nav>
+<!-- Wrong -->
+<nav><ul role="menu"><li role="menuitem"><a href="/about">About</a></li></ul></nav>
 
 <!-- Right — native semantics, no ARIA menu roles -->
-<nav aria-label="Main">
-  <ul>
-    <li><a href="/about">About</a></li>
-  </ul>
+<nav aria-label="Primary">
+  <ul><li><a href="/about">About</a></li></ul>
 </nav>
 ```
 
-The **only** appropriate use of `role="menu"` / `role="menuitem"` in web
-navigation is for application toolbar menus that genuinely replicate desktop
-app behaviour with full arrow-key navigation. See the
+The distinction is based on behaviour and purpose, not visual appearance.
+`role="menu"`/`"menuitem"` is appropriate only for application toolbar/action/
+context menus that genuinely implement full arrow-key interaction — see the
 [WAI-ARIA APG menubar pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/)
 for that distinct use case.
 
 ---
 
-## Serious: Dropdown / Disclosure Navigation
+## Serious: Disclosure (Dropdown) Navigation
 
-The recommended pattern for dropdown submenus is the **Disclosure pattern**
-(not the APG Menubar pattern). Disclosure is simpler, has broader AT support,
-and is what most users — including AT users — expect from web navigation.
-
-### Disclosure dropdown (recommended)
+Use disclosure buttons for site navigation that shows/hides nested link
+lists — do not force ordinary navigation into the ARIA menubar pattern.
 
 ```html
-<nav aria-label="Main">
+<nav aria-label="Primary" data-disclosure-nav>
   <ul>
-    <li>
-      <!-- Option A: Top-level item is a link; separate button opens dropdown -->
+    <li data-disclosure-item>
       <a href="/services">Services</a>
-      <button type="button"
-              aria-expanded="false"
-              aria-controls="services-submenu"
-              aria-label="Services submenu">
-        <svg aria-hidden="true" focusable="false"><!-- chevron icon --></svg>
+      <button type="button" aria-expanded="false" aria-controls="services-links">
+        <span class="visually-hidden">Show Services submenu</span>
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20">
+          <path d="m5 7 5 5 5-5" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
       </button>
-      <ul id="services-submenu" hidden>
-        <li><a href="/services/web">Web</a></li>
-        <li><a href="/services/mobile">Mobile</a></li>
-      </ul>
-    </li>
-
-    <li>
-      <!-- Option B: Top-level item is a button that opens dropdown only -->
-      <button type="button"
-              aria-expanded="false"
-              aria-controls="about-submenu">
-        About
-        <svg aria-hidden="true" focusable="false"><!-- chevron --></svg>
-      </button>
-      <ul id="about-submenu" hidden>
-        <li><a href="/about/team">Team</a></li>
-        <li><a href="/about/history">History</a></li>
+      <ul id="services-links" hidden>
+        <li><a href="/services/design">Design</a></li>
       </ul>
     </li>
   </ul>
 </nav>
 ```
 
-**Do not mix link and dropdown trigger on a single element.** If "Services"
-is both a link to `/services` and the trigger for a dropdown, keyboard users
-cannot reach the dropdown without navigating away from the page. Use Option A
-(separate button) or Option B (button only, link in dropdown).
-
-### JavaScript for disclosure dropdown
+**Do not mix link and dropdown trigger on a single element** — if "Services"
+is both a link and the dropdown trigger, keyboard users can't reach the
+dropdown without navigating away. Use a separate button (shown above), or a
+button-only parent with an "Overview" link as the first child.
 
 ```js
-document.querySelectorAll('[aria-controls][aria-expanded]').forEach(trigger => {
-  const target = document.getElementById(trigger.getAttribute('aria-controls'));
+document.querySelectorAll('[data-disclosure-nav]').forEach((navigation) => {
+  const buttons = Array.from(navigation.querySelectorAll('[data-disclosure-item] > button[aria-controls]'));
 
-  trigger.addEventListener('click', () => {
-    const expanded = trigger.getAttribute('aria-expanded') === 'true';
-    trigger.setAttribute('aria-expanded', String(!expanded));
-    target.hidden = expanded;
+  function close(button, restoreFocus = false) {
+    const panel = document.getElementById(button.getAttribute('aria-controls'));
+    button.setAttribute('aria-expanded', 'false');
+    panel.hidden = true;
+    if (restoreFocus) button.focus();
+  }
+  function open(button) {
+    const panel = document.getElementById(button.getAttribute('aria-controls'));
+    button.setAttribute('aria-expanded', 'true');
+    panel.hidden = false;
+  }
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const expanded = button.getAttribute('aria-expanded') === 'true';
+      expanded ? close(button) : open(button);
+    });
+    const item = button.closest('[data-disclosure-item]');
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
+        e.preventDefault();
+        close(button, true);
+      }
+    });
+    item.addEventListener('focusout', (e) => {
+      if (!item.contains(e.relatedTarget)) close(button);
+    });
   });
 
-  // Escape closes the dropdown and returns focus to trigger
-  target.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      trigger.setAttribute('aria-expanded', 'false');
-      target.hidden = true;
-      trigger.focus();
-    }
-  });
-});
-
-// Close on outside click
-document.addEventListener('click', e => {
-  document.querySelectorAll('[aria-controls][aria-expanded="true"]').forEach(trigger => {
-    if (!trigger.contains(e.target)) {
-      const target = document.getElementById(trigger.getAttribute('aria-controls'));
-      trigger.setAttribute('aria-expanded', 'false');
-      target.hidden = true;
-    }
+  document.addEventListener('pointerdown', (event) => {
+    buttons.forEach((button) => {
+      const item = button.closest('[data-disclosure-item]');
+      if (!item.contains(event.target)) close(button);
+    });
   });
 });
 ```
 
-### Hover behaviour
+Requirements: `aria-expanded` and `hidden` stay synchronized; Tab/Shift+Tab
+follow ordinary order; Escape closes and returns focus to the button; moving
+focus outside the parent item closes its submenu; opening doesn't
+automatically move focus or change the page; the component works without
+hover; scope JavaScript to the nav component, not every `aria-controls`
+element on the page.
 
-If hover also opens dropdowns, the dropdown **must not disappear immediately**
-when the pointer moves away — users with motor impairments need time to move
-the pointer into the submenu. Add a short CSS delay:
-
-```css
-.submenu { transition-delay: 0.2s; }
-```
-
-Also apply the dropdown open state on focus, not just hover — keyboard users
-focus the trigger, not hover it.
+**Hover behaviour is optional** — click/activation must be sufficient. If
+hover or focus also reveals content, WCAG 1.4.13 requires it be dismissible
+(without moving focus/pointer), hoverable (pointer can move onto it), and
+persistent (stays until hover/focus removed or dismissed). A CSS
+`transition-delay` alone does not satisfy hoverable/persistent behaviour.
 
 ---
 
@@ -294,15 +285,16 @@ focus the trigger, not hover it.
   <ol>
     <li><a href="/">Home</a></li>
     <li><a href="/services">Services</a></li>
-    <li><a href="/services/web" aria-current="page">Web Design</a></li>
+    <li aria-current="page">Web accessibility</li>
   </ol>
 </nav>
 ```
 
-- Use `<ol>` (ordered list) — breadcrumbs have a meaningful sequence
-- `aria-label="Breadcrumb"` distinguishes it from other nav landmarks
-- `aria-current="page"` on the current page item
-- The current item may be a link or plain text — both are acceptable
+Use `<ol>` — order is meaningful. Hide decorative separators from AT
+(preferably via CSS). The current item may be plain text or a link — don't
+create a link that performs no useful navigation. Keep the visible breadcrumb
+consistent with the actual page hierarchy. WCAG does not require breadcrumbs
+on every site.
 
 ---
 
@@ -311,145 +303,193 @@ focus the trigger, not hover it.
 ```html
 <nav aria-label="Pagination">
   <ul>
-    <li>
-      <a href="/articles?page=1" aria-label="Previous page">
-        <span aria-hidden="true">←</span>
-      </a>
-    </li>
-    <li><a href="/articles?page=1">1</a></li>
-    <li><a href="/articles?page=2" aria-current="page" aria-label="Page 2, current">2</a></li>
-    <li><a href="/articles?page=3">3</a></li>
-    <li>
-      <a href="/articles?page=3" aria-label="Next page">
-        <span aria-hidden="true">→</span>
-      </a>
-    </li>
+    <li><a href="?page=1" rel="prev">Previous</a></li>
+    <li><a href="?page=1" aria-label="Page 1">1</a></li>
+    <li><a href="?page=2" aria-label="Page 2" aria-current="page">2</a></li>
+    <li><a href="?page=3" rel="next">Next</a></li>
   </ul>
 </nav>
 ```
 
-- `aria-label="Pagination"` on the `<nav>`
-- `aria-current="page"` on the current page link
-- Previous/Next arrows need descriptive `aria-label` — arrows alone are not
-  meaningful to screen reader users
-- Page numbers: `aria-label="Page 2, current"` avoids ambiguity
+Use visible "Previous"/"Next" text where space permits; if only an arrow is
+visible, the accessible name must contain "Previous"/"Next". Ensure the
+current page has a visible non-colour distinction. Do not create links for
+unavailable Previous/Next actions. Preserve filters, search terms, and sort
+order in pagination URLs.
 
 ---
 
-## Moderate: Mobile Navigation (Hamburger)
+## Moderate: Responsive (Mobile) Navigation
+
+Treat a typical responsive menu as a **non-modal disclosure** unless the
+design genuinely requires a modal navigation drawer — do not apply `inert` to
+the rest of the page for an ordinary hamburger menu.
 
 ```html
-<button type="button"
-        id="mobile-menu-toggle"
-        aria-expanded="false"
-        aria-controls="mobile-nav"
-        aria-label="Open main menu">
-  <svg aria-hidden="true" focusable="false"><!-- hamburger icon --></svg>
+<button type="button" id="navigation-toggle" aria-expanded="false" aria-controls="responsive-navigation">
+  <span>Menu</span>
+  <svg aria-hidden="true" focusable="false"><!-- menu icon --></svg>
 </button>
-
-<nav id="mobile-nav" aria-label="Main" hidden>
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/about">About</a></li>
-  </ul>
+<nav id="responsive-navigation" aria-label="Primary" hidden>
+  <ul><li><a href="/">Home</a></li></ul>
 </nav>
 ```
 
 ```js
-const toggle = document.getElementById('mobile-menu-toggle');
-const nav    = document.getElementById('mobile-nav');
+const toggle = document.getElementById('navigation-toggle');
+const navigation = document.getElementById('responsive-navigation');
 
-toggle.addEventListener('click', () => {
-  const expanded = toggle.getAttribute('aria-expanded') === 'true';
-  toggle.setAttribute('aria-expanded', String(!expanded));
-  // Update label to reflect current state — action-based label
-  toggle.setAttribute('aria-label', expanded ? 'Open main menu' : 'Close main menu');
-  nav.hidden = expanded;
-  if (!expanded) {
-    // Move focus to first link in nav when opening
-    nav.querySelector('a')?.focus();
-  }
+function setNavigationOpen(open) {
+  toggle.setAttribute('aria-expanded', String(open));
+  navigation.hidden = !open;
+}
+toggle.addEventListener('click', () => setNavigationOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+navigation.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') { setNavigationOpen(false); toggle.focus(); }
 });
 ```
 
-When the nav closes, return focus to the toggle button.
-Apply `inert` to background content while the mobile nav is open (see
-`keyboard/SKILL.md` for the `inert` pattern).
+For a **non-modal** disclosure: keep the toggle immediately before the nav in
+DOM order; do not make the rest of the page inert; do not trap focus; do not
+force focus into the first link (Tab naturally moves from toggle into the
+revealed nav); support Escape to close and return focus; ensure links after
+the nav remain reachable.
+
+If the navigation genuinely is a **modal** drawer, implement it as a full
+modal dialog: focus containment, accessible name, visible close button,
+Escape handling, background inertness, and focus restoration. Don't create
+partial modality by applying `inert` without the complete modal interaction
+(see `skills/keyboard/SKILL.md`).
 
 ---
 
-## Moderate: `aria-current` for Active Navigation States
+## Moderate: Consistent Navigation and Multiple Ways to Find Pages
 
-Beyond `aria-current="page"`, use `aria-current` for other active states:
+Navigation repeated across a set of pages must occur in the same relative
+order unless the user initiates a change (WCAG 3.2.3). Keep repeated link
+names/destinations consistent; don't reorder navigation based on inferred
+user characteristics without an explicit user-controlled personalization
+feature.
+
+For pages within a set, provide more than one way to locate a page (WCAG
+2.4.5) unless it's a step or result within a process — hierarchical
+navigation, site search, sitemap, table of contents, or index. Two
+presentations of the same list don't count as meaningfully different ways.
+
+---
+
+## Moderate: Client-Side Routing and Dynamic Navigation
+
+A route change must establish a clear new-page context: update the document
+title, update the main heading/current-location state, move focus to a
+logical target, preserve Back/Forward, and avoid duplicate announcements.
 
 ```html
-<!-- Step indicator -->
-<ol aria-label="Order process">
-  <li><a href="/cart">Cart</a></li>
-  <li><a href="/delivery" aria-current="step">Delivery</a></li>
-  <li>Payment</li>
-</ol>
-
-<!-- Tab list (use APG Tabs pattern instead for interactive tabs) -->
-<!-- For navigation-style tabs that are links: -->
-<nav aria-label="Account sections">
-  <ul>
-    <li><a href="/account/profile" aria-current="page">Profile</a></li>
-    <li><a href="/account/security">Security</a></li>
-  </ul>
-</nav>
+<main id="main-content">
+  <h1 id="page-heading" tabindex="-1">Account settings</h1>
+</main>
 ```
+
+```js
+document.title = 'Account settings · Service name';
+document.getElementById('page-heading').focus();
+```
+
+Do not automatically combine heading focus, main-region focus, assertive live
+regions, AND route announcements — that produces repeated or interrupted
+output. Choose one tested strategy. Preserve real `<a>` semantics for
+route-changing links — do not use a button for navigation merely because
+JavaScript handles the route.
 
 ---
 
-## Minor: Navigation Design Principles
+## Reflow, Zoom, and Magnification
 
-- **5–7 top-level items** is the cognitive limit for most users; more creates
-  findability problems before accessibility ones
-- Navigation items must have **consistent placement** across all pages —
-  moving the nav between pages disoriented users with cognitive disabilities
-- Navigation icons must have **visible text labels** — icon-only nav is a
-  persistent accessibility and usability failure
-- **Do not open new windows or tabs** from navigation links without warning
+At 200%/400% zoom and narrow viewports: navigation must reflow without 2D
+scrolling; controls/labels/focus indicators must not be clipped; sticky nav
+must not consume an unreasonable portion of the viewport or obscure the
+focused component; users must be able to dismiss persistent overlays; touch
+targets remain usable without overlap. Test with actual browser zoom, not
+just window resizing, and in both orientations.
 
 ---
 
 ## CMS and Framework Notes
 
-**Drupal:** Drupal's Menu module generates `<nav>` landmark markup. The active
-trail uses the `.is-active` class — ensure `aria-current="page"` is also set
-programmatically. The [Drupal Accessibility Coding Standards](https://www.drupal.org/docs/getting-started/accessibility/accessibility-coding-standards)
-require correct landmark structure in contributed modules.
+**Drupal:** the Menu module generates `<nav>` markup; the active-trail
+`.is-active` class does not itself add `aria-current="page"` — set it
+programmatically too. See the
+[Drupal Accessibility Coding Standards](https://www.drupal.org/docs/getting-started/accessibility/accessibility-coding-standards).
 
-**WordPress:** Block themes use `<nav>` landmarks. Check that `wp_nav_menu()`
-output includes `aria-label` when multiple menus are present — it does not by
-default. Use the `nav_menu_args` filter to add it.
+**WordPress:** block themes use `<nav>` landmarks, but `wp_nav_menu()` does
+not add `aria-label` by default when multiple menus are present — use the
+`nav_menu_args` filter.
 
-**React/SPA frameworks:** Single-page apps must announce page changes after
-navigation. When a route changes, move focus to the new page's `<h1>` or a
-designated skip target, and announce the page title via a live region. Without
-this, screen reader users hear nothing after navigation.
+**React/SPA frameworks:** must announce page changes after navigation (see
+Client-Side Routing above). Without this, screen reader users hear nothing
+after a route change.
+
+When reviewing any CMS/framework-generated nav, verify: native links and
+landmarks are used; stable IDs for disclosure relationships; `aria-current`
+added/updated correctly; visible and accessible names stay aligned; no menu
+roles added to site nav; `aria-expanded`/`hidden` stay synchronized; hidden
+responsive variants are removed from focus order and the accessibility tree.
+Prefer correcting the shared template over patching individual pages.
+
+---
+
+## Testing
+
+* **Structure:** inspect the landmark list for distinguishable major regions;
+  confirm incidental link groups don't create unnecessary landmarks; confirm
+  repeated identical navigation uses consistent names; confirm the current
+  item is visible and programmatically identified
+* **Keyboard:** activate the skip link and confirm focus/viewport movement;
+  Tab/Shift+Tab through every nav control; open/close each disclosure with
+  Enter/Space; Escape closes open submenus and responsive nav; confirm focus
+  is never trapped, lost, or obscured; confirm site nav doesn't require
+  application-menu arrow keys
+* **Pointer/touch/speech:** operate with mouse, touch, and a large pointer;
+  confirm hover-triggered content is dismissible/hoverable/persistent; confirm
+  visible labels are contained in accessible names; activate controls by
+  speaking their visible labels
+* **Reflow:** 200%/400% zoom; 320px viewport; portrait/landscape; text-spacing
+  overrides; light/dark/forced-colours modes
+* **Routes/resilience:** follow links with JS disabled where progressive
+  enhancement is required; test Back/Forward/refresh/deep-links/copied URLs;
+  confirm route changes update title/heading/focus/current-state without
+  duplicate announcements; test long labels, localization, and RTL text
+
+**Automated checks** can catch duplicate IDs, broken `aria-controls`
+references, missing/duplicate landmark names, invalid menu roles,
+`aria-expanded`/`hidden` desync, and focusable content inside hidden/inert
+navigation — but cannot determine whether labels are understandable, link
+purpose is clear, or the complete navigation model is usable. Retain manual
+keyboard, screen reader, magnification, and touch testing.
 
 ---
 
 ## Definition of Done Checklist
 
-* [ ] `<nav>` landmark wraps every navigation region
-* [ ] Every `<nav>` has a unique, descriptive `aria-label`
-* [ ] Skip link: first in DOM, visible on focus, target has `tabindex="-1"`
-* [ ] `aria-current="page"` on current page link in every nav
-* [ ] `role="menu"` / `role="menuitem"` not used on site navigation
-* [ ] Dropdowns use Disclosure pattern: `aria-expanded`, `aria-controls`, `hidden`
-* [ ] Top-level link and dropdown trigger are separate elements (not one `<a>`)
-* [ ] `Escape` closes dropdown and returns focus to trigger
-* [ ] Hover dropdowns: delay prevents immediate close on pointer leave
-* [ ] Breadcrumb: `<ol>`, `aria-label="Breadcrumb"`, `aria-current="page"` on last item
-* [ ] Pagination: `aria-label` on nav, `aria-label` on prev/next arrows, `aria-current` on current page
-* [ ] Mobile nav: `aria-expanded` on toggle, focus moves into nav on open, returns on close
-* [ ] `inert` applied to background while mobile nav is open
+* [ ] `<nav>` landmark wraps every major navigation region (not incidental link lists)
+* [ ] Every `<nav>` has a unique, understandable name (no role word in the name)
+* [ ] Skip link: near the start of `<body>`, visible on focus, target has `tabindex="-1"`
+* [ ] `aria-current` uses the value matching the relationship (page/step/location/true)
+* [ ] `role="menu"`/`"menuitem"`/`"menubar"` not used on site navigation
+* [ ] Dropdowns use the Disclosure pattern: `aria-expanded`, `aria-controls`, `hidden`
+* [ ] Top-level link and dropdown trigger are separate elements
+* [ ] Escape closes dropdown/responsive nav and returns focus to trigger
+* [ ] Hover-revealed content is dismissible, hoverable, and persistent (WCAG 1.4.13)
+* [ ] Breadcrumb: `<ol>`, named landmark, `aria-current="page"` on current item
+* [ ] Pagination: named landmark, accessible Previous/Next names, `aria-current` on current page
+* [ ] Responsive nav implemented as either complete non-modal or complete modal
+      pattern — not a hybrid with partial `inert`
+* [ ] Repeated navigation stays in consistent relative order across pages
+* [ ] Multiple ways to find pages provided where WCAG 2.4.5 applies
+* [ ] SPA/framework: focus moved and page title announced after route change,
+      without duplicate announcements
 * [ ] Voice Control tested: all links activatable by speaking visible text
-* [ ] Screen magnification tested at 200%: nav not covering content at high zoom
-* [ ] SPA/framework: focus moved and page title announced after route change
+* [ ] Tested at 200%/400% zoom: nav not covering content
 * [ ] Tested: NVDA+Chrome, JAWS+Chrome, VoiceOver+Safari
 
 ---
@@ -458,10 +498,14 @@ this, screen reader users hear nothing after navigation.
 
 * 2.4.1 Bypass Blocks (A) — **Serious if skip link absent or broken**
 * 2.4.3 Focus Order (A)
-* 2.4.5 Multiple Ways (AA) — navigation + search or sitemap
+* 2.4.4 Link Purpose in Context (A)
+* 2.4.5 Multiple Ways (AA)
 * 2.4.7 Focus Visible (AA)
-* 2.4.11 Focus Appearance (AA, WCAG 2.2)
+* 2.4.11 Focus Not Obscured Minimum (AA, WCAG 2.2)
+* 1.4.13 Content on Hover or Focus (AA)
 * 2.5.3 Label in Name (A) — **Serious for voice control if violated**
+* 3.2.3 Consistent Navigation (AA)
+* 3.2.4 Consistent Identification (AA)
 * 4.1.2 Name, Role, Value (A) — **Serious if `aria-expanded` not updated**
 
 ---
@@ -470,14 +514,13 @@ this, screen reader users hear nothing after navigation.
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/NAVIGATION_ACCESSIBILITY_BEST_PRACTICES.md)
 * [Curated resources — navigation](../../resources/by-topic/navigation.md)
-* [WAI Menus Tutorial](https://www.w3.org/WAI/tutorials/menus/) — structure, fly-out, application menus
-* [WAI-ARIA APG — Disclosure Navigation](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/) — recommended dropdown pattern
-* [WAI-ARIA APG — Menubar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) — for application toolbar menus only
-* [Pope Tech — Accessible navigations and sub-menus](https://blog.pope.tech/2024/01/30/how-to-create-accessible-navigations-and-sub-menus/)
-* [Adrian Roselli — Be careful using menu](https://adrianroselli.com/2023/05/be-careful-using-menu.html) — `role="menu"` misuse — do not scrape; link to it
+* [WAI Menus Tutorial](https://www.w3.org/WAI/tutorials/menus/)
+* [WAI-ARIA APG — Disclosure Navigation](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/)
+* [WAI-ARIA APG — Menubar](https://www.w3.org/WAI/ARIA/apg/patterns/menubar/) — application toolbar menus only
+* [Adrian Roselli — Be careful using menu](https://adrianroselli.com/2023/05/be-careful-using-menu.html)
 * [Drupal Accessibility Coding Standards](https://www.drupal.org/docs/getting-started/accessibility/accessibility-coding-standards)
-* [WCAG 2.2 Understanding 2.4.1 Bypass Blocks](https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html)
-* [WCAG 2.2 Understanding 2.5.3 Label in Name](https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html)
+* [WCAG 2.2 Understanding 3.2.3 Consistent Navigation](https://www.w3.org/WAI/WCAG22/Understanding/consistent-navigation.html)
+* [WCAG 2.2 Understanding 2.4.5 Multiple Ways](https://www.w3.org/WAI/WCAG22/Understanding/multiple-ways.html)
 
 > **Standards horizon:** These rules target WCAG 2.2 AA. No breaking changes
 > to navigation requirements are anticipated in WCAG 3.0.

@@ -13,6 +13,11 @@ notes: >
   personalization (WCAG 1.3.11) and to avoid radiogroup anti-patterns in
   this context. When re-syncing with canonical source, preserve the
   three-option pattern as the authoritative approach.
+
+  2026-07-22: added a reference to examples/MODERN_CSS_THEME_ARCHITECTURE.md,
+  a canonical file with no other skill link anywhere in this repo. It covers
+  semantic design tokens and theme architecture that complements this
+  skill's content; not folded into the skill body itself, just linked.
 ```
 
 ## How to Update This Skill
