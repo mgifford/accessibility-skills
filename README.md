@@ -5,11 +5,12 @@ Each skill distills a full example into agent-actionable rules.
 **The `examples/` file is always the canonical source of truth.**
 
 > **Looking for the AGENTS.md approach?** If you want to add accessibility guidance to a project via `AGENTS.md` or `ACCESSIBILITY.md` files (for GitHub Copilot, Cursor, or any AI agent), see the companion repo: **[mgifford/ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md)**. See [ACCESSIBILITY.md](./ACCESSIBILITY.md) for a full comparison.
+> **New: Not sure when to use AI skills vs scanners like axe?** Read [AI-Assisted Accessibility Audits Guide](./AI_AUDIT_GUIDE.md).
 
 ## Available Skills
 
 | Skill | Derived from | Install |
-|---|---|---|
+| --- | --- | --- |
 | [ACCESSIBILITY-general](./skills/ACCESSIBILITY-general/SKILL.md) | `AGENTS.md` + project-wide | General project skill |
 | [anchor-links](./skills/anchor-links/SKILL.md) | `examples/ANCHOR_LINKS_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [axe-rules](./skills/axe-rules/SKILL.md) | `examples/AXE_RULES_REFERENCE.md` | ✅ |
@@ -123,7 +124,7 @@ For all accessibility work: read `skills/ACCESSIBILITY-general/SKILL.md`
 
 Add skill file references to `.cursorrules`, your Copilot system prompt config, or equivalent:
 
-```
+```text
 When working on forms, follow the rules in skills/forms/SKILL.md.
 When working on color themes, follow the rules in skills/light-dark-mode/SKILL.md.
 ```
@@ -131,6 +132,7 @@ When working on color themes, follow the rules in skills/light-dark-mode/SKILL.m
 ## How Skills Stay in Sync
 
 Each skill directory contains a `SYNC.md` recording:
+
 - `canonical_source` — which `examples/` file this skill is derived from
 - `last_synced_commit` — git SHA at last sync
 
@@ -169,8 +171,8 @@ This keeps skills compact and fast for agents to load.
 5. Build the ZIP: `cd skills && zip -r your-topic.skill your-topic/`
 6. Add a row to the table above and open a PR
 
-
 ## Related Projects
+
 - [Mike Mai's Agent Skills](https://github.com/mikemai2awesome/agent-skills)
 - [Intopia's Web Accessibility Skill](https://github.com/Intopia/intopia-web-accessibility-skill/)
 - [A11y Spec-First Coding](https://github.com/LaurenceRLewis/a11y-spec-first-skill)

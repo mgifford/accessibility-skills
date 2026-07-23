@@ -17,6 +17,9 @@ description: >
 
 Apply these rules when adding, reviewing, or maintaining CI/CD accessibility checks.
 
+For guidance on when to use AI skills versus automated scanners during audits,
+see `AI_AUDIT_GUIDE.md` in this repository.
+
 ---
 
 ## Core Mandate
