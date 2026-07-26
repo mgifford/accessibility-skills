@@ -35,14 +35,23 @@ Examine how content behaves when users magnify the page to 200-400%, use screen 
 ## Evidence That Can Be Gathered Automatically
 
 - Text resize failures (axe-core `meta-viewport` checks for `user-scalable=no`)
-- Reflow violations detected via viewport testing
+- Reflow risk: a behavioral Playwright check (`skills/behavioral-a11y/SKILL.md`)
+  resizes to a 320 CSS-pixel viewport and measures horizontal overflow,
+  reporting a `potential-reflow-barrier` indicator, `no-overflow-detected`,
+  `cant-tell`, or `test-error` — an indicator of risk, not an SC 1.4.10
+  conformance check. It cannot detect clipped content with no scrollbar, and
+  cannot determine whether an overflowing element qualifies for the
+  two-dimensional-layout exception.
 - CSS analysis for fixed-width containers that may overflow
 - Colour contrast at various text sizes
 
 ## Evidence That Requires Manual Testing
 
 - Actual zoom to 200% and 400% to verify content remains accessible
-- Verification that content reflows without horizontal scrolling at 320px width
+- Confirming a Reflow risk indicator against the SC 1.4.10 exception (data
+  tables, maps, diagrams, and similar components that require
+  two-dimensional layout for their meaning) and verifying content is not
+  cut off, overlapped, or non-operable
 - Confirmation that spacing properties can be overridden by user stylesheets
 - Testing that overlapping elements do not obscure content at high zoom
 
@@ -61,6 +70,10 @@ Examine how content behaves when users magnify the page to 200-400%, use screen 
 ## Limitations of AI Analysis
 
 - AI can detect `user-scalable=no` but cannot verify that the layout actually reflows correctly at 200% zoom.
+- A behavioral Reflow risk check can flag a candidate overflow at 320 CSS
+  pixels, but only a human reviewer can confirm whether the SC 1.4.10
+  two-dimensional-layout exception applies, or whether content is cut off,
+  overlapped, or non-operable. A clean result is not proof of conformance.
 - AI can check CSS spacing properties but cannot confirm that user stylesheets can override them.
 - AI cannot determine whether spatial information lost during reflow is essential to understanding.
 

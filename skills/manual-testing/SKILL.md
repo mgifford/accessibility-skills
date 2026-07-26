@@ -226,19 +226,98 @@ of forced colors entirely and can negate the user's accessibility settings.
 Test with: WebAIM Contrast Checker, browser DevTools. Test light and dark
 color modes separately.
 
-### Zoom at 200%
+### SC 1.4.4 Resize Text vs. SC 1.4.10 Reflow — do not conflate
+
+These are two distinct success criteria with different tests. A page can
+pass one and fail the other, and horizontal scrolling at 200% zoom is not
+automatically a failure of either.
+
+**SC 1.4.4 Resize Text (AA):** content must be resizable up to 200% without
+loss of content or functionality. Checks text enlargement specifically — it
+does not itself require eliminating horizontal scrolling.
 
 1. Set browser zoom to 200% (Ctrl/Cmd + +)
-2. Verify all content is readable and not cut off
-3. Verify no horizontal scrolling on a standard 1280px viewport
+2. Verify all content is readable and not cut off or overlapping
+3. Verify functionality (menus, forms, controls) still works at 200%
 4. Also test with OS-level screen magnification (Windows Magnifier, macOS Zoom)
 
-### Focus indicator
+**SC 1.4.10 Reflow (AA):** content must be presented without loss of
+information or functionality, and without requiring scrolling in two
+dimensions, at a viewport width equivalent to 320 CSS pixels (a common way
+to test this on desktop is a 1280px-wide viewport at 400% zoom — the two
+are equivalent).
+
+1. Set the viewport to 320 CSS pixels wide (or 400% zoom on a 1280px viewport)
+2. Verify content does not require horizontal scrolling to read, for
+   non-excepted content — see the exception below
+3. Verify no content is cut off, overlapped, or hidden
+4. Verify interactive elements remain operable
+5. Verify reading order, relationships, and operation are preserved without
+   relying on the original visual layout
+
+**The exception, precisely:** SC 1.4.10 exempts only **parts of content
+that require two-dimensional layout for their usage or meaning** — not the
+page as a whole. Normative examples: data tables, maps, diagrams, video
+players, games, presentations, interfaces requiring a persistently visible
+toolbar. An excepted component does not exempt the rest of the page (the
+heading above a data table, filters, search, pagination must still reflow).
+Within an excepted component, individual sections may still need to
+reflow. "Requires" is a meaning test, not a convenience test — a component
+that merely looks better in a wide fixed layout, without losing information
+or functionality if it reflowed, is not exempt.
+
+A page that triggers horizontal scroll at 400% zoom (or the 320px
+equivalent) is a high-value indicator that Reflow has not been achieved,
+but investigate whether the overflowing content falls within the exception
+before concluding a failure. See
+[Behavioral Accessibility Automation](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/BEHAVIORAL_ACCESSIBILITY_AUTOMATION.md#4-reflow-risk-in-detail)
+(`skills/behavioral-a11y/SKILL.md`) for a reusable, tested Playwright Reflow
+risk indicator and its documented limitations — it is an indicator, not a
+Reflow conformance check; human judgment is still required to confirm the
+exception, verify content isn't cut off, and test actual content at 400% zoom.
+
+### Focus indicator: three distinct success criteria
+
+**SC 2.4.7 Focus Visible (AA):** every keyboard-focusable element must have
+a visible focus indicator. Binary check — either a visible indicator exists
+or it does not.
 
 * [ ] Focus indicator is visible for every focusable element
-* [ ] Contrast meets 3:1 requirement against adjacent colors
-* [ ] Focus indicator is not removed or replaced with something less visible
-* [ ] Focus indicator doesn't obscure content
+* [ ] Focus indicator is not removed unless replaced with a superior alternative
+* [ ] Focus indicator is not obscured by other content
+
+**SC 1.4.11 Non-text Contrast (AA):** focus indicators on UI components must
+have a contrast ratio of at least 3:1 against adjacent colors. Applies to
+the indicator itself, not the component's normal state.
+
+* [ ] Focus indicator contrast meets 3:1 against adjacent colors, measured
+      against the indicator color and the adjacent background/component color
+* [ ] Custom focus styles meet the contrast requirement (not just the default outline)
+
+**SC 2.4.13 Focus Appearance (AAA):** stricter than SC 2.4.7 — requires a
+minimum area equal to the focusable element's perimeter × 2 CSS pixels, a
+3:1 contrast ratio between focused and unfocused states, and the indicator
+must not be fully obscured by author-created content. Projects targeting AA
+are not required to meet this, but meeting it provides stronger
+accessibility; document whether your project targets it.
+
+**Behavioral screenshot-difference testing:** the
+[CWAC](https://github.com/GOVTNZ/cwac/) project's `FocusIndicatorAudit`
+sends real Tab presses and compares whole-page screenshots before/after
+each press, reporting a finding when no pixels changed. It does **not**
+measure contrast (SC 1.4.11), prove a detected change is local to the
+focused element (its comparison is whole-page), determine an indicator is
+sufficiently perceptible, or distinguish a missing indicator from one
+obscured by other content. This repository's own reusable implementation
+(`skills/behavioral-a11y/SKILL.md`,
+[`focus-visible-risk.mjs`](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/playwright/focus-visible-risk.mjs))
+is an independent reimplementation of the documented method that instead
+captures a fresh unfocused/focused screenshot pair scoped to a padded
+region around each element, closing some of CWAC's whole-page limitations
+while introducing its own documented tradeoffs. Neither implementation, nor
+any screenshot-diff approach alone, verifies SC 1.4.11 (contrast) or SC
+2.4.13 (minimum area). Use screenshot-difference testing as a supplementary
+check alongside manual verification, not as a sole focus indicator test.
 
 ---
 
@@ -363,6 +442,7 @@ alone; light and dark modes; forced colors mode.
 ## References
 
 * [Full guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/MANUAL_ACCESSIBILITY_TESTING_GUIDE.md)
+* `skills/behavioral-a11y/SKILL.md` — Reflow risk and Focus Visible risk automated indicators, and their documented limitations
 * [WebAIM: Testing with NVDA](https://webaim.org/articles/nvda/)
 * [WebAIM: Using VoiceOver](https://webaim.org/articles/voiceover/)
 * [WebAIM: Screen Reader Testing](https://webaim.org/articles/screenreader_testing/)

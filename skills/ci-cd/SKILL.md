@@ -226,6 +226,47 @@ product merely to make a screenshot pass.
 
 ---
 
+## Critical: Risk Indicators and Build Gates
+
+Behavioral checks such as Reflow risk and Focus Visible testing (see
+`skills/behavioral-a11y/SKILL.md`) produce indicators, not conformance
+verdicts. A small per-target false-positive probability compounds across
+many pages, components, states, or builds, and website findings are
+frequently correlated across shared templates and components. Converting
+every indicator into a blocking build failure produces noisy, low-trust CI
+and encourages bypassing the check rather than fixing the underlying
+pattern.
+
+| Result | Default CI treatment |
+| --- | --- |
+| Deterministic confirmed failure | May block |
+| Confirmed regression against a reviewed baseline | May block |
+| Risk indicator | Report and route for review |
+| `cantTell` | Report as incomplete coverage |
+| Test error | Report as scan-health failure |
+| Reviewed exception | Do not block until its review expires |
+
+Do not prescribe automatic blocking merely because a result is
+machine-readable. A first-seen risk indicator has not been reviewed and has
+not ruled out a normative exception (for example, the SC 1.4.10
+two-dimensional-layout exception); blocking on it treats an unreviewed
+signal as a confirmed failure.
+
+Fleet-wide and site-wide scans additionally require: separating unique
+root-cause clusters from affected instances and reporting both — not one
+issue per affected URL; comparing new findings against a reviewed baseline
+before deciding severity; recording the detector, browser, and baseline
+versions used for the scan; giving every reviewed exception an owner, a
+reason, and an expiry date; and periodically sampling apparently clean
+results to investigate false negatives, since a check with no findings has
+not been shown to have zero false negatives.
+
+See `skills/behavioral-a11y/SKILL.md` for the fixture/PR/scheduled-scan
+cadence and the definitions of unique finding, affected instance, affected
+page, and root-cause cluster used above.
+
+---
+
 ## Critical: CI Workflow Security
 
 Apply these controls to accessibility workflows the same as build/deploy workflows:
@@ -482,6 +523,7 @@ deterministic tooling before AI when it can answer the question.
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/CI_CD_ACCESSIBILITY_BEST_PRACTICES.md)
+* `skills/behavioral-a11y/SKILL.md` — Reflow risk and Focus Visible risk indicators, result vocabulary, and false-positive-at-scale guidance
 * [Shift-left automation guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/SHIFT_LEFT_ACCESSIBILITY_AUTOMATION.md)
 * [GitHub Accessibility Scanner integration](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/GITHUB_ACCESSIBILITY_SCANNER_INTEGRATION.md)
 * [GitHub Actions Secure Use Reference](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions)

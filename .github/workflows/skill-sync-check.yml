@@ -1,0 +1,104 @@
+name: Skill Sync Check
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths:
+      - "skills/**"
+      - "scripts/sync-check.sh"
+      - ".github/workflows/skill-sync-check.yml"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out accessibility-skills
+        uses: actions/checkout@v4
+        with:
+          path: accessibility-skills
+
+      - name: Check out mgifford/ACCESSIBILITY.md
+        uses: actions/checkout@v4
+        with:
+          repository: mgifford/ACCESSIBILITY.md
+          path: ACCESSIBILITY.md
+
+      - name: Run sync check
+        id: sync_check
+        working-directory: accessibility-skills
+        env:
+          ACCESSIBILITY_MD_DIR: ${{ github.workspace }}/ACCESSIBILITY.md
+        run: |
+          set +e
+          ./scripts/sync-check.sh > /tmp/sync-check-output.txt 2>&1
+          exit_code=$?
+          cat /tmp/sync-check-output.txt
+          {
+            echo "output<<EOF"
+            cat /tmp/sync-check-output.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          # sync-check.sh exits non-zero whenever any skill shows drift,
+          # including documented (expected) divergence. Only undocumented
+          # drift (the [DRIFT] label) should open an issue.
+          if grep -q '^\[DRIFT\]' /tmp/sync-check-output.txt; then
+            echo "has_undocumented_drift=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_undocumented_drift=false" >> "$GITHUB_OUTPUT"
+          fi
+          exit 0
+
+      - name: Open or update drift issue
+        if: steps.sync_check.outputs.has_undocumented_drift == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "Skill sync drift detected against mgifford/ACCESSIBILITY.md";
+            const body = [
+              "The scheduled skill sync check found skills whose content differs",
+              "from their canonical source in `mgifford/ACCESSIBILITY.md`, without",
+              "a documented `DIVERGENCE:` note in the skill's `SYNC.md`.",
+              "",
+              "```",
+              "${{ steps.sync_check.outputs.output }}",
+              "```",
+              "",
+              "To resolve:",
+              "1. Review the diff: `./scripts/sync-check.sh --diff --skill <name>`",
+              "2. Update `skills/<name>/SKILL.md` to reflect the canonical source, or",
+              "   document the intentional difference with a `DIVERGENCE:` note in",
+              "   `skills/<name>/SYNC.md`",
+              "3. Update `last_synced_commit` and `last_synced_date` in `SYNC.md`",
+            ].join("\n");
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: ["skill-sync-drift"],
+            });
+            const existing = issues.find((i) => i.title === title);
+
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ["skill-sync-drift"],
+              });
+            }

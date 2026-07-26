@@ -6,8 +6,8 @@ Links this skill to its canonical source. Read by `.github/workflows/skill-sync-
 
 ```yaml
 canonical_source: examples/CI_CD_ACCESSIBILITY_BEST_PRACTICES.md
-last_synced_commit: "bb235f3"
-last_synced_date: "2026-07-21"
+last_synced_commit: "a5967b3"
+last_synced_date: "2026-07-25"
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md; that guide
@@ -22,6 +22,14 @@ notes: >
   and shell/URL/memory tool denial, and never let the agent commit/push/merge
   itself. Removed the prior "Zero-Debt / 100% Lighthouse" framing which
   canonical no longer uses.
+
+  2026-07-25 (commit a5967b3, via BEHAVIORAL_ACCESSIBILITY_AUTOMATION.md):
+  added "Risk Indicators and Build Gates" section — behavioral checks
+  (Reflow risk, Focus Visible risk) produce indicators, not conformance
+  verdicts; added the default CI treatment table and fleet-scan
+  requirements (root-cause clustering, reviewed baselines, exception
+  expiry, periodic clean-result sampling). Cross-references new
+  skills/behavioral-a11y/SKILL.md.
 
   DIVERGENCE: This skill's format (YAML frontmatter, severity-tagged
   sections, condensed Definition of Done checklist) intentionally differs

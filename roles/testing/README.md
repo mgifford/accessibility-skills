@@ -100,9 +100,12 @@ Testing validates all WCAG criteria, but particularly:
 ## Testing Levels
 
 1. **Automated** — axe-core, WAVE, Lighthouse (catches ~30% of issues)
-2. **Manual keyboard** — Tab, Enter, Space, Escape, arrow keys (catches interaction issues)
-3. **Screen reader** — VoiceOver, NVDA, JAWS, TalkBack (catches announcement issues)
-4. **Zoom and reflow** — 200%, 400%, forced colors mode
-5. **User testing** — Real people with disabilities using the product
+2. **Behavioral automation** — Playwright-driven Reflow risk and Focus Visible
+   risk checks (`skills/behavioral-a11y/SKILL.md`); these produce risk
+   indicators for human review, not conformance verdicts
+3. **Manual keyboard** — Tab, Enter, Space, Escape, arrow keys (catches interaction issues)
+4. **Screen reader** — VoiceOver, NVDA, JAWS, TalkBack (catches announcement issues)
+5. **Zoom and reflow** — 200%, 400%, forced colors mode
+6. **User testing** — Real people with disabilities using the product
 
-No single level is sufficient. All five are needed for confidence.
+No single level is sufficient. All six are needed for confidence.

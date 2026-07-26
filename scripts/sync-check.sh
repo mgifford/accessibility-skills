@@ -10,7 +10,9 @@ set -eo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ACCESSIBILITY_SKILLS_DIR="$(dirname "$SCRIPT_DIR")"
-ACCESSIBILITY_MD_DIR="$(dirname "$ACCESSIBILITY_SKILLS_DIR")/ACCESSIBILITY.md"
+# Override with ACCESSIBILITY_MD_DIR=/path/to/checkout for CI, where the
+# canonical repo is not necessarily checked out as a sibling directory.
+ACCESSIBILITY_MD_DIR="${ACCESSIBILITY_MD_DIR:-$(dirname "$ACCESSIBILITY_SKILLS_DIR")/ACCESSIBILITY.md}"
 
 SHOW_DIFF=false
 CHECK_SKILL=""
@@ -89,6 +91,7 @@ SKILL_LIST=(
   "aria-live-regions:ARIA_LIVE_REGIONS_BEST_PRACTICES.md"
   "audio-video:AUDIO_VIDEO_ACCESSIBILITY_BEST_PRACTICES.md"
   "axe-rules:AXE_RULES_REFERENCE.md"
+  "behavioral-a11y:BEHAVIORAL_ACCESSIBILITY_AUTOMATION.md"
   "bug-reporting:ACCESSIBILITY_BUG_REPORTING_BEST_PRACTICES.md"
   "charts-graphs:CHARTS_GRAPHS_ACCESSIBILITY_BEST_PRACTICES.md"
   "ci-cd:CI_CD_ACCESSIBILITY_BEST_PRACTICES.md"
