@@ -4,30 +4,307 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Provide required fields for an accessibility bug report.",
-      "expected_output": "Includes URL, XPath, HTML snippet, WCAG SC, rule ID, severity, frequency.",
-      "expectations": ["URL", "XPath", "HTML snippet", "WCAG and severity"],
-      "files": [],
-      "must_contain_any": ["URL", "XPath", "HTML snippet", "WCAG", "severity", "frequency"],
-      "must_not_contain": ["vague issue"]
+      "prompt": "A user reports: 'The main menu doesn't work with my screen reader, it's really frustrating.' No URL, no browser/AT version, no steps. How should this be handled?",
+      "required_concepts": [
+        {
+          "label": "preserves the report as a valid finding",
+          "any_of": ["valid report", "valid finding", "preserve the report", "do not reject", "don't reject", "accept the report"]
+        },
+        {
+          "label": "requests a precise safe location",
+          "any_of": ["safe URL", "redacted URL", "route", "page or screen", "which menu", "precise location"]
+        },
+        {
+          "label": "requests task/behavior/reproduction context",
+          "any_of": ["what were you trying to do", "task", "what happened", "steps", "reproduc"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "requires a diagnosis or disability disclosure",
+          "any_of": ["must disclose", "require a diagnosis", "what disability", "confirm your disability"]
+        },
+        {
+          "label": "requires HTML/technical evidence from the reporter before accepting",
+          "any_of": ["must provide HTML", "must include the DOM", "required before we can accept", "reject this report"]
+        },
+        {
+          "label": "treats it as remediation-ready",
+          "any_of": ["ready for remediation", "add to the active queue", "assign for a fix now"]
+        }
+      ]
     },
     {
       "id": 2,
-      "prompt": "What reproduction details make an accessibility issue actionable?",
-      "expected_output": "Includes exact steps, expected behavior, actual behavior, and environment.",
-      "expectations": ["Steps", "Expected", "Actual", "Environment"],
-      "files": [],
-      "must_contain_any": ["steps", "expected", "actual", "environment"],
-      "must_not_contain": ["cannot reproduce"]
+      "prompt": "An axe-core scan flagged 'button-name' on https://example.gov/checkout. Describe what's needed before this becomes an actionable, remediation-ready finding.",
+      "required_concepts": [
+        {
+          "label": "requires a precise safe location",
+          "any_of": ["safe URL", "precise location", "https://example.gov/checkout", "redacted route"]
+        },
+        {
+          "label": "requires tool/rule identity and configuration",
+          "any_of": ["tool and version", "rule id", "configuration", "axe-core"]
+        },
+        {
+          "label": "requires focused technical evidence",
+          "any_of": ["HTML excerpt", "DOM", "accessibility-tree", "focused excerpt", "component evidence"]
+        },
+        {
+          "label": "requires reproduction or equivalent evidence",
+          "any_of": ["controlled rerun", "reproduc", "equivalent evidence", "successful rerun"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "requires WCAG mapping or severity as a gate",
+          "any_of": ["must have a WCAG mapping", "requires a severity", "must assign priority", "needs a fingerprint before"]
+        }
+      ]
     },
     {
       "id": 3,
-      "prompt": "How should severity be assigned in accessibility bug reports?",
-      "expected_output": "Based on user impact and task blockage.",
-      "expectations": ["Impact based", "Task blockage", "Consistent scale"],
-      "files": [],
-      "must_contain_any": ["impact", "block", "severity"],
-      "must_not_contain": ["severity guessed"]
+      "prompt": "A reporter pastes this URL in a bug report: https://example.com/orders/847291?token=secret-value&email=jane@example.com. What should happen to the location field?",
+      "required_concepts": [
+        {
+          "label": "redacts the token and personal data",
+          "any_of": ["redact", "remove the token", "remove the email", "strip the token"]
+        },
+        {
+          "label": "preserves a usable location",
+          "any_of": ["safe URL", "test-order-id", "route", "usable location", "still locate"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "reproduces the unsafe URL verbatim",
+          "any_of": ["token=secret-value", "jane@example.com"]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "The reported HTML source for a page shows a properly labeled button, but the automated scan still failed on it. What's the likely explanation and what evidence should be collected?",
+      "required_concepts": [
+        {
+          "label": "recognizes source HTML may not match runtime DOM",
+          "any_of": ["source HTML", "live DOM", "runtime", "hydration", "client-side rendering", "does not represent"]
+        },
+        {
+          "label": "requests appropriate runtime evidence",
+          "any_of": ["accessibility-tree", "live-DOM", "DOM snapshot", "runtime state"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "assumes source HTML is authoritative",
+          "any_of": ["source HTML proves", "the HTML confirms it's fine", "source is sufficient"]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "A finding was reproduced last week. This week's comparable rerun, on the same resource and rule with successful page load and auth, found nothing. What lifecycle status applies, and what happens to the finding?",
+      "required_concepts": [
+        {
+          "label": "uses not_observed",
+          "any_of": ["not_observed", "not observed"]
+        },
+        {
+          "label": "removes it from active remediation",
+          "any_of": ["remove it from active", "out of the active queue", "not in active remediation"]
+        },
+        {
+          "label": "retains compact recurrence history",
+          "any_of": ["observation history", "compact history", "recurrence detection", "retain evidence"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "calls it resolved",
+          "any_of": ["mark it resolved", "status: resolved", "resolved"]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "A scheduled rerun of a rule against a resource timed out before the page finished loading. What lifecycle status applies?",
+      "required_concepts": [
+        {
+          "label": "uses not_tested",
+          "any_of": ["not_tested", "not tested"]
+        },
+        {
+          "label": "identifies the incomplete-coverage reason",
+          "any_of": ["timeout", "did not complete", "incomplete", "did not load"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "treats it as absent or resolved",
+          "any_of": ["not_observed", "resolved", "finding is gone", "no longer present"]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "A color-contrast finding on a dynamically generated marketing page reproduced twice out of five scan runs this month, but not the other three. How should this be tracked?",
+      "required_concepts": [
+        {
+          "label": "uses bounded investigation",
+          "any_of": ["investigation queue", "bounded investigation", "investigate further"]
+        },
+        {
+          "label": "records owner and next action",
+          "any_of": ["owner", "next action", "next investigative"]
+        },
+        {
+          "label": "records a review or expiry date",
+          "any_of": ["review date", "expiry date", "expiry"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "discards it as noise",
+          "any_of": ["discard", "ignore it", "not worth tracking", "flaky, drop it"]
+        },
+        {
+          "label": "keeps it with no owner or plan indefinitely",
+          "any_of": ["no owner needed", "leave it open indefinitely with no plan"]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "A user with a documented history of using a screen reader reports that the checkout submit button is unreachable by keyboard on a payment page. Internal QA could not reproduce it in one attempt. How should this be handled given the task is payment-related?",
+      "required_concepts": [
+        {
+          "label": "does not reject based on failed internal reproduction alone",
+          "any_of": ["does not mean invalid", "not proof the reporter was wrong", "don't reject", "do not reject"]
+        },
+        {
+          "label": "creates bounded investigation proportionate to consequence",
+          "any_of": ["bounded investigation", "investigation queue", "proportionate"]
+        },
+        {
+          "label": "reflects high-consequence handling (payment/safety)",
+          "any_of": ["payment", "high-consequence", "critical task"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "treats failed rerun as proof finding is invalid",
+          "any_of": ["proves the report is wrong", "confirms there is no issue", "report is invalid"]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "The same rule fails on 40 pages of a site. Should the task-level severity be escalated because of how many pages are affected?",
+      "required_concepts": [
+        {
+          "label": "keeps severity based on task impact",
+          "any_of": ["task impact", "task-level consequence", "severity is based on"]
+        },
+        {
+          "label": "treats frequency/reach as a priority signal",
+          "any_of": ["priority", "reach", "frequency"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "escalates severity purely from occurrence count",
+          "any_of": ["escalate severity because", "increase severity due to the number of pages", "40 pages makes it critical"]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "A GitHub issue was filed to request a fresh accessibility scan of a site. The scan found 12 findings. Is the scan request issue the tracker ID for all 12?",
+      "required_concepts": [
+        {
+          "label": "distinguishes scan request from tracker ID",
+          "any_of": ["scan request", "not automatically", "not a tracker", "separate tracker"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "treats scan request as the tracker for every finding",
+          "any_of": ["scan request is the tracker id for each", "use the scan issue as the tracker for all"]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Two findings from different pages have the same pattern fingerprint. Does this prove they share the same root cause?",
+      "required_concepts": [
+        {
+          "label": "fingerprint supports correlation, not proof",
+          "any_of": ["does not prove", "not proof", "supports grouping", "correlation, not"]
+        },
+        {
+          "label": "requires investigation to confirm root cause",
+          "any_of": ["investigation", "confirm the shared cause", "investigate to establish"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "treats matching fingerprint as proof of shared cause",
+          "any_of": ["proves they share the same root cause", "confirms a common root cause", "same fingerprint means same cause"]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "A developer merged a fix and the automated rule now passes. Is the issue ready to close?",
+      "required_concepts": [
+        {
+          "label": "requires manual/comparable retest before closure",
+          "any_of": ["manually retest", "comparable rerun", "repeat the original interaction", "retested"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "treats automated pass alone as sufficient to close",
+          "any_of": ["automated pass is enough to close", "close it now that the rule passes", "sufficient evidence to close"]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "A team wants to change how the pattern fingerprint is computed to fix a normalization bug. What has to happen to the existing a11y/pattern/v1 profile and its identifiers?",
+      "required_concepts": [
+        {
+          "label": "requires a new profile version",
+          "any_of": ["new profile version", "new version", "a11y/pattern/v2", "versioned"]
+        },
+        {
+          "label": "preserves the old profile and legacy identifiers",
+          "any_of": ["preserve the old profile", "retain legacy identifiers", "keep the existing profile", "do not edit in place"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "edits the frozen profile in place",
+          "any_of": ["edit a11y/pattern/v1 in place", "change the existing profile directly", "modify v1 to fix"]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "prompt": "A tester manually found a barrier with no automated tool involved and no way to compute a fingerprint for it. Is this a valid, acceptable finding?",
+      "required_concepts": [
+        {
+          "label": "accepts the manual finding without a fingerprint",
+          "any_of": ["valid finding", "acceptable", "does not require a fingerprint", "no fingerprint needed"]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "requires calculating or inventing a fingerprint",
+          "any_of": ["must calculate a fingerprint", "requires a fingerprint to be valid", "compute one anyway"]
+        }
+      ]
     }
   ]
 }
