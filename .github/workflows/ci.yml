@@ -34,6 +34,9 @@ jobs:
       - name: Check ARRM role integrity
         run: node scripts/check-arrm-roles.js
 
+      - name: Validate shared cross-repo policy fixture
+        run: npm run test:shared-fixture
+
       - name: Verify generated output is up to date
         run: |
           npm run generate:arrm-roles

@@ -35,7 +35,8 @@
     "test:csv": "node tests/test-csv-parsing.js",
     "validate:csv": "node tests/test-csv-parsing.js",
     "generate:arrm-roles": "node scripts/generate-role-indexes.js",
-    "check:arrm-roles": "node scripts/check-arrm-roles.js"
+    "check:arrm-roles": "node scripts/check-arrm-roles.js",
+    "test:shared-fixture": "node tests/validate-shared-fixture.js"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.10.2",
