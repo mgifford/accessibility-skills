@@ -59,8 +59,19 @@ For each issue reported:
 1. Identify source: `axe` or `accessibilityTree`.
 2. Include affected selector/path from axe nodes when available.
 3. Provide impact summary and severity using the relevant skill scale.
-4. Cite WCAG 2.2 success criteria when determinable.
+4. Cite WCAG 2.2 success criteria when determinable, and cite the source of
+   the mapping (the axe rule's documented mapping, or the specific skill
+   rule) — do not invent a WCAG mapping this audit's evidence does not support.
 5. Provide a concrete remediation recommendation tied to a skill rule.
+6. Preserve the tool's raw outcome (`axe.violations` vs. `axe.incomplete`, or
+   the accessibility-tree evidence) rather than collapsing it into a single
+   pass/fail label.
+7. Report every `axe.violations` and `accessibilityTree` finding from this
+   audit as `evidence_status: automated-indicator` with `handling: review`
+   — this audit alone does not constitute the human confirmation needed for
+   `confirmed-standards-failure`, `confirmed-user-facing-barrier`, or
+   `handling: report`/`suppress`. See
+   [Accessibility Finding Tracking: Policy Classification](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html#policy-classification).
 
 If no issues are found, report residual risk clearly:
 

@@ -14,6 +14,17 @@ notes: >
   severity) and merges in the updated/expanded rule list from both canonical
   files. When re-syncing, keep the general-purpose framing as authoritative
   and pull only the rule list/severity updates from canonical.
+
+  2026-07-27 update (mgifford/ACCESSIBILITY.md commit a4ccf27, "Release
+  finding schema 2.1: add policy classification"): this skill does not have
+  ACCESSIBILITY_FINDING_TRACKING.md as its canonical_source, but now
+  references its "Policy Classification" vocabulary directly -- added a
+  "Core Principle" paragraph requiring axe results to be preserved as raw
+  outcomes and classified evidence_status "automated-indicator" /
+  handling "review" until human-confirmed, and a note that axe's
+  disabled-by-default AAA rules are obligation "aspirational" (not
+  "advisory") under an AA target. This is a shared-vocabulary update, not
+  an AXE_RULES_REFERENCE.md content sync -- see VOCABULARY_SYNC.md.
 ```
 
 ## How to Update This Skill

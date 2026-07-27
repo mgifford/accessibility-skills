@@ -57,6 +57,11 @@ graph TD
 3. Classify as deterministic or judgement-call
 4. If deterministic: apply fix, run tests, document
 5. If ambiguous: present perspectives, ask questions, recommend participants
+6. Classify `obligation` (per applicable standards mapping), `handling`, and
+   `evidence_status` — see [Accessibility Finding Tracking: Policy Classification](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html#policy-classification).
+   An unreviewed automated result stays `evidence_status: automated-indicator`
+   with `handling: review` until Stage 4 confirms it; it is never assigned
+   `handling: suppress` at collection time.
 
 #### Decision Making
 - **Auto-fixable**: Clear technical violation, low risk, can be automated
@@ -105,6 +110,8 @@ Each finding is examined for impacts on:
 - **Verifiable**: Conditions under which evidence was collected
 - **Contextual**: Relevant to the specific implementation
 - **Complete**: Includes expected and actual behavior
+- **Classified**: `evidence_status` reflects what was actually confirmed, not
+  what the source tool labeled it — see [Accessibility Finding Tracking: Policy Classification](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html#policy-classification)
 
 #### Decision Quality
 - **Role-aware**: Questions targeted to appropriate professional roles

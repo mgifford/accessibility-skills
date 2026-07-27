@@ -4,6 +4,8 @@
 
 This document defines the decision state model used throughout the role-aware accessibility workflow architecture. The model provides a standardized way to classify accessibility work and determine the appropriate level of human involvement.
 
+This model is orthogonal to, and must not be conflated with, the `obligation` / `handling` / `evidence_status` policy classification defined in [Accessibility Finding Tracking: Policy Classification](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html#policy-classification). This document's decision state answers "how automatable is resolving this finding, and who needs to be involved?" Policy classification answers separate questions: whether the project is obligated to fix it (`obligation`), how it is currently reported or enforced (`handling`), and how strong the evidence is (`evidence_status`). A finding can be `auto-fixable` and still `handling: review` pending confirmation, or `insufficient-evidence` in this model while already `obligation: required` from an established standards mapping. Do not infer one axis from the other.
+
 ## Decision States
 
 ### 1. auto-fixable

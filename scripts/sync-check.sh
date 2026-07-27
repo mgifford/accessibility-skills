@@ -5,6 +5,7 @@
 #   ./sync-check.sh                    # check all skills
 #   ./sync-check.sh --diff             # show diffs
 #   ./sync-check.sh --skill light-dark-mode  # check one skill
+#   ./sync-check.sh --vocab            # check shared vocabulary sources (see VOCABULARY_SYNC.md)
 
 set -eo pipefail
 
@@ -16,14 +17,93 @@ ACCESSIBILITY_MD_DIR="${ACCESSIBILITY_MD_DIR:-$(dirname "$ACCESSIBILITY_SKILLS_D
 
 SHOW_DIFF=false
 CHECK_SKILL=""
+CHECK_VOCAB=false
 
 while [[ $# -gt 0 ]]; do
   case $1 in
     --diff) SHOW_DIFF=true; shift ;;
     --skill) CHECK_SKILL="$2"; shift 2 ;;
+    --vocab) CHECK_VOCAB=true; shift ;;
     *) echo "Unknown option: $1"; exit 1 ;;
   esac
 done
+
+# --vocab: check shared vocabulary sources (terminology, lifecycle states,
+# the finding schema, and policy classification) that several skills
+# reference without being any one skill's primary canonical_source. See
+# VOCABULARY_SYNC.md for the full mapping and rationale. This is additive
+# to, and independent of, the per-skill checks below.
+if $CHECK_VOCAB; then
+  VOCAB_FILE="${ACCESSIBILITY_SKILLS_DIR}/VOCABULARY_SYNC.md"
+
+  if [[ ! -f "$VOCAB_FILE" ]]; then
+    echo "[MISSING] VOCABULARY_SYNC.md not found at $VOCAB_FILE"
+    exit 1
+  fi
+
+  if [[ ! -d "$ACCESSIBILITY_MD_DIR/.git" ]]; then
+    echo "[UNKNOWN] $ACCESSIBILITY_MD_DIR is not a git checkout; cannot compare commits"
+    exit 1
+  fi
+
+  echo "=== Shared Vocabulary Sync Check ==="
+  echo "See VOCABULARY_SYNC.md for the consumer mapping."
+  echo ""
+
+  vocab_drift=0
+
+  # Parse "  <path>: \"<sha>\"" lines from the vocab_sync YAML block in
+  # VOCABULARY_SYNC.md. This is a simple line-oriented parse, not a full
+  # YAML parser, matching this repo's existing SYNC.md parsing approach.
+  while IFS=: read -r raw_path raw_sha; do
+    vocab_path=$(echo "$raw_path" | xargs)
+    recorded_sha=$(echo "$raw_sha" | tr -d '",' | xargs)
+
+    [[ -z "$vocab_path" || -z "$recorded_sha" ]] && continue
+
+    if [[ ! -e "$ACCESSIBILITY_MD_DIR/$vocab_path" ]]; then
+      echo "[ORPHAN]  $vocab_path - not found in $ACCESSIBILITY_MD_DIR"
+      ((vocab_drift++))
+      continue
+    fi
+
+    latest_sha=$(git -C "$ACCESSIBILITY_MD_DIR" log -1 --format=%H -- "$vocab_path" 2>/dev/null)
+
+    if [[ -z "$latest_sha" ]]; then
+      echo "[UNKNOWN] $vocab_path - could not determine latest commit"
+      ((vocab_drift++))
+      continue
+    fi
+
+    if [[ "$latest_sha" == "$recorded_sha" ]]; then
+      echo "[SYNCED]  $vocab_path (unchanged since $recorded_sha)"
+      continue
+    fi
+
+    if git -C "$ACCESSIBILITY_MD_DIR" cat-file -e "${recorded_sha}^{commit}" 2>/dev/null; then
+      changed=$(git -C "$ACCESSIBILITY_MD_DIR" diff --name-only "$recorded_sha" "$latest_sha" -- "$vocab_path" 2>/dev/null)
+      if [[ -z "$changed" ]]; then
+        echo "[SYNCED]  $vocab_path (no content change between $recorded_sha and $latest_sha)"
+        continue
+      fi
+    fi
+
+    echo "[VOCAB REVIEW] $vocab_path changed: recorded=$recorded_sha latest=$latest_sha"
+    echo "               Review every consumer skill listed for this source in VOCABULARY_SYNC.md,"
+    echo "               not only the skill that prompted the change."
+    ((vocab_drift++))
+  done < <(sed -n '/^vocab_sync:/,/^```/p' "$VOCAB_FILE" | grep -E '^\s+examples/')
+
+  echo ""
+  echo "=== Vocabulary Summary ==="
+  if [[ $vocab_drift -eq 0 ]]; then
+    echo "All shared vocabulary sources unchanged since their recorded sync point."
+  else
+    echo "$vocab_drift shared vocabulary source(s) need review. See VOCABULARY_SYNC.md."
+  fi
+
+  exit $((vocab_drift > 0 ? 1 : 0))
+fi
 
 echo "=== Accessibility Skills Sync Check ==="
 echo "Skills directory: $ACCESSIBILITY_SKILLS_DIR"

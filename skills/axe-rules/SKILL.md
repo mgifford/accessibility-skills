@@ -25,6 +25,17 @@ Axe-core catches ~30–40% of WCAG issues automatically. It is the baseline,
 not the ceiling. Always pair automated scanning with manual keyboard and screen
 reader testing.
 
+**An axe-core result is evidence, not a conformance decision.** Preserve the
+rule's raw outcome (`violations`, `incomplete`, `passes`, `inapplicable`)
+exactly as axe reports it — do not overwrite or discard it when converting
+to a project finding. Cite this file, `AXE_RULES_REFERENCE.md`, or the
+rule's own `dequeuniversity.com/rules/axe/` page as the authority for a
+WCAG mapping; do not invent a mapping axe-core does not document for that
+rule. Record an unreviewed `violations` result as
+`evidence_status: automated-indicator` with `handling: review` — never as a
+confirmed standards failure — until a human confirms it. See
+[Accessibility Finding Tracking: Policy Classification](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html#policy-classification).
+
 **Key tags to include in scans:**
 
 ```typescript
@@ -157,6 +168,13 @@ by default).
 
 Disabled-by-default rules (deprecated `marquee`/`blink`/`audio-caption`) are not
 listed above — flag them if encountered, but they are not enabled in a default scan.
+
+The three WCAG AAA rules axe-core disables by default report against a
+level the project's AA target does not require. If enabled and a project
+has not declared a broader target, classify a confirmed finding from one of
+these rules as `obligation: aspirational`, not `advisory` — it is still a
+real AAA-level finding, just not part of the AA baseline. Do not report
+satisfying one of these rules as WCAG AAA conformance.
 
 ---
 

@@ -336,6 +336,24 @@ assessment. **If using ACT Rules Format 1.1, preserve one of its outcomes**
 results for human review; a `passed`/`inapplicable` result may still need
 other tests before a WCAG conclusion.
 
+**Obligation and handling are separate from the WCAG mapping.** Assign them
+per standards mapping, not by inference from severity or lifecycle status:
+
+- `obligation`: `required` | `aspirational` | `advisory` | `unmapped` | `not-applicable`.
+  **A confirmed AAA finding under an AA baseline target is `aspirational`, not
+  `advisory`** — record it as a visible stretch goal, not an arbitrary
+  suggestion. A project may elevate a specific AAA criterion to `required`;
+  cite the local policy or authority in `obligation_basis` when it does. Do
+  not describe satisfying individual AAA criteria as WCAG AAA conformance.
+- `handling`: `report` | `review` | `suppress`. **Send an unresolved
+  automated indicator to `review`, never straight to `report` as a confirmed
+  failure or to `suppress`.** `suppress` requires a documented exception —
+  narrow scope, reason, evidence, owner, and a review or expiry date — and
+  never means the finding is resolved or deleted.
+
+See [Accessibility Finding Tracking: Policy Classification](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html#policy-classification)
+for the full definitions and worked examples.
+
 ---
 
 ## Serious: Plan Complementary Testing and Verification
@@ -501,11 +519,15 @@ analysis. This JSON format is optional — it must not require fields that
 don't exist for manual or user-reported findings.
 
 The canonical, versioned, schema-validated format is `schema_version: "2.0"`
-(JSON Schema Draft 2020-12), defined in
+or `"2.1"` (JSON Schema Draft 2020-12), defined in
 [examples/schemas/](https://mgifford.github.io/ACCESSIBILITY.md/examples/schemas/README.html)
 in `mgifford/ACCESSIBILITY.md`. **Do not use `schema_version: "1.1"`** — that
 was an illustrative shape from an earlier draft of this skill and has been
-replaced. A concise excerpt using the current schema:
+replaced. `"2.1"` adds an optional top-level `policy` object (`standards_obligations`,
+`handling`, `evidence_status`, `suppression`) for the obligation/handling
+classification above; a `"2.0"` record must not populate it. `policy` is
+never fingerprint identity and never alters `tracking.fingerprints`. A
+concise excerpt using the current schema:
 
 ```json
 {
@@ -539,10 +561,11 @@ replaced. A concise excerpt using the current schema:
 
 `tracking.fingerprints`, `tracking.tracker_ids`, and `tracking.lifecycle`
 are optional additions for automated or correlated findings — see the
-[complete example](https://mgifford.github.io/ACCESSIBILITY.md/examples/schemas/accessibility-finding-v2.example.json)
-and
+[complete example](https://mgifford.github.io/ACCESSIBILITY.md/examples/schemas/accessibility-finding-v2.example.json),
 [minimal example](https://mgifford.github.io/ACCESSIBILITY.md/examples/schemas/accessibility-finding-v2-minimal.example.json)
-for a finding with none of them. Do not compute a fingerprint by hand or
+for a finding with none of them, and the
+[policy-classification examples](https://mgifford.github.io/ACCESSIBILITY.md/examples/schemas/accessibility-finding-v2.1-policy-examples.json)
+for eight worked `obligation`/`handling`/`evidence_status` scenarios. Do not compute a fingerprint by hand or
 duplicate the fingerprint algorithm here; see
 [Fingerprint Profiles](https://mgifford.github.io/ACCESSIBILITY.md/examples/fingerprints/README.html)
 for the frozen, versioned `a11y/pattern/v1` / `a11y/occurrence/v1`
@@ -585,6 +608,12 @@ An automated/AI-assisted workflow should:
 15. **Never automatically reject a credible user-reported or potentially
     high-consequence barrier just because an internal rerun didn't
     reproduce it** — route it to bounded investigation instead
+16. **Record an unreviewed automated result as `evidence_status:
+    automated-indicator` with `handling: review`** — never as
+    `confirmed-standards-failure`, `confirmed-user-facing-barrier`, or
+    `handling: suppress`, until a human confirms it. Do not disable an
+    entire rule or engine because one target produces noise; suppress the
+    specific, scoped finding instead.
 
 Do not close an issue only because the original automated rule passes — the
 implementation may have changed the selector, hidden the tested node, or

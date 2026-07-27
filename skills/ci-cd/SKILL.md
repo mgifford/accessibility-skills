@@ -28,7 +28,10 @@ CI can prevent known accessibility regressions, preserve tested semantics, and
 produce evidence for human review. **It cannot establish WCAG conformance by
 itself.** Automated rules, scores, snapshots, and AI output are inputs to an
 accessibility evaluation, not substitutes for one. This guide targets WCAG 2.2
-AA for in-scope content — that target is not itself a conformance claim.
+AA for in-scope content — that target is not itself a conformance claim. A
+confirmed AAA-level finding under this AA target is `obligation: aspirational`
+by default (a visible, non-blocking stretch goal), not `advisory`, unless a
+project explicitly elevates that specific criterion to `required`.
 
 Principles: test complete user tasks and relevant states, not only page loads;
 run fast deterministic checks locally and repeat in CI; block known
@@ -252,6 +255,16 @@ not ruled out a normative exception (for example, the SC 1.4.10
 two-dimensional-layout exception); blocking on it treats an unreviewed
 signal as a confirmed failure.
 
+Map "default CI treatment" onto `policy.handling`: a deterministic
+confirmed failure or reviewed regression is `report` (and may block); a
+risk indicator or `cantTell` is `review`, never `suppress`, until a human
+confirms or rejects it; a reviewed exception is `suppress` only with the
+full suppression detail below. `handling` is independent of `obligation` —
+do not use CI treatment as a stand-in for whether the underlying standard
+is `required`. Never disable an entire rule or engine because one target
+is noisy; suppress the specific, scoped finding instead. See
+[Accessibility Finding Tracking: Policy Classification](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html#policy-classification).
+
 Fleet-wide and site-wide scans additionally require: separating unique
 root-cause clusters from affected instances and reporting both — not one
 issue per affected URL; comparing new findings against a reviewed baseline
@@ -470,6 +483,12 @@ and available workaround; an accountable owner and linked issue; an expiry or
 review date; and the narrowest practical scope. Do not suppress an entire
 rule when one reviewed instance is the exception. Do not update snapshots or
 baselines solely to make CI green.
+
+This is the same required detail as `policy.suppression` (scope, reason,
+evidence, owner, review or expiry date) — use that vocabulary in a
+machine-readable finding. Suppression is never resolution; a suppressed
+finding stays recorded and is excluded only from the specified reporting or
+enforcement surface.
 
 ---
 

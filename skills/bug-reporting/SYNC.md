@@ -2,10 +2,30 @@
 
 ```yaml
 canonical_source: examples/ACCESSIBILITY_BUG_REPORTING_BEST_PRACTICES.md
-last_synced_commit: "ce9aa2aeecc9bf57bc26585f80d829d8657a2250"
+last_synced_commit: "a4ccf278924692a3fa0e911ed6ef928676c248fa"
 last_synced_date: "2026-07-27"
 skill_maintainer: ""
 notes: >
+  2026-07-27 sync pass (ce9aa2a -> a4ccf27, mgifford/ACCESSIBILITY.md,
+  "Release finding schema 2.1: add policy classification"): added the
+  "Obligation and handling" note to "Serious: Standards, Rules, and Test
+  Results" (obligation: required/aspirational/advisory/unmapped/not-applicable,
+  assigned per standards mapping; AAA under an AA baseline target is
+  aspirational, not advisory, unless locally elevated; handling:
+  report/review/suppress, with suppression requiring scope, reason,
+  evidence, owner, and a review/expiry date). Updated "Machine-Readable
+  Finding Schema" to note schema_version "2.1"'s optional top-level
+  `policy` object and link the new policy-classification examples file.
+  Added guardrail item 16 to "Automation and AI Guardrails": an unreviewed
+  automated result is evidence_status "automated-indicator" with handling
+  "review", never straight to a confirmed/suppressed classification. Did
+  not change this skill's severity scale, WCAG table, deduplication
+  section, or reporting workflow -- those were not affected. See
+  VOCABULARY_SYNC.md for the shared-vocabulary consumer mapping this pass
+  is part of.
+
+  PRIOR notes, retained for history:
+
   2026-07-27 sync pass (e53501b -> ce9aa2a, mgifford/ACCESSIBILITY.md draft
   PR #141, "Define actionable finding and repeatability policy"): added the
   actionability policy distinguishing a valid intake report from a

@@ -141,6 +141,13 @@ Each skill directory contains a `SYNC.md` recording:
 If the current SHA differs from `last_synced_commit`, it posts a diff comment on the PR
 or opens/updates an issue on push to `main`.
 
+Some canonical sources — finding terminology, lifecycle states, the finding
+schema, and policy classification (`obligation`/`handling`/`evidence_status`)
+— are shared vocabulary consumed by several skills without being any one
+skill's `canonical_source`. See [`VOCABULARY_SYNC.md`](./VOCABULARY_SYNC.md)
+for that mapping and `./scripts/sync-check.sh --vocab` for the check that
+covers it.
+
 ## Evaluation Manifests
 
 This repository also keeps repo-local eval manifests in `evals/`.

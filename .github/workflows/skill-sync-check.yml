@@ -8,7 +8,9 @@ on:
     branches: [main, master]
     paths:
       - "skills/**"
+      - "workflows/**"
       - "scripts/sync-check.sh"
+      - "VOCABULARY_SYNC.md"
       - ".github/workflows/skill-sync-check.yml"
 
 permissions:
@@ -100,5 +102,80 @@ jobs:
                 title,
                 body,
                 labels: ["skill-sync-drift"],
+              });
+            }
+
+      - name: Run shared vocabulary sync check
+        id: vocab_check
+        working-directory: accessibility-skills
+        env:
+          ACCESSIBILITY_MD_DIR: ${{ github.workspace }}/ACCESSIBILITY.md
+        run: |
+          set +e
+          ./scripts/sync-check.sh --vocab > /tmp/vocab-check-output.txt 2>&1
+          exit_code=$?
+          cat /tmp/vocab-check-output.txt
+          {
+            echo "output<<EOF"
+            cat /tmp/vocab-check-output.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          if [[ $exit_code -ne 0 ]]; then
+            echo "has_vocab_drift=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_vocab_drift=false" >> "$GITHUB_OUTPUT"
+          fi
+          exit 0
+
+      - name: Open or update vocabulary drift issue
+        if: steps.vocab_check.outputs.has_vocab_drift == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "Shared vocabulary drift detected against mgifford/ACCESSIBILITY.md";
+            const body = [
+              "The scheduled vocabulary sync check found that a shared",
+              "vocabulary source (finding terminology, lifecycle states,",
+              "the finding schema, or policy classification) changed since",
+              "its recorded sync point in `VOCABULARY_SYNC.md`.",
+              "",
+              "This is broader than a single skill's own canonical-source",
+              "check: these sources are consumed by several skills that do",
+              "not each list the source as their primary `canonical_source`.",
+              "",
+              "```",
+              "${{ steps.vocab_check.outputs.output }}",
+              "```",
+              "",
+              "To resolve:",
+              "1. Review every consumer skill listed in `VOCABULARY_SYNC.md`",
+              "   for the changed source, not only the skill that prompted it.",
+              "2. Update each affected `SKILL.md` and its own `SYNC.md`.",
+              "3. Update the recorded commit for that source in `VOCABULARY_SYNC.md`",
+              "   only after every listed consumer has been reviewed.",
+            ].join("\n");
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: ["vocabulary-sync-drift"],
+            });
+            const existing = issues.find((i) => i.title === title);
+
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ["vocabulary-sync-drift"],
               });
             }

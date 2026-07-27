@@ -6,10 +6,23 @@ Links this skill to its canonical source. Read by `.github/workflows/skill-sync-
 
 ```yaml
 canonical_source: examples/CI_CD_ACCESSIBILITY_BEST_PRACTICES.md
-last_synced_commit: "a5967b3"
-last_synced_date: "2026-07-25"
+last_synced_commit: "a4ccf278924692a3fa0e911ed6ef928676c248fa"
+last_synced_date: "2026-07-27"
 skill_maintainer: ""
 notes: >
+  2026-07-27 sync pass (a5967b3 -> a4ccf27, mgifford/ACCESSIBILITY.md,
+  "Release finding schema 2.1: add policy classification"): added the
+  AAA-under-AA-target obligation note to "Core Mandate"; mapped "Critical:
+  Risk Indicators and Build Gates" default CI treatments onto
+  policy.handling (report/review/suppress) values; cross-referenced
+  "Baselines, Suppressions, and Exceptions" to the policy.suppression
+  vocabulary (scope, reason, evidence, owner, review/expiry date) without
+  changing its required-field list. Did not change the severity scale, the
+  layered testing model, or the workflow security/AI-remediation sections
+  -- those were not affected. See VOCABULARY_SYNC.md.
+
+  PRIOR notes, retained for history:
+
   Canonical example file exists in mgifford/ACCESSIBILITY.md; that guide
   explicitly states sync with this skill is NOT automatic.
   Substantial resync. CORRECTIONS: Key corrections carried over: Lighthouse/axe scores are
