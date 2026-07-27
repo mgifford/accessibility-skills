@@ -98,9 +98,17 @@ as a priority factor instead.
 
 ## Critical: Minimum Information for a Useful Report
 
-Include when known and relevant — do not reject a report from a user for
-lacking technical detail; a triager can add locators, standards mapping, or
-a verification plan later.
+A report can be **valid at intake without being ready for remediation** —
+these are different bars. Do not reject a report from a user for lacking
+technical detail; a triager collects locators, standards mapping, and a
+verification plan afterward. See [Actionable Findings and Repeatability](#actionable-findings-and-repeatability)
+below for the full stage model.
+
+**Valid intake** needs only: title, location/state (as precisely as the
+reporter can safely give), task and impact, actual result, evidence basis.
+
+**Additional fields for evaluation and remediation** — collected by triage,
+not required from the reporter:
 
 | Field | What to record |
 | --- | --- |
@@ -269,6 +277,14 @@ physical device are separate facts. Relevant CSS preference values:
 ## Serious: Add Technical Evidence Without Exposing Data
 
 Technical evidence is optional when the observed behavior is already clear.
+Automated and technical findings normally need a focused HTML/DOM/
+accessibility-tree/component excerpt before code-level remediation —
+**triage collects this, not the reporter.** A disabled person or other
+reporter may not know how to capture it, and requiring it before accepting
+a report excludes exactly the people best placed to notice a barrier. Don't
+assume source HTML represents the live DOM or accessibility tree — client
+rendering and hydration can make them diverge; capture live-DOM/
+accessibility-tree output when the finding depends on runtime state.
 
 ```html
 <label for="card-number">Card number</label>
@@ -563,10 +579,66 @@ An automated/AI-assisted workflow should:
 11. Require manual user-facing retesting before closure when automation can't verify the outcome
 12. Record whether testing with disabled people is required/planned/completed with rationale
 13. **Never claim testing with disabled people occurred unless it actually did**
+14. Route each automated result to the active remediation queue, the
+    investigation queue, or observation history — never place a raw,
+    unreproduced automated result directly into active remediation
+15. **Never automatically reject a credible user-reported or potentially
+    high-consequence barrier just because an internal rerun didn't
+    reproduce it** — route it to bounded investigation instead
 
 Do not close an issue only because the original automated rule passes — the
 implementation may have changed the selector, hidden the tested node, or
 introduced a different barrier.
+
+## Actionable Findings and Repeatability
+
+A finding can be valid and worth preserving before the team has enough
+evidence to act on it. Use three destinations, not one undifferentiated
+queue:
+
+- **Active remediation queue** — reproducible, or otherwise sufficiently
+  evidenced: precise safe location, technical evidence where applicable,
+  owner, acceptance criteria, verification plan. WCAG mapping, severity,
+  frequency, and fingerprint are useful but not prerequisites.
+- **Investigation queue** — credible but intermittent/insufficiently
+  evidenced: must have an owner, current evidence, next action, evidence
+  needed for promotion, and a review/expiry date. Don't let an unowned
+  `needs_review` finding sit indefinitely.
+- **Observation history** — compact, retention-bounded evidence for
+  unreproduced automated results (fingerprints, location, tool/rule
+  identity, scan run ID, first/last-seen, reason not promoted). Not the
+  active human issue queue.
+
+**Automated-finding actionability gate** — before an automated result enters
+active remediation, ask: *can the team locate the result, rerun or evaluate
+the check, inspect the affected output, and determine what would demonstrate
+correction?* If not, route it to investigation or observation history
+instead of creating an issue nobody can act on. This gate is about
+automated-finding volume; it does not add a reproduction or evidence
+requirement before accepting a human-reported finding as valid.
+
+**Comparable runs and `not_observed` vs. `not_tested`:** a missing result is
+only meaningful when the rerun is genuinely comparable (same resource,
+successful load, required auth/state reached, same rule, scanner completed,
+no material exclusion change). Classify a timeout, auth failure, disabled
+rule, or incomplete crawl as `not_tested` — never as absence. Classify a
+genuine absence after a comparable run as `not_observed`, never silently as
+`resolved`.
+
+**Direct reproduction is preferred; equivalent evidence is accepted** when
+exact reproduction isn't possible — a focused HTML/DOM/accessibility-tree
+excerpt, tool output with config/version, a recording with explanation,
+repeated reports, or documented reproduction attempts. `Cannot reproduce`
+describes the team's current evidence, not the reporter's credibility.
+
+Don't retain findings without a plan: an investigation item with no owner
+and no review date is functionally a discarded report.
+
+For the full stage model, the three destinations, the actionability gate,
+comparable-run rules, and aggressive-filtering consequences/exceptions, see
+[Accessibility Finding Tracking § Actionability](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html#actionability-valid-report-vs-ready-for-remediation)
+in the canonical repository. Do not restate the stage-promotion thresholds
+or fingerprint algorithm here; link to them.
 
 **Deduplication and tracking:** a **tracker ID** (the issue tracker's own
 ID) is the durable identity of tracked remediation work — it is assigned by
@@ -580,8 +652,9 @@ matching fingerprint supports grouping and investigation, it does not by
 itself prove a shared root cause. A short **display ID** derived from a
 fingerprint (e.g. `A11Y-PAT-EA3B846C4F12`) is a human-readable alias, never
 the authoritative value. If fingerprints are used: version the algorithm
-and profile; include tool/rule version where relevant; normalize
-URLs/selectors carefully; expect fingerprints to change only within a new
+and profile. Record tool and rule versions as provenance; include them in
+fingerprint identity only when the applicable frozen fingerprint profile
+explicitly requires it. Normalize URLs/selectors carefully; expect fingerprints to change only within a new
 profile version, never silently; retain legacy identifiers when a
 fingerprint algorithm changes; do not infer mobile/desktop from a width
 threshold; don't merge results solely because hashes match. Absence from a
@@ -724,7 +797,7 @@ For the complete list, see the [WCAG 2.2 Quick Reference](https://www.w3.org/WAI
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/ACCESSIBILITY_BUG_REPORTING_BEST_PRACTICES.md)
-* [Accessibility Finding Tracking](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html) — tracker IDs, scan request/run IDs, occurrence and pattern fingerprints, display IDs, legacy identifier migration
+* [Accessibility Finding Tracking](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html) — tracker IDs, scan request/run IDs, occurrence and pattern fingerprints, display IDs, legacy identifier migration, and the actionability policy (stage model, active/investigation/observation-history destinations, automated-finding gate)
 * [Fingerprint Profiles](https://mgifford.github.io/ACCESSIBILITY.md/examples/fingerprints/README.html) — frozen `a11y/pattern/v1` / `a11y/occurrence/v1` contracts and golden test vectors
 * [Accessibility Finding Schema](https://mgifford.github.io/ACCESSIBILITY.md/examples/schemas/README.html) — `schema_version: "2.0"` JSON Schema and validated examples
 * [Website Accessibility Conformance Evaluation Methodology (WCAG-EM)](https://www.w3.org/WAI/test-evaluate/conformance/wcag-em/)

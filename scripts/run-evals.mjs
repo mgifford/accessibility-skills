@@ -101,6 +101,44 @@ function containsAny(text, needles) {
   return needles.filter((needle) => text.includes(needle));
 }
 
+// Case-insensitive substring search, used by required_concepts /
+// prohibited_concepts. These are deterministic response assertions — a
+// substring match is not semantic understanding, and reports must not be
+// worded as if it were.
+function containsAnyCaseInsensitive(text, needles) {
+  const lowerText = text.toLowerCase();
+  return needles.filter((needle) => lowerText.includes(needle.toLowerCase()));
+}
+
+function evaluateConceptGroups(responseText, groups, expectPresent) {
+  const checks = [];
+
+  for (const group of Array.isArray(groups) ? groups : []) {
+    const matches = responseText ? containsAnyCaseInsensitive(responseText, group.any_of ?? []) : [];
+    const pass = responseText ? (expectPresent ? matches.length > 0 : matches.length === 0) : false;
+
+    checks.push({
+      label: group.label,
+      pass,
+      detail: !responseText
+        ? 'response file missing'
+        : expectPresent
+          ? (matches.length > 0 ? `matched ${matches.map((item) => JSON.stringify(item)).join(', ')}` : 'no alternative phrasing matched (case-insensitive)')
+          : (matches.length === 0 ? 'no prohibited phrasing matched (case-insensitive)' : `found prohibited phrasing ${matches.map((item) => JSON.stringify(item)).join(', ')}`),
+    });
+  }
+
+  return checks;
+}
+
+function hasExecutableAssertions(evalCase) {
+  const hasLegacy = (Array.isArray(evalCase.must_contain_any) && evalCase.must_contain_any.length > 0)
+    || (Array.isArray(evalCase.must_not_contain) && evalCase.must_not_contain.length > 0);
+  const hasGrouped = (Array.isArray(evalCase.required_concepts) && evalCase.required_concepts.length > 0)
+    || (Array.isArray(evalCase.prohibited_concepts) && evalCase.prohibited_concepts.length > 0);
+  return hasLegacy || hasGrouped;
+}
+
 function buildResponseCandidates(responsesDir, skillName, evalId) {
   return [
     path.join(responsesDir, skillName, `${evalId}.txt`),
@@ -141,7 +179,14 @@ function buildReportData(summary, totalChecks, passedChecks, failedEvals) {
 
 function renderMarkdownReport(report) {
   const lines = [
-    '# Eval Report',
+    '# Deterministic Response-Assertion Report',
+    '',
+    'This report checks stored response files against deterministic,',
+    'case-insensitive substring assertions (required/prohibited phrasing,',
+    'or legacy must_contain_any/must_not_contain). It does not execute or',
+    'grade an AI model, and a passing score is not evidence that a model',
+    'understood or reasoned about the scenario — only that a saved response',
+    'contains or avoids specific wording.',
     '',
     `Generated: ${report.generatedAt}`,
     '',
@@ -218,7 +263,14 @@ async function writeReportFiles(options, report) {
 const options = parseArgs(process.argv.slice(2));
 
 if (options.help) {
-  console.log(`Usage: node scripts/run-evals.mjs [--manifest evals/<skill>/evals.json] [--responses-dir responses] [--json] [--format json|markdown] [--output file] [--output-dir dir]`);
+  console.log(`Usage: node scripts/run-evals.mjs [--manifest evals/<skill>/evals.json] [--responses-dir responses] [--json] [--format json|markdown] [--output file] [--output-dir dir]
+
+Checks saved response files against deterministic, case-insensitive
+substring assertions (required_concepts / prohibited_concepts, or legacy
+must_contain_any / must_not_contain). This does not invoke or grade an AI
+model — it only verifies that a stored response file contains or avoids
+specific wording. A response file must already exist under --responses-dir
+for each eval id.`);
   process.exit(0);
 }
 
@@ -272,6 +324,8 @@ for (const manifestPath of manifestPaths) {
 
     const checks = [];
 
+    // Legacy flat-list assertions, preserved for manifests that have not
+    // migrated to the grouped required_concepts / prohibited_concepts form.
     if (Array.isArray(evalCase.must_contain_any) && evalCase.must_contain_any.length > 0) {
       const matches = responseText ? containsAny(responseText, evalCase.must_contain_any) : [];
       checks.push({
@@ -294,7 +348,26 @@ for (const manifestPath of manifestPaths) {
       });
     }
 
-    const evalPassed = checks.every((check) => check.pass) && Boolean(responseText);
+    // Grouped concept assertions: every required_concepts group must match
+    // at least one of its alternative phrasings; every prohibited_concepts
+    // group must match none of its alternative phrasings. Matching is a
+    // deterministic, case-insensitive substring check per alternative — it
+    // demonstrates the response contains or avoids specific wording, not
+    // that a model understood or reasoned about the scenario.
+    checks.push(...evaluateConceptGroups(responseText, evalCase.required_concepts, true));
+    checks.push(...evaluateConceptGroups(responseText, evalCase.prohibited_concepts, false));
+
+    const evalHasExecutableAssertions = hasExecutableAssertions(evalCase);
+
+    if (!evalHasExecutableAssertions) {
+      checks.push({
+        label: 'executable-assertions',
+        pass: false,
+        detail: 'eval has no required_concepts, prohibited_concepts, must_contain_any, or must_not_contain — a descriptive-only eval cannot be scored and fails',
+      });
+    }
+
+    const evalPassed = evalHasExecutableAssertions && checks.every((check) => check.pass) && Boolean(responseText);
     const evalCheckCount = checks.length;
     const evalPassedChecks = checks.filter((check) => check.pass).length;
 
@@ -369,6 +442,6 @@ for (const item of summary) {
   }
 }
 
-console.log(`Overall score: ${totalChecks === 0 ? 100 : Math.round((passedChecks / totalChecks) * 100)}% (${passedChecks}/${totalChecks} checks passed)`);
+console.log(`Overall deterministic response-assertion score: ${totalChecks === 0 ? 100 : Math.round((passedChecks / totalChecks) * 100)}% (${passedChecks}/${totalChecks} checks passed). This measures stored-response wording, not model behavior.`);
 
 process.exit(failedEvals > 0 ? 1 : 0);

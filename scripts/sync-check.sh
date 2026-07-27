@@ -34,6 +34,86 @@ drift_count=0
 synced_count=0
 divergent=()
 
+# Exact-commit sync check: reads canonical_source/last_synced_commit from
+# the skill's own SYNC.md, finds the most recent commit that actually
+# touched that canonical file in the ACCESSIBILITY.md checkout, and reports
+# whether the skill's recorded sync point is still current. This detects
+# semantic drift the plain content diff below cannot: this skill's SKILL.md
+# intentionally differs in format/presentation from the canonical prose
+# (see its SYNC.md DIVERGENCE note), so a raw diff is expected to always
+# show "different" and is not a meaningful drift signal for this skill.
+check_skill_exact_commit() {
+  local skill="$1"
+  local canonical_file="$2"
+
+  local skill_file="${ACCESSIBILITY_SKILLS_DIR}/skills/${skill}/SKILL.md"
+  local sync_file="${ACCESSIBILITY_SKILLS_DIR}/skills/${skill}/SYNC.md"
+  local canonical_path="examples/${canonical_file}"
+
+  if [[ ! -f "$skill_file" ]]; then
+    echo "[MISSING] $skill - no SKILL.md found"
+    return 1
+  fi
+
+  if [[ ! -f "$sync_file" ]]; then
+    echo "[MISSING] $skill - no SYNC.md found; cannot determine last_synced_commit"
+    return 1
+  fi
+
+  if [[ ! -d "$ACCESSIBILITY_MD_DIR/.git" ]]; then
+    echo "[UNKNOWN] $skill - $ACCESSIBILITY_MD_DIR is not a git checkout; cannot compare commits"
+    return 1
+  fi
+
+  if [[ ! -f "$ACCESSIBILITY_MD_DIR/$canonical_path" ]]; then
+    echo "[ORPHAN]  $skill - canonical source not found: $canonical_path"
+    return 1
+  fi
+
+  local recorded_source
+  local recorded_commit
+  recorded_source=$(grep -m1 '^canonical_source:' "$sync_file" | sed -E 's/^canonical_source:\s*//' | tr -d '"' | xargs)
+  recorded_commit=$(grep -m1 '^last_synced_commit:' "$sync_file" | sed -E 's/^last_synced_commit:\s*//' | tr -d '"' | xargs)
+
+  if [[ -z "$recorded_commit" ]]; then
+    echo "[MISSING] $skill - SYNC.md has no last_synced_commit"
+    return 1
+  fi
+
+  if [[ -n "$recorded_source" && "$recorded_source" != "$canonical_path" ]]; then
+    echo "[MISMATCH] $skill - SYNC.md canonical_source ($recorded_source) does not match expected ($canonical_path)"
+  fi
+
+  local latest_commit
+  latest_commit=$(git -C "$ACCESSIBILITY_MD_DIR" log -1 --format=%H -- "$canonical_path" 2>/dev/null)
+
+  if [[ -z "$latest_commit" ]]; then
+    echo "[UNKNOWN] $skill - could not determine the latest commit touching $canonical_path"
+    return 1
+  fi
+
+  if [[ "$latest_commit" == "$recorded_commit" ]]; then
+    echo "[SYNCED]  $skill (canonical source unchanged since $recorded_commit)"
+    return 0
+  fi
+
+  # Not equal is only meaningful if recorded_commit is actually an ancestor
+  # of (or equal to) latest_commit in this checkout; if it isn't found at
+  # all, still report needs-review rather than silently passing.
+  if git -C "$ACCESSIBILITY_MD_DIR" cat-file -e "${recorded_commit}^{commit}" 2>/dev/null; then
+    local changed_files
+    changed_files=$(git -C "$ACCESSIBILITY_MD_DIR" diff --name-only "$recorded_commit" "$latest_commit" -- "$canonical_path" 2>/dev/null)
+    if [[ -z "$changed_files" ]]; then
+      echo "[SYNCED]  $skill (no content change to $canonical_path between $recorded_commit and $latest_commit)"
+      return 0
+    fi
+  fi
+
+  echo "[NEEDS REVIEW] $skill - canonical source changed: last_synced_commit=$recorded_commit, latest=$latest_commit ($canonical_path)"
+  echo "               Review the canonical diff and update SKILL.md deliberately; do not copy the full canonical guide over the distilled skill."
+  return 1
+}
+
 check_skill() {
   local skill="$1"
   local canonical_file="$2"
@@ -117,11 +197,38 @@ SKILL_LIST=(
   "user-personalization:USER_PERSONALIZATION_ACCESSIBILITY_BEST_PRACTICES.md"
 )
 
+# Skills using the exact-commit check instead of the raw content diff.
+# Add a skill here once its SYNC.md documents a stable, intentional
+# presentation divergence, so a content diff would only ever report noise.
+EXACT_COMMIT_SKILLS=(
+  "bug-reporting"
+)
+
+uses_exact_commit_check() {
+  local skill="$1"
+  for candidate in "${EXACT_COMMIT_SKILLS[@]}"; do
+    if [[ "$candidate" == "$skill" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 for entry in "${SKILL_LIST[@]}"; do
   skill="${entry%%:*}"
   canonical_file="${entry##*:}"
 
   if [[ -n "$CHECK_SKILL" && "$skill" != "$CHECK_SKILL" ]]; then
+    continue
+  fi
+
+  if uses_exact_commit_check "$skill"; then
+    if check_skill_exact_commit "$skill" "$canonical_file"; then
+      ((synced_count++))
+    else
+      ((drift_count++))
+      divergent+=("$skill")
+    fi
     continue
   fi
 

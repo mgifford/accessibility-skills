@@ -2,10 +2,51 @@
 
 ```yaml
 canonical_source: examples/ACCESSIBILITY_BUG_REPORTING_BEST_PRACTICES.md
-last_synced_commit: "e53501b793bff844b2c7b056f9b4e70b4374085e"
+last_synced_commit: "ce9aa2aeecc9bf57bc26585f80d829d8657a2250"
 last_synced_date: "2026-07-27"
 skill_maintainer: ""
 notes: >
+  2026-07-27 sync pass (e53501b -> ce9aa2a, mgifford/ACCESSIBILITY.md draft
+  PR #141, "Define actionable finding and repeatability policy"): added the
+  actionability policy distinguishing a valid intake report from a
+  remediation-ready finding. Updated the "Critical: Minimum Information"
+  section to separate valid-intake fields from evaluation/remediation
+  fields collected by triage, not the reporter. Added a note to "Serious:
+  Add Technical Evidence" that triage -- not the reporter -- collects
+  HTML/DOM/accessibility-tree evidence, and that source HTML may not match
+  the live DOM. Added a new "Actionable Findings and Repeatability" section
+  covering the three destinations (active remediation queue / investigation
+  queue / observation history), the automated-finding actionability gate,
+  comparable-run rules for not_observed vs. not_tested, and the
+  aggressive-filtering exceptions for credible/high-consequence reports.
+  Extended the "Automation and AI Guardrails" numbered list (items 14-15)
+  and clarified the existing fingerprint-provenance sentence in
+  "Deduplication and tracking" per the canonical wording (tool/rule version
+  is provenance, not fingerprint identity, unless a frozen profile requires
+  it). Did not change this skill's severity scale, WCAG table, or reporting
+  workflow sections -- those were not affected by this canonical change.
+
+  NOTE: last_synced_commit (ce9aa2a) is the head of
+  mgifford/ACCESSIBILITY.md draft PR #141, not yet merged to main at the
+  time of this sync pass. The linked mgifford.github.io/ACCESSIBILITY.md
+  URLs in this file's References section will not reflect this commit's
+  content until #141 merges and the site republishes.
+
+  Also in this pass: replaced evals/bug-reporting/evals.json's three
+  stale evals (which required URL/XPath/HTML/WCAG/severity/frequency as
+  universal report fields, contradicting the canonical "don't reject an
+  incomplete report" guidance) with 14 scenario-based evals using a new
+  grouped required_concepts/prohibited_concepts format. Updated
+  scripts/validate-evals.mjs and scripts/run-evals.mjs to validate and
+  execute the grouped format (case-insensitive, per-alternative matching)
+  while preserving the legacy must_contain_any/must_not_contain path used
+  by the other 27 skills' manifests. Reworded run-evals.mjs's reports to
+  describe themselves accurately as deterministic response-assertion
+  checks, not AI model evaluation. Added an exact-commit sync check to
+  scripts/sync-check.sh, used only for bug-reporting (see "Sync-check
+  methodology" below).
+
+  PRIOR notes, retained for history:
   Canonical example file exists in mgifford/ACCESSIBILITY.md. Complete
   philosophical rewrite: canonical moved from a rigid "8 required fields
   always" tool-output-centric model to a human-centered, evidence-based
@@ -49,6 +90,23 @@ notes: >
   not-yet-live linking already present in drupal-core's and open-scans'
   Stage 4B/4C updates.
 ```
+
+## Sync-check methodology
+
+Unlike most skills, `bug-reporting`'s drift check
+(`scripts/sync-check.sh`) does **not** rely on a raw content diff against
+the canonical file — this skill's presentation (YAML frontmatter,
+severity-tagged sections, condensed checklists) intentionally never
+matches the canonical prose verbatim, so a raw diff always reports
+"different" and cannot detect real drift.
+
+Instead, `sync-check.sh` compares this file's `last_synced_commit` against
+the most recent commit that actually touched
+`examples/ACCESSIBILITY_BUG_REPORTING_BEST_PRACTICES.md` in the
+`ACCESSIBILITY.md` checkout (`git log -1 -- <file>`). If they differ, the
+skill is reported `[NEEDS REVIEW]` — the canonical file changed since this
+skill was last reviewed, and a maintainer should read the diff and update
+`SKILL.md` deliberately rather than copy the canonical file over it.
 
 ## How to Update This Skill
 
