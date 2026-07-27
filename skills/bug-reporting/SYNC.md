@@ -2,8 +2,8 @@
 
 ```yaml
 canonical_source: examples/ACCESSIBILITY_BUG_REPORTING_BEST_PRACTICES.md
-last_synced_commit: "bb235f3"
-last_synced_date: "2026-07-22"
+last_synced_commit: "e53501b793bff844b2c7b056f9b4e70b4374085e"
+last_synced_date: "2026-07-27"
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md. Complete
@@ -27,6 +27,27 @@ notes: >
   sections, condensed Definition of Done checklist) intentionally differs
   from the canonical file's prose structure. Content substance is synced;
   presentation format is not expected to match verbatim.
+
+  2026-07-27 sync pass (bb235f3 -> e53501b, Stages 1-4A of the finding
+  tracking/fingerprint work, currently on branch docs/finding-tracking-stage1
+  pending merge to main): replaced the stale "Deduplication" paragraph with
+  the full tracker-ID/scan-request-ID/occurrence-fingerprint/pattern-
+  fingerprint/display-ID distinction now defined in
+  examples/ACCESSIBILITY_FINDING_TRACKING.md, including the not_observed-vs-
+  resolved requirement. Replaced the "Machine-Readable Finding Schema"
+  section's stale schema_version "1.1" example with a concise excerpt using
+  the canonical schema_version "2.0" (examples/schemas/), linking to the
+  complete/minimal examples rather than duplicating the full schema. Added
+  References entries for Accessibility Finding Tracking, Fingerprint
+  Profiles, and Accessibility Finding Schema. Did not change this skill's
+  own severity scale, terminology table, or reporting workflow sections --
+  those were not affected by the canonical changes in Stages 1-4A.
+
+  NOTE: the linked mgifford.github.io/ACCESSIBILITY.md URLs added in this
+  pass will 404 until docs/finding-tracking-stage1 is merged into
+  ACCESSIBILITY.md's main branch and republished. This mirrors the same
+  not-yet-live linking already present in drupal-core's and open-scans'
+  Stage 4B/4C updates.
 ```
 
 ## How to Update This Skill

@@ -481,28 +481,38 @@ just an attribute/selector/automated-rule result:
 ## Machine-Readable Finding Schema
 
 Machine-readable output can support imports, reporting, and regression
-analysis — it must not require fields that don't exist for manual or
-user-reported findings.
+analysis. This JSON format is optional — it must not require fields that
+don't exist for manual or user-reported findings.
+
+The canonical, versioned, schema-validated format is `schema_version: "2.0"`
+(JSON Schema Draft 2020-12), defined in
+[examples/schemas/](https://mgifford.github.io/ACCESSIBILITY.md/examples/schemas/README.html)
+in `mgifford/ACCESSIBILITY.md`. **Do not use `schema_version: "1.1"`** — that
+was an illustrative shape from an earlier draft of this skill and has been
+replaced. A concise excerpt using the current schema:
 
 ```json
 {
-  "schema_version": "1.1",
+  "schema_version": "2.0",
   "title": "Checkout: card error text is not associated with the field",
+  "reported_at": "2026-07-18T14:30:00-04:00",
+  "source": { "method": "manual-evaluation" },
   "location": {
-    "route": "/checkout/payment",
-    "component": "Payment form",
-    "locator": { "type": "stable-css", "value": "[data-component='payment-form']" }
+    "safe_url": "https://example.com/checkout/payment",
+    "component": "Payment form"
   },
-  "expected": "The field exposes its label, invalid state, and associated error programmatically.",
-  "actual": "A visible error appears, but the field has no error association.",
+  "description": {
+    "summary": "The visible card error is not programmatically associated with the field.",
+    "expected": "The field exposes its label, invalid state, and associated error programmatically.",
+    "actual": "A visible error appears, but the field has no error association."
+  },
   "affected_people": [{
     "description": "People who use screen readers",
     "status": "likely",
     "evidence_basis": "manual-evaluation",
     "scope_limit": "Observed with NVDA and Firefox; not yet evaluated with disabled participants"
   }],
-  "standards": [{ "standard": "WCAG 2.2", "criterion": "1.3.1", "level": "A", "relationship": "confirmed-failure" }],
-  "test_result": { "method": "manual", "status": "confirmed" },
+  "standards": [{ "standard": "WCAG", "version": "2.2", "requirement": "1.3.1", "level": "A", "relationship": "confirmed-failure" }],
   "verification": {
     "automated": { "required": true, "status": "planned" },
     "manual": { "required": true, "status": "completed-for-original-finding" },
@@ -511,9 +521,24 @@ user-reported findings.
 }
 ```
 
-Version the schema, document null/omitted values, validate imports, and plan
-migrations. Preserve a tool's raw output separately when exact round-trip
-fidelity matters.
+`tracking.fingerprints`, `tracking.tracker_ids`, and `tracking.lifecycle`
+are optional additions for automated or correlated findings — see the
+[complete example](https://mgifford.github.io/ACCESSIBILITY.md/examples/schemas/accessibility-finding-v2.example.json)
+and
+[minimal example](https://mgifford.github.io/ACCESSIBILITY.md/examples/schemas/accessibility-finding-v2-minimal.example.json)
+for a finding with none of them. Do not compute a fingerprint by hand or
+duplicate the fingerprint algorithm here; see
+[Fingerprint Profiles](https://mgifford.github.io/ACCESSIBILITY.md/examples/fingerprints/README.html)
+for the frozen, versioned `a11y/pattern/v1` / `a11y/occurrence/v1`
+contracts. A published fingerprint profile is immutable — an algorithm
+change requires a new profile version, never an in-place edit.
+
+Validate imports against the published schema; document null/omitted
+values per the schema's own convention; plan migrations using the
+`equivalent` / `split` / `merged` / `unresolved` vocabulary in
+[Accessibility Finding Tracking](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html).
+Preserve a tool's raw output separately when exact round-trip fidelity
+matters (`source.raw_result_reference` / `evidence.references`).
 
 ---
 
@@ -543,12 +568,34 @@ Do not close an issue only because the original automated rule passes — the
 implementation may have changed the selector, hidden the tested node, or
 introduced a different barrier.
 
-**Deduplication:** use the issue tracker's ID as the durable identity — a
-scan fingerprint can help correlate repeated results but is not a permanent
-bug ID. If fingerprints are used: version the algorithm; include tool/rule
-version; normalize URLs/selectors carefully; expect fingerprints to change
-when markup changes; do not infer mobile/desktop from a width threshold;
-don't merge results solely because hashes match.
+**Deduplication and tracking:** a **tracker ID** (the issue tracker's own
+ID) is the durable identity of tracked remediation work — it is assigned by
+a human filing or linking an issue, never computed from finding content. A
+**scan request ID** identifies why a scan ran; it is not automatically a
+tracker ID for every finding the scan produces. A fingerprint (an
+**occurrence fingerprint** for one location, or a **pattern fingerprint**
+for a correlation candidate across locations) can help correlate repeated
+results, but is a computed correlation key, not a permanent bug ID — a
+matching fingerprint supports grouping and investigation, it does not by
+itself prove a shared root cause. A short **display ID** derived from a
+fingerprint (e.g. `A11Y-PAT-EA3B846C4F12`) is a human-readable alias, never
+the authoritative value. If fingerprints are used: version the algorithm
+and profile; include tool/rule version where relevant; normalize
+URLs/selectors carefully; expect fingerprints to change only within a new
+profile version, never silently; retain legacy identifiers when a
+fingerprint algorithm changes; do not infer mobile/desktop from a width
+threshold; don't merge results solely because hashes match. Absence from a
+later scan does not by itself prove resolution — treat it as `not_observed`
+unless the scope was actually retested or otherwise verified.
+
+For the full model — including scan run IDs, legacy identifier migration,
+and the frozen `a11y/pattern/v1` / `a11y/occurrence/v1` fingerprint
+profiles with published test vectors — see
+[Accessibility Finding Tracking](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html)
+and
+[Fingerprint Profiles](https://mgifford.github.io/ACCESSIBILITY.md/examples/fingerprints/README.html)
+in the canonical repository. Do not restate the fingerprint algorithm here;
+link to it.
 
 ---
 
@@ -677,6 +724,9 @@ For the complete list, see the [WCAG 2.2 Quick Reference](https://www.w3.org/WAI
 ## References
 
 * [Full best practices guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/ACCESSIBILITY_BUG_REPORTING_BEST_PRACTICES.md)
+* [Accessibility Finding Tracking](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_TRACKING.html) — tracker IDs, scan request/run IDs, occurrence and pattern fingerprints, display IDs, legacy identifier migration
+* [Fingerprint Profiles](https://mgifford.github.io/ACCESSIBILITY.md/examples/fingerprints/README.html) — frozen `a11y/pattern/v1` / `a11y/occurrence/v1` contracts and golden test vectors
+* [Accessibility Finding Schema](https://mgifford.github.io/ACCESSIBILITY.md/examples/schemas/README.html) — `schema_version: "2.0"` JSON Schema and validated examples
 * [Website Accessibility Conformance Evaluation Methodology (WCAG-EM)](https://www.w3.org/WAI/test-evaluate/conformance/wcag-em/)
 * [Involving Users in Evaluating Web Accessibility](https://www.w3.org/WAI/test-evaluate/involving-users/)
 * [Using Combined Expertise to Evaluate Web Accessibility](https://www.w3.org/WAI/test-evaluate/combined-expertise/)
