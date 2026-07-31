@@ -17,7 +17,7 @@ that mapping; `scripts/sync-check.sh --vocab` checks it.
 
 | Canonical source | Defines | Consumed by |
 | --- | --- | --- |
-| `examples/ACCESSIBILITY_FINDING_TRACKING.md` (`mgifford/ACCESSIBILITY.md`) | Finding/occurrence/pattern terminology, lifecycle states, actionability stages, and **Policy Classification** (`obligation`, `handling`, `evidence_status`, suppression requirements) | `skills/bug-reporting/SKILL.md`, `skills/axe-rules/SKILL.md`, `skills/ci-cd/SKILL.md`, `skills/cli-audit/SKILL.md`, `workflows/decision-states.md`, `workflows/end-to-end.md` |
+| `examples/ACCESSIBILITY_FINDING_TRACKING.md` (`mgifford/ACCESSIBILITY.md`) | Finding/occurrence/pattern terminology, lifecycle states, actionability stages, **Policy Classification** (`obligation`, `handling`, `evidence_status`, suppression requirements), and (since 2026-07-31) **Local and upstream trackers** — `tracking.tracker_ids` as an array supporting independent local/upstream relationships, and the rule that a closed or merged upstream tracker is not evidence of resolution | `skills/bug-reporting/SKILL.md`, `skills/axe-rules/SKILL.md`, `skills/ci-cd/SKILL.md`, `skills/cli-audit/SKILL.md`, `skills/upstream-first/SKILL.md`, `workflows/decision-states.md`, `workflows/end-to-end.md` |
 | `examples/schemas/` (`accessibility-finding-v2.schema.json`, `README.md`, and the `accessibility-finding-v2*.json` examples) | The versioned `schema_version` record shape, including the `2.1` `policy` object | `skills/bug-reporting/SKILL.md` (machine-readable finding example), `skills/axe-rules/SKILL.md`, `skills/ci-cd/SKILL.md`, `skills/cli-audit/SKILL.md` |
 | `examples/fingerprints/` (`README.md`, `a11y-pattern-v1.json`, `a11y-occurrence-v1.json`) | Fingerprint profile identity and computation | `skills/bug-reporting/SKILL.md` (deduplication section) |
 
@@ -51,8 +51,8 @@ canonical source.
 # Recorded sync points for shared vocabulary sources.
 # Update after reviewing every listed consumer skill, not just one.
 vocab_sync:
-  examples/ACCESSIBILITY_FINDING_TRACKING.md: "a4ccf278924692a3fa0e911ed6ef928676c248fa"
-  examples/schemas/: "a4ccf278924692a3fa0e911ed6ef928676c248fa"
+  examples/ACCESSIBILITY_FINDING_TRACKING.md: "f2c89d7e5c143a3fd7c836a0de1ea82aad92ba73"
+  examples/schemas/: "6d9d2967daee194658265bc2f57373fa126ae7f5"
   examples/fingerprints/: "b87a2994aba52de491340490fb969df954180e18"
 ```
 

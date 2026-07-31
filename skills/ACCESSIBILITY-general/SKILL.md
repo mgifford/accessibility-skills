@@ -63,6 +63,7 @@ in the `mgifford/ACCESSIBILITY.md` `examples/` directory.
 | Digital quality (Opquast) | `skills/opquast-digital-quality/SKILL.md` |
 | axe-core scans / automated rule results | `skills/axe-rules/SKILL.md` |
 | Manual / assistive-technology testing | `skills/manual-testing/SKILL.md` |
+| A barrier that may originate in a shared component or dependency | `skills/upstream-first/SKILL.md` *(before implementing a fix — see below)* |
 
 If a skill file is not present, fall back to the corresponding file in the
 `mgifford/ACCESSIBILITY.md` `examples/` directory.
@@ -103,6 +104,17 @@ Never convey information by color alone. Always pair color with icon, label, or 
 ### No accessibility regressions
 
 Never propose a change that introduces a WCAG 2.2 AA violation, even if the change is otherwise an improvement.
+
+### Decide the responsible source before implementing
+
+Before writing a fix for a barrier that may originate in a shared
+component, design system, renderer, or external dependency, load
+`skills/upstream-first/SKILL.md`. Do not default to a local patch without
+deciding whether the fix belongs there instead. Never open, comment on, or
+submit anything in an external project without explicit human approval.
+Record any temporary local divergence with an owner and removal condition,
+and do not treat a merged or closed upstream tracker item as resolution
+until the correction is released, adopted, and verified.
 
 ---
 
