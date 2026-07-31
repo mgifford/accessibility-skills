@@ -39,6 +39,7 @@ Each skill distills a full example into agent-actionable rules.
 | [touch-pointer](./skills/touch-pointer/SKILL.md) | `examples/TOUCH_POINTER_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [user-personalization](./skills/user-personalization/SKILL.md) | `examples/USER_PERSONALIZATION_ACCESSIBILITY_BEST_PRACTICES.md` | ✅ |
 | [opquast-digital-quality](./skills/opquast-digital-quality/SKILL.md) | Opquast checklist (external) | ✅ |
+| [upstream-first](./skills/upstream-first/SKILL.md) | [mgifford/upstream-first](https://github.com/mgifford/upstream-first) (external) | ✅ |
 
 ## Alternative Accessibility Skills
 
