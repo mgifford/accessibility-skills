@@ -432,6 +432,23 @@ data loss cannot be recovered.
 
 ---
 
+## Moderate: Reusable Matching-Field Components
+
+A web component may add matching-value validation, but it must be additive to
+native constraint validation and server-side validation. The form must still
+submit without JavaScript, the error must be associated with the right field,
+and an existing native or custom error must not be overwritten.
+
+[`<form-matching-fields>`](https://github.com/aarongustafson/form-matching-fields)
+is one reviewed reference. It compares the first two eligible text-type inputs
+and pins a custom validity message to the second. That is a narrow scope, not a
+general validation framework. This is a reference, not a recommendation; test
+the error announcement and no-JavaScript behaviour in context. Check the
+[component registry](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/TRUSTED_SOURCES.md#component-reference-curation)
+for the reviewed metadata and limitations.
+
+---
+
 ## Moderate: Visual Layout and Interaction
 
 * Meet text and non-text contrast for controls, borders, instructions,

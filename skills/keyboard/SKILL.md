@@ -343,6 +343,20 @@ items, and dynamic additions. Consult the
 [APG roving tabindex practice](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/#kbd_roving_tabindex)
 for the specific arrow-key directions per widget type.
 
+### Reusable tab components
+
+A web component may generate a tablist and panels from heading-structured
+content. Verify manual versus automatic activation, arrow/Home/End behaviour,
+panel labelling, focus into the active panel, print behaviour, and a linear
+fallback when the tabs do not fit. Do not use tabs for content that should
+remain linear.
+
+[`<tabbed-interface>`](https://github.com/aarongustafson/tabbed-interface) is one
+reviewed reference. It keeps authored content in the light DOM and falls back to
+linear sections without JavaScript or when the tablist does not fit;
+`fixed-tabs` removes that fallback. This is a reference, not a recommendation.
+Test the component in context. Check the [component registry](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/TRUSTED_SOURCES.md#component-reference-curation) for the reviewed metadata and limitations.
+
 ---
 
 ## Moderate: Character-Key Shortcuts (WCAG 2.1.4)

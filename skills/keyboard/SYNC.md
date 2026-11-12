@@ -2,8 +2,10 @@
 
 ```yaml
 canonical_source: examples/KEYBOARD_ACCESSIBILITY_BEST_PRACTICES.md
-last_synced_commit: "bb235f3"
-last_synced_date: "2026-07-21"
+last_synced_commit: "25a354624bc81bb54d0cf80a88d92de24db6b326"
+last_synced_date: "2026-11-12"
+review_decision: updated
+last_reviewed_commit: "25a354624bc81bb54d0cf80a88d92de24db6b326"
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md.
@@ -29,3 +31,7 @@ When the canonical source changes and CI flags drift:
 3. Update `SKILL.md` to reflect new requirements, changed patterns, or removed guidance
 4. Set `last_synced_commit` to the current commit SHA of `mgifford/ACCESSIBILITY.md`
 5. Rebuild: `cd skills && zip -r keyboard.skill keyboard/`
+
+## Review history
+
+- 2026-11-12 reviewed 25a354624bc81bb54d0cf80a88d92de24db6b326: updated - Added a concise tabbed-interface note covering activation, focus, print, and linear fallback.
