@@ -104,6 +104,49 @@
       "must_not_contain": [
         "positive tabindex"
       ]
+    },
+    {
+      "id": 6,
+      "prompt": "A developer proposes adding tabindex=\"0\" and a click handler to every div so the page becomes keyboard accessible. Review the proposal and give minimal, standards-grounded guidance.",
+      "expected_output": "The agent should reject making static divs focusable, prefer native interactive elements, and explain the keyboard behavior and focus semantics that native elements provide. It should not invent requirements or recommend unnecessary ARIA.",
+      "expectations": [
+        "Prefers native interactive elements over focusable divs",
+        "Explains why tabindex=0 on static content is not a keyboard-accessibility fix",
+        "Avoids unnecessary ARIA and preserves semantic HTML"
+      ],
+      "files": [],
+      "required_concepts": [
+        {
+          "label": "native element first",
+          "any_of": [
+            "native element",
+            "native HTML",
+            "use a button",
+            "<button",
+            "semantic element"
+          ]
+        },
+        {
+          "label": "no blanket tabindex",
+          "any_of": [
+            "do not add tabindex",
+            "remove tabindex",
+            "tabindex is not",
+            "not a substitute",
+            "not keyboard accessible"
+          ]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "blanket focusable divs",
+          "any_of": [
+            "add tabindex=\"0\" to every div",
+            "make every div focusable",
+            "tabindex=\"0\" is sufficient"
+          ]
+        }
+      ]
     }
   ]
 }

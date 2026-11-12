@@ -130,6 +130,19 @@ test('documented no-update-needed decision is distinguished from drift', () => {
   assert.match(result.stdout, /\[SYNCED\]\s+alpha - reviewed .*no skill update needed/);
 });
 
+test('documented intentional divergence is reported separately from synced', () => {
+  const f = makeSimpleFixture();
+  const latest = changeGuide(f.canonical);
+  write(
+    join(f.skillsDir, 'skills', 'alpha', 'SYNC.md'),
+    `# Sync Metadata\n\n\`\`\`yaml\ncanonical_source: examples/GUIDE.md\nlast_synced_commit: "${latest}"\nlast_synced_date: "2026-01-02"\nlast_reviewed_commit: "${latest}"\nreview_decision: intentional-divergence\nskill_maintainer: ""\n\`\`\`\n`,
+  );
+  const result = sync(f.skillsDir, f.canonical);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.match(result.stdout, /\[INTENTIONAL DIVERGENCE\] alpha/);
+  assert.match(result.stdout, /Intentional divergence: 1/);
+});
+
 test('further-review-required remains a review item', () => {
   const f = makeSimpleFixture();
   const latest = changeGuide(f.canonical);
@@ -228,6 +241,41 @@ test('lockfile-only change in a directory source is not vocabulary drift', () =>
   const result = sync(skillsDir, canonical, ['--vocab']);
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout, /\[VOCAB SYNCED\]\s+examples\/schemas\//);
+});
+
+test('deferred review is reported without advancing synchronization metadata', () => {
+  const f = makeSimpleFixture();
+  const latest = changeGuide(f.canonical);
+  write(
+    join(f.skillsDir, 'skills', 'alpha', 'SYNC.md'),
+    `# Sync Metadata\n\n\`\`\`yaml\ncanonical_source: examples/GUIDE.md\nlast_synced_commit: "${f.sha}"\nlast_synced_date: "2026-01-01"\nreview_decision: deferred\ndeferred_source_commit: "${latest}"\n\`\`\`\n`,
+  );
+  const result = sync(f.skillsDir, f.canonical);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /\[DEFERRED\] alpha/);
+  assert.match(result.stdout, /Deferred: 1/);
+});
+
+test('a deferred review becomes stale when the canonical source changes again', () => {
+  const f = makeSimpleFixture();
+  const first = changeGuide(f.canonical, '# Guide\n\nFirst change.\n');
+  write(
+    join(f.skillsDir, 'skills', 'alpha', 'SYNC.md'),
+    `# Sync Metadata\n\n\`\`\`yaml\ncanonical_source: examples/GUIDE.md\nlast_synced_commit: "${f.sha}"\nlast_synced_date: "2026-01-01"\nreview_decision: deferred\ndeferred_source_commit: "${first}"\n\`\`\`\n`,
+  );
+  changeGuide(f.canonical, '# Guide\n\nSecond change.\n');
+  const result = sync(f.skillsDir, f.canonical);
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /deferred review is stale/);
+});
+
+test('invalid review_decision is invalid metadata', () => {
+  const f = makeSimpleFixture({
+    syncMd: (sha) => `canonical_source: examples/GUIDE.md\nlast_synced_commit: "${sha}"\nlast_synced_date: "2026-01-01"\nreview_decision: maybe\n`,
+  });
+  const result = sync(f.skillsDir, f.canonical);
+  assert.equal(result.status, 2, result.stdout + result.stderr);
+  assert.match(result.stdout, /\[INVALID METADATA\] alpha/);
 });
 
 test('missing last_synced_date is a stale-metadata error', () => {

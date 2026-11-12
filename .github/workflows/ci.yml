@@ -40,6 +40,9 @@ jobs:
       - name: Test the sync engine
         run: npm run test:sync
 
+      - name: Test the local sync CLI
+        run: npm run test:sync-cli
+
       - name: Test sync issue deduplication
         run: npm run test:issues
 

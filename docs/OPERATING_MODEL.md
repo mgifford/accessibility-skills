@@ -1,6 +1,6 @@
 # Accessibility Guidance and Skills: Operating Model
 
-**Status:** Proposed operating model  
+**Status:** Implemented operating model, with documented follow-ups
 **Scope:** `mgifford/ACCESSIBILITY.md` and `mgifford/accessibility-skills`  
 **Principle:** Maintain authoritative guidance once, derive useful skills, and verify changes through evidence and review.
 
@@ -170,7 +170,7 @@ Local paths must not be embedded into version-controlled configuration.
 
 ### Day-to-day commands
 
-The following is the proposed CLI interface. These commands are not all implemented yet.
+The CLI interface is implemented in `scripts/sync.mjs` and wraps the existing `scripts/sync-check.sh` engine.
 
 ```bash
 # Show synchronization status
@@ -180,7 +180,7 @@ npm run sync:status
 npm run sync:diff -- --skill forms
 
 # Review changes and record a decision
-npm run sync:review -- --skill forms
+npm run sync:review -- --skill forms --decision no-update --note "No material change"
 
 # Validate synchronization records and skill files
 npm run sync:validate
@@ -537,20 +537,24 @@ Existing functionality includes:
 - Scheduled GitHub Actions.
 - Skill evaluation infrastructure.
 
-The following require implementation or verification:
+Implemented and verified in this repository:
 
-1. Reliable discovery of independent local repositories.
-2. A consistent local command interface.
-3. Git-based source change review.
-4. Explicit review outcomes.
-5. Correct handling of uncommitted changes.
-6. Consistent synchronization status reporting.
-7. Rationalization of overlapping CI checks.
-8. Verification of source paths in existing workflows.
-9. Clear handling of canonical resource registry snapshots.
-10. End-to-end tests of the maintenance lifecycle.
+1. Reliable discovery of independent local repositories (`sync:status`, configuration, environment, siblings).
+2. A consistent local command interface (`sync:status`, `diff`, `review`, `validate`, `report`, `list`).
+3. Git-based source change review with exact commits and full history.
+4. Explicit review outcomes (`updated`, `no-update-needed`, `intentional-divergence`, `deferred`).
+5. Safe handling of uncommitted changes: status reports them, and a review decision refuses an uncommitted canonical revision.
+6. Consistent synchronization status reporting, including `DEFERRED` and `INVALID_METADATA`.
+7. Rationalized CI checks: one engine, full-history checkouts, deduplicated issues, machine-readable reports.
+8. Verified workflow source paths and removed the raw-path/line-count comparison.
+9. Canonical resource registry owned by `ACCESSIBILITY.md`; the duplicate skills copy was removed.
+10. End-to-end tests for the maintenance lifecycle, including discovery, review decisions, metadata validation, deferred work, and report generation.
 
-These improvements should extend existing infrastructure rather than replace it wholesale.
+Remaining follow-up:
+
+- Optional model-based evaluations remain outside mandatory CI and require explicit model configuration.
+- A generated offline resource snapshot is not needed today; document and validate one only if a real offline consumer appears.
+- The scheduled GitHub Actions behavior is verified locally and by workflow wiring tests; the next scheduled run provides live evidence.
 
 ## 17. Definition of done
 

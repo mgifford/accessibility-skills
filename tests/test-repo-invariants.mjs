@@ -84,6 +84,25 @@ test('README does not install skills from the wrong repository', () => {
 });
 
 
+test('local workflow documentation and prompt exist', () => {
+  for (const path of ['SYNC_WORKFLOW.md', 'prompts/UPDATE_SKILL_FROM_CANONICAL.md', 'sync.config.example.yaml']) {
+    assert.ok(existsSync(join(ROOT, path)), `${path} is missing`);
+  }
+  const workflow = read('SYNC_WORKFLOW.md');
+  for (const command of ['sync:status', 'sync:diff', 'sync:review', 'sync:validate', 'sync:report']) {
+    assert.match(workflow, new RegExp(command), `${command} is not documented`);
+  }
+});
+
+test('local CLI stays deterministic and repository-local', () => {
+  const cli = read('scripts/sync.mjs');
+  assert.doesNotMatch(cli, /\b(curl|wget)\b/);
+  assert.doesNotMatch(cli, /fetch\(/);
+  assert.match(cli, /sync-check\.sh/);
+  assert.match(cli, /--canonical/);
+  assert.match(cli, /--skills/);
+});
+
 test('sync workflow uses the shared engine, full history, and deduplication', () => {
   const workflow = read('.github/workflows/skill-sync-check.yml');
   assert.match(workflow, /scripts\/sync-check\.sh/);
@@ -93,9 +112,24 @@ test('sync workflow uses the shared engine, full history, and deduplication', ()
   assert.match(workflow, /concurrency:/);
 });
 
+test('representative skills have meaningful eval guardrails', () => {
+  for (const skill of ['forms', 'keyboard', 'charts-graphs', 'bug-reporting', 'user-personalization']) {
+    const manifestPath = join(ROOT, 'evals', skill, 'evals.json');
+    assert.ok(existsSync(manifestPath), `${skill} has no eval manifest`);
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+    assert.equal(manifest.skill_file, `skills/${skill}/SKILL.md`);
+    assert.ok(manifest.evals.length > 0, `${skill} has no eval cases`);
+    const hasGuardrail = manifest.evals.some((evalCase) =>
+      Array.isArray(evalCase.prohibited_concepts) && evalCase.prohibited_concepts.length > 0
+      || Array.isArray(evalCase.must_not_contain) && evalCase.must_not_contain.length > 0
+    );
+    assert.ok(hasGuardrail, `${skill} has no negative/guardrail assertion`);
+  }
+});
+
 test('CI runs the new deterministic checks', () => {
   const ci = read('.github/workflows/ci.yml');
-  for (const script of ['test:sync', 'test:issues', 'test:invariants']) {
+  for (const script of ['test:sync', 'test:sync-cli', 'test:issues', 'test:invariants']) {
     assert.match(ci, new RegExp(script.replace(':', '\\:')), `CI does not run ${script}`);
   }
 });

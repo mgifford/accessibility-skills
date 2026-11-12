@@ -1,0 +1,22 @@
+# Optional local configuration for scripts/sync.mjs.
+#
+# Copy this file to sync.config.yaml for a committed, team-shared relationship,
+# or to .accessibility-sync.local.yaml for a machine-specific override that
+# must not be committed. Relative paths resolve from this file's directory.
+#
+# Precedence: CLI flags > environment variables > configuration > siblings.
+
+repositories:
+  canonical:
+    path: ../ACCESSIBILITY.md
+    remote: https://github.com/mgifford/ACCESSIBILITY.md
+  skills:
+    path: .
+    remote: https://github.com/mgifford/accessibility-skills
+
+sync:
+  # Currently informational; recorded review revisions come from each
+  # skill's SYNC.md (last_synced_commit).
+  base_ref: last_synced
+  # review: report and record decisions; do not rewrite skill content.
+  mode: review

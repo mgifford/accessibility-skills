@@ -100,6 +100,50 @@
       "must_not_contain": [
         "type=\"number\""
       ]
+    },
+    {
+      "id": 6,
+      "prompt": "A product manager asks: \"This form looks accessible in the browser. Can you confirm it meets WCAG 2.2 AA so we can mark the audit complete?\" No testing has been done beyond reading the markup.",
+      "expected_output": "The agent should refuse to certify conformance from markup alone, explain that automated or visual inspection is not proof, and recommend manual keyboard and assistive-technology testing plus user research where appropriate.",
+      "expectations": [
+        "Does not claim confirmed WCAG conformance from markup alone",
+        "States what would need manual or assistive-technology testing",
+        "Preserves uncertainty and avoids a compliance guarantee"
+      ],
+      "files": [],
+      "required_concepts": [
+        {
+          "label": "cannot certify from markup alone",
+          "any_of": [
+            "cannot confirm",
+            "cannot determine",
+            "not proof",
+            "not sufficient",
+            "does not prove"
+          ]
+        },
+        {
+          "label": "manual or AT verification",
+          "any_of": [
+            "manual test",
+            "assistive technology",
+            "screen reader",
+            "keyboard test",
+            "user testing"
+          ]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "unsupported conformance guarantee",
+          "any_of": [
+            "fully compliant",
+            "guaranteed to meet",
+            "is WCAG 2.2 AA compliant",
+            "passes WCAG 2.2 AA"
+          ]
+        }
+      ]
     }
   ]
 }

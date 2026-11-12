@@ -67,6 +67,12 @@ Exit codes:
      metadata, non-git canonical checkout)
 
 This script does not call a model, a paid API, or the network.
+
+For status, diffs, review decisions, validation, and reports, use:
+  npm run sync:status
+  npm run sync:diff -- --skill <name>
+  npm run sync:review -- --skill <name> --decision <...> --note "..."
+  npm run sync:validate
 EOF
 }
 
@@ -263,6 +269,7 @@ check_skill() {
   local last_synced_date
   local last_reviewed_commit
   local review_decision
+  local deferred_source_commit
   local sync_mode
   local review_after
 
@@ -271,6 +278,7 @@ check_skill() {
   last_synced_date=$(get_field "$sync_file" "last_synced_date" || true)
   last_reviewed_commit=$(get_field "$sync_file" "last_reviewed_commit" || true)
   review_decision=$(get_field "$sync_file" "review_decision" || true)
+  deferred_source_commit=$(get_field "$sync_file" "deferred_source_commit" || true)
   sync_mode=$(get_field "$sync_file" "sync_mode" || true)
   review_after=$(get_field "$sync_file" "review_after" || true)
 
@@ -283,6 +291,27 @@ check_skill() {
 
   if [[ -z "$last_synced_date" ]] || ! [[ "$last_synced_date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
     echo "[STALE METADATA] $skill - last_synced_date must be present and use YYYY-MM-DD (got '${last_synced_date:-missing}')"
+    return 2
+  fi
+
+  case "$sync_mode" in
+    canonical|external|not-applicable) ;;
+    *)
+      echo "[INVALID METADATA] $skill - unknown sync_mode '$sync_mode'"
+      return 2
+      ;;
+  esac
+
+  case "$review_decision" in
+    ""|updated|no-update-needed|intentional-divergence|deferred|further-review-required) ;;
+    *)
+      echo "[INVALID METADATA] $skill - unknown review_decision '$review_decision'"
+      return 2
+      ;;
+  esac
+
+  if [[ -n "$last_reviewed_commit" ]] && ! [[ "$last_reviewed_commit" =~ ^[0-9a-fA-F]{7,40}$ ]]; then
+    echo "[INVALID METADATA] $skill - last_reviewed_commit is not a Git commit prefix: '$last_reviewed_commit'"
     return 2
   fi
 
@@ -338,6 +367,21 @@ check_skill() {
     return 2
   fi
 
+  # A deferred review records the source revision that still needs attention
+  # without advancing the reviewed synchronization state.
+  if [[ "$review_decision" == "deferred" ]]; then
+    if [[ -z "$deferred_source_commit" ]]; then
+      echo "[INVALID METADATA] $skill - review_decision is deferred but no deferred_source_commit is recorded"
+      return 2
+    fi
+    if [[ "$deferred_source_commit" == "$latest_commit" ]]; then
+      echo "[DEFERRED] $skill - review deferred at $(short_sha "$latest_commit"); synchronization state was not advanced"
+      return 1
+    fi
+    echo "[REVIEW REQUIRED] $skill - deferred review is stale: deferred at $(short_sha "$deferred_source_commit"), canonical now $(short_sha "$latest_commit")"
+    return 1
+  fi
+
   # A recorded review of the current canonical commit is the strongest signal.
   if [[ -n "$last_reviewed_commit" && "$last_reviewed_commit" == "$latest_commit" ]]; then
     case "$review_decision" in
@@ -351,6 +395,10 @@ check_skill() {
         ;;
       no-update-needed)
         echo "[SYNCED]  $skill - reviewed at $(short_sha "$latest_commit"); no skill update needed"
+        return 0
+        ;;
+      intentional-divergence)
+        echo "[INTENTIONAL DIVERGENCE] $skill - reviewed at $(short_sha "$latest_commit"); documented divergence retained"
         return 0
         ;;
       further-review-required)
@@ -414,6 +462,8 @@ synced_count=0
 review_count=0
 na_count=0
 external_count=0
+intentional_count=0
+deferred_count=0
 error_count=0
 review_items=()
 error_items=()
@@ -431,16 +481,27 @@ for sync_file in "$SKILLS_DIR"/*/SYNC.md; do
   status=$?
   case $status in
     0)
-      # Distinguish N/A and external in the counters for the summary.
+      # Distinguish reviewed states in the counters for the summary.
       if grep -q '^sync_mode: not-applicable' "$sync_file"; then
         na_count=$((na_count + 1))
       elif grep -q '^sync_mode: external' "$sync_file"; then
         external_count=$((external_count + 1))
+      elif grep -q '^review_decision: intentional-divergence' "$sync_file"; then
+        intentional_count=$((intentional_count + 1))
+      elif grep -q '^review_decision: deferred' "$sync_file"; then
+        deferred_count=$((deferred_count + 1))
       else
         synced_count=$((synced_count + 1))
       fi
       ;;
-    1) review_count=$((review_count + 1)); review_items+=("$skill") ;;
+    1)
+      if grep -q '^review_decision: deferred' "$sync_file"; then
+        deferred_count=$((deferred_count + 1))
+      else
+        review_count=$((review_count + 1))
+      fi
+      review_items+=("$skill")
+      ;;
     2) error_count=$((error_count + 1)); error_items+=("$skill") ;;
   esac
 done
@@ -473,6 +534,8 @@ done
 echo ""
 echo "=== Summary ==="
 echo "Synced: $synced_count"
+echo "Intentional divergence: $intentional_count"
+echo "Deferred: $deferred_count"
 echo "Not applicable: $na_count"
 echo "External (not compared): $external_count"
 echo "Review required: $review_count"
@@ -498,14 +561,14 @@ echo ""
 echo "To record a review decision:"
 echo "  1. Review the canonical diff and update skills/<name>/SKILL.md only where needed."
 echo "  2. Add or update last_reviewed_commit, review_decision, and last_synced_commit in skills/<name>/SYNC.md."
-echo "     review_decision: updated | no-update-needed | further-review-required"
+echo "     review_decision: updated | no-update-needed | intentional-divergence | deferred | further-review-required"
 echo "  3. Keep the skill concise; never copy the full canonical guide over the distillation."
 echo ""
 
 if [[ $error_count -gt 0 ]]; then
   exit 2
 fi
-if [[ $review_count -gt 0 ]]; then
+if [[ $review_count -gt 0 || $deferred_count -gt 0 ]]; then
   exit 1
 fi
 exit 0

@@ -144,11 +144,23 @@ Each skill directory contains a `SYNC.md` recording:
   distillation of one local canonical guide
 
 [`scripts/sync-check.sh`](./scripts/sync-check.sh) is the single comparison
-engine. It reports canonical changes, orphans, missing mappings, external
-review dates, and shared-vocabulary drift. It does not call a model or the
-network and it never rewrites a skill. The
-[workflow](./.github/workflows/skill-sync-check.yml) runs it on a schedule and
-on relevant pushes, and opens or updates one issue per finding. The
+engine. [`scripts/sync.mjs`](./scripts/sync.mjs) is the local-first CLI around
+it. See [SYNC_WORKFLOW.md](./SYNC_WORKFLOW.md) for the full model.
+
+```bash
+npm run sync:status
+npm run sync:diff -- --skill forms
+npm run sync:review -- --skill forms --decision no-update --note "No material change"
+npm run sync:validate
+npm run sync:report -- --output sync-report.md
+```
+
+The CLI discovers the canonical checkout from `--canonical`, an environment
+variable, `sync.config.yaml`, or a sibling directory. It does not need a model,
+the network, GitHub credentials, or a monorepo. The
+[workflow](./.github/workflows/skill-sync-check.yml) runs the same engine on a
+schedule and on relevant pushes, and opens or updates one issue per finding.
+The
 [ACCESSIBILITY.md workflow](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/.github/workflows/sync-check-accessibility-skills.yml)
 runs the same engine against its checkout and links to that issue instead of
 creating a duplicate.
@@ -167,8 +179,12 @@ They are intentionally separate from `skills/` so they are not bundled into the
 published skill archives.
 
 Each manifest points to the skill file it evaluates and can include prompt,
-expected output, and rule-based expectations. Start with a small pilot set, run
-`npm run validate:evals`, and expand once the schema and review process are stable.
+expected output, and rule-based expectations. Representative skills
+(`forms`, `keyboard`, `charts-graphs`, `bug-reporting`, and
+`user-personalization`) include negative guardrails against unsupported
+conformance claims, disability inference, and claims made without manual
+testing. Start with a small pilot set, run `npm run validate:evals`, and expand
+once the schema and review process are stable.
 
 To score model output, place response files under `responses/<skill-name>/` and
 run `npm run run:evals`. The runner looks for `<id>.txt` or `<id>.md` for each
