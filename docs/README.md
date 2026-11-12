@@ -13,6 +13,7 @@ maintained and how it relates to `ACCESSIBILITY.md`.
   are curated.
 - [AI-assisted accessibility audits guide](./AI_AUDIT_GUIDE.md) — when to use
   skills versus scanners during an audit.
+- [Project learnings](./LEARNINGS.md) — durable maintenance lessons from this work.
 
 For the installable skills, see [`../skills/`](../skills/). For evaluation
 fixtures, see [`../evals/`](../evals/). The root
