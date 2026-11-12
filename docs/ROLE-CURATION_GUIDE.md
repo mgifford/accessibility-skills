@@ -57,7 +57,7 @@ roles/
 #### Modified Files:
 1. **`scripts/generate-role-indexes.js`** - Updated to not overwrite ROLE.md, generate task-summary.md instead
 2. **`roles/*/ROLE.md`** - Recreate as curated content (to be populated)
-3. **`ARCHITECTURE.md`** - Update to reflect new structure
+3. **`docs/ARCHITECTURE.md`** - Update to reflect new structure
 4. **`ai-workflows/README.md`** - Update if referencing role structure
 
 #### New Files:
@@ -94,7 +94,7 @@ roles/
    - What the role doesn't own
 
 #### Phase 3: Update Documentation
-1. Update `ARCHITECTURE.md` to reflect new structure
+1. Update `docs/ARCHITECTURE.md` to reflect new structure
 2. Add guidance README for role curation
 3. Update AI workflow documentation if needed
 
@@ -145,9 +145,9 @@ Content creation and management for accessible digital experiences
 - Clear, reachable content
 
 ## Generated Task Indexes
-- [Primary Tasks](./generated/primary-tasks.csv)
-- [Secondary Tasks](./generated/secondary-tasks.js)
-- [Contributor Tasks](./generated/contributor-tasks.csv)
+- [Primary Tasks](../roles/content-authoring/generated/primary-tasks.csv)
+- [Secondary Tasks](../roles/content-authoring/generated/secondary-tasks.csv)
+- [Contributor Tasks](../roles/content-authoring/generated/contributor-tasks.csv)
 ```
 
 ### 6. Initial Roles to Implement

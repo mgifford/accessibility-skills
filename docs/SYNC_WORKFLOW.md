@@ -61,7 +61,7 @@ expected repository markers, and rejects an unrelated checkout. An explicit
 path that is not a Git checkout is an error; it is never silently replaced by
 a sibling.
 
-Copy [`sync.config.example.yaml`](./sync.config.example.yaml) to
+Copy [`sync.config.example.yaml`](../sync.config.example.yaml) to
 `sync.config.yaml` for a committed relationship, or to
 `.accessibility-sync.local.yaml` for a machine-specific override. The local
 override is ignored by Git. Relative paths resolve from the config file.
@@ -210,7 +210,7 @@ it records a finding.
 
 ## Optional AI assistance
 
-[`prompts/UPDATE_SKILL_FROM_CANONICAL.md`](./prompts/UPDATE_SKILL_FROM_CANONICAL.md)
+[`prompts/UPDATE_SKILL_FROM_CANONICAL.md`](../prompts/UPDATE_SKILL_FROM_CANONICAL.md)
 provides a bounded drafting task. AI may propose a minimal edit; it may not
 certify accessibility, invent requirements, change canonical guidance, or
 advance synchronization metadata. The maintainer records the decision and runs

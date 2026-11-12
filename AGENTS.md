@@ -60,7 +60,7 @@ Before changing a skill that mirrors `ACCESSIBILITY.md`:
 
 Do not edit `SYNC.md` metadata by hand to make a check pass. Do not edit the
 canonical guide merely to match the skill. Do not commit, push, or merge
-without authorization. See [SYNC_WORKFLOW.md](./SYNC_WORKFLOW.md).
+without authorization. See [SYNC_WORKFLOW.md](./docs/SYNC_WORKFLOW.md).
 
 Optional AI assistance is bounded by
 [prompts/UPDATE_SKILL_FROM_CANONICAL.md](./prompts/UPDATE_SKILL_FROM_CANONICAL.md);

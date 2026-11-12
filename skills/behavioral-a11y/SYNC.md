@@ -2,8 +2,10 @@
 
 ```yaml
 canonical_source: examples/BEHAVIORAL_ACCESSIBILITY_AUTOMATION.md
-last_synced_commit: "69b2ee89eb860eef791107f92f13c61cca6c7fd9"
-last_synced_date: "2026-07-26"
+last_synced_commit: "8ee537d2d537cf9d7075a03ef4f5bd855d4a6751"
+last_synced_date: "2026-11-12"
+review_decision: no-update-needed
+last_reviewed_commit: "8ee537d2d537cf9d7075a03ef4f5bd855d4a6751"
 skill_maintainer: ""
 notes: >
   New skill created to close a gap the canonical file itself documents:
@@ -45,3 +47,7 @@ When the canonical source changes and CI flags drift:
 3. Update `SKILL.md` to reflect new requirements, changed patterns, or removed guidance
 4. Set `last_synced_commit` to the current commit SHA of `mgifford/ACCESSIBILITY.md`
 5. Rebuild: `cd skills && zip -r behavioral-a11y.skill behavioral-a11y/`
+
+## Review history
+
+- 2026-11-12 reviewed 8ee537d2d537cf9d7075a03ef4f5bd855d4a6751: no-update-needed - The canonical behavioral guide only changed its Definition of Done link after the documentation move; no skill content change is needed.
