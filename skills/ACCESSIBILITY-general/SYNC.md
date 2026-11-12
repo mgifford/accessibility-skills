@@ -2,9 +2,9 @@
 
 ```yaml
 canonical_source: AGENTS.md
-last_synced_commit: "5c1cd0fa5cb715e97ed1a5d3a5a61390c8a110d3"
+last_synced_commit: "8f95228f0012fc2a165c033fa851b28c46fe489e"
 last_synced_date: "2026-11-12"
-last_reviewed_commit: "5c1cd0fa5cb715e97ed1a5d3a5a61390c8a110d3"
+last_reviewed_commit: "8f95228f0012fc2a165c033fa851b28c46fe489e"
 review_decision: no-update-needed
 skill_maintainer: ""
 notes: >
@@ -23,6 +23,7 @@ notes: >
 - 2026-11-11 review (5d85cc1 -> 45d6b46): `AGENTS.md` added the canonical-registry ownership note and resource-discovery links. The skill already routes agents to the registry and now links the canonical copy directly; no routing change was needed. Metadata advanced after review.
 
 - 2026-11-12 reviewed 5c1cd0fa5cb715e97ed1a5d3a5a61390c8a110d3: no-update-needed - AGENTS.md added cross-repository maintenance guidance; the general skill is for projects consuming ACCESSIBILITY.md and does not need maintainer workflow details.
+- 2026-11-12 reviewed 8f95228f0012fc2a165c033fa851b28c46fe489e: no-update-needed - Canonical follow-up was rebased onto main; AGENTS.md content is unchanged from the previously reviewed revision.
 
 ## How to Update This Skill
 
