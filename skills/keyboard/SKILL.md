@@ -355,7 +355,7 @@ remain linear.
 reviewed reference. It keeps authored content in the light DOM and falls back to
 linear sections without JavaScript or when the tablist does not fit;
 `fixed-tabs` removes that fallback. This is a reference, not a recommendation.
-Test the component in context.
+Test the component in context. Check the [component registry](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/TRUSTED_SOURCES.md#component-reference-curation) for the reviewed metadata and limitations.
 
 ---
 

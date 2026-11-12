@@ -234,7 +234,7 @@ preference.
 [`<theme-switcher>`](https://github.com/aarongustafson/theme-switcher) is one
 reviewed reference for a System/Light/Dark control. It leaves colours to CSS and
 documents an authored-radio fallback. This is a reference, not a recommendation;
-evaluate the licence, tests, limitations, and context before using it.
+evaluate the licence, tests, limitations, and context before using it. Check the [component registry](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/TRUSTED_SOURCES.md#component-reference-curation) for the reviewed metadata.
 
 ---
 

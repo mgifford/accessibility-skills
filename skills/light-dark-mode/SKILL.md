@@ -95,7 +95,7 @@ name is not an accessible role or name.
 reviewed reference. It writes `data-theme` and leaves colours to CSS; its
 minimal generated form has no usable controls without JavaScript, and authored
 radios are the documented fallback. This is a reference, not a recommendation.
-Check the registry, licence, tests, and limitations, and test it in context.
+Check the [component registry](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/TRUSTED_SOURCES.md#component-reference-curation) for metadata, licence, tests, and limitations, and test it in context.
 
 ---
 
