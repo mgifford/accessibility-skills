@@ -85,10 +85,10 @@ test('README does not install skills from the wrong repository', () => {
 
 
 test('local workflow documentation and prompt exist', () => {
-  for (const path of ['SYNC_WORKFLOW.md', 'prompts/UPDATE_SKILL_FROM_CANONICAL.md', 'sync.config.example.yaml']) {
+  for (const path of ['docs/SYNC_WORKFLOW.md', 'prompts/UPDATE_SKILL_FROM_CANONICAL.md', 'sync.config.example.yaml']) {
     assert.ok(existsSync(join(ROOT, path)), `${path} is missing`);
   }
-  const workflow = read('SYNC_WORKFLOW.md');
+  const workflow = read('docs/SYNC_WORKFLOW.md');
   for (const command of ['sync:status', 'sync:diff', 'sync:review', 'sync:validate', 'sync:report']) {
     assert.match(workflow, new RegExp(command), `${command} is not documented`);
   }

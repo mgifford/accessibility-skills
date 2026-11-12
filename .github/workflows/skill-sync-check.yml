@@ -11,7 +11,7 @@ on:
       - "workflows/**"
       - "scripts/sync-check.sh"
       - "scripts/sync.mjs"
-      - "SYNC_WORKFLOW.md"
+      - "docs/SYNC_WORKFLOW.md"
       - "prompts/**"
       - "evals/**"
       - "tests/**"

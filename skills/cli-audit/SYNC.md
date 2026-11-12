@@ -3,7 +3,7 @@
 ```yaml
 sync_mode: not-applicable
 last_synced_date: "2026-11-11"
-not_applicable_reason: "No single canonical prose source; this skill wraps Playwright and axe checks and follows the finding schema. See SKILL.md and AI_AUDIT_GUIDE.md."
+not_applicable_reason: "No single canonical prose source; this skill wraps Playwright and axe checks and follows the finding schema. See SKILL.md and docs/AI_AUDIT_GUIDE.md."
 skill_maintainer: ""
 notes: >
   This skill is an operational wrapper rather than a distillation of one
@@ -16,7 +16,7 @@ notes: >
 ## How to Update This Skill
 
 1. Review changes to the finding schema, finding tracking guide, and
-   `AI_AUDIT_GUIDE.md`.
+   `docs/AI_AUDIT_GUIDE.md`.
 2. Update the skill only when its operational instructions or output shape
    change.
 3. Do not add a fake canonical source.
