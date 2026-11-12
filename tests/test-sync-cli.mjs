@@ -160,6 +160,8 @@ test('review no-update advances the reviewed revision and reports synced', () =>
   assert.match(sync, new RegExp(`last_synced_commit: "${latest}"`));
   assert.match(sync, /review_decision: no-update-needed/);
   assert.match(sync, /Review history/);
+  const howToUpdate = sync.indexOf('## How to Update');
+  assert.ok(howToUpdate === -1 || sync.indexOf('## Review history') < howToUpdate, 'review history must stay in its section');
   const status = cli(f.skills, ['status']);
   assert.equal(status.status, 0, status.stdout + status.stderr);
   assert.match(status.stdout, /SYNCED\s+alpha/);

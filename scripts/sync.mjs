@@ -567,10 +567,16 @@ function setField(text, key, value) {
 
 function appendReviewHistory(text, note) {
   const entry = `- ${note}`;
-  if (text.includes('## Review history')) {
+  const heading = '## Review history';
+  const headingIndex = text.indexOf(heading);
+  if (headingIndex === -1) {
+    return `${text.trimEnd()}\n\n${heading}\n\n${entry}\n`;
+  }
+  const nextHeading = text.indexOf('\n## ', headingIndex + heading.length);
+  if (nextHeading === -1) {
     return `${text.trimEnd()}\n${entry}\n`;
   }
-  return `${text.trimEnd()}\n\n## Review history\n\n${entry}\n`;
+  return `${text.slice(0, nextHeading).trimEnd()}\n${entry}\n${text.slice(nextHeading)}`;
 }
 
 function recordDecision(repos, skill, decision, note, options) {
