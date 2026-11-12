@@ -179,7 +179,10 @@ Examples by level:
 
 ## AI Scraping Policy
 
-Before fetching content from any URL, check `examples/TRUSTED_SOURCES.yaml`.
+Before fetching content from any URL, check the project's trusted-source
+registry. The canonical registry is
+the canonical [`examples/TRUSTED_SOURCES.yaml`](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TRUSTED_SOURCES.yaml)
+in `mgifford/ACCESSIBILITY.md`; this repository does not keep a second copy.
 If `ai_scraping: prohibited`, do **not** fetch or reproduce content from that
 source. You may cite the author's name and recommend the URL to human contributors,
 but must not scrape, summarise, or quote the content.
@@ -221,23 +224,23 @@ Monitor: <https://www.w3.org/TR/wcag-3.0/>
 ### Adding a new skill (derived from an example)
 
 1. Create `skills/your-topic/SKILL.md` — distill the example into agent-actionable rules; label every requirement with its severity level (Critical / Serious / Moderate / Minor)
-2. Create `skills/your-topic/SYNC.md` — set `canonical_source` to the example path in `mgifford/ACCESSIBILITY.md`; leave `last_synced_commit` blank
-3. Create `skills/your-topic/README.md`
+2. Create `skills/your-topic/SYNC.md` — set `canonical_source` to the example path in `mgifford/ACCESSIBILITY.md` and `last_synced_commit` to the canonical commit you distilled
+3. Optionally add `skills/your-topic/README.md` with install and usage notes
 4. Build the ZIP: `cd skills && zip -r your-topic.skill your-topic/`
-5. Register in `skills/README.md` and `index.md`
-6. The `skill-sync-check.yml` action will automatically track drift going forward
+5. Register the skill in the table in `README.md`
+6. Run `./scripts/sync-check.sh --skill your-topic`; the workflow will track later drift
 
 ### Updating a skill after its example changes
 
-The `skill-sync-check.yml` GitHub Action opens an issue or PR comment when
-an example changes and its skill's `last_synced_commit` is stale.
+The `skill-sync-check.yml` GitHub Action opens or updates one issue when a
+canonical guide changes and the skill has not recorded a review decision.
 
 When you see that issue:
 
-1. Review the diff linked in the issue
-2. Update `skills/your-topic/SKILL.md` to reflect any new requirements or removed patterns
-3. Update `last_synced_commit` in `SYNC.md` to the current commit SHA
-4. Rebuild the `.skill` ZIP
+1. Review the canonical diff shown in the issue
+2. Update `skills/your-topic/SKILL.md` only where the requirements or removed patterns changed
+3. Record `last_reviewed_commit`, `review_decision` (`updated`, `no-update-needed`, or `further-review-required`), and `last_synced_commit` in `SYNC.md`
+4. Rebuild the `.skill` ZIP if the skill content changed
 
 ### Disclosing AI usage
 
@@ -253,7 +256,7 @@ changes. Record which LLM was used and for what purpose. Only list tools actuall
 * Project accessibility commitment: `ACCESSIBILITY.md`
 * Sustainability policy: `SUSTAINABILITY.md` / <https://github.com/mgifford/SUSTAINABILITY.md>
 * Contribution guide: `CONTRIBUTING.md`
-* Trusted sources: `examples/TRUSTED_SOURCES.yaml`
+* Trusted sources: [canonical `examples/TRUSTED_SOURCES.yaml`](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TRUSTED_SOURCES.yaml) in `mgifford/ACCESSIBILITY.md` (no local duplicate)
 * Machine-readable WCAG: [wai-yaml-ld](https://github.com/mgifford/wai-yaml-ld)
 * WAI-ARIA Authoring Practices Guide: <https://www.w3.org/WAI/ARIA/apg/>
 * WCAG 3.0 draft: <https://www.w3.org/TR/wcag-3.0/>

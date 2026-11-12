@@ -68,7 +68,9 @@ Do not treat these definitions as exhaustive. Consult the linked sources for dee
 When updating a perspective:
 
 1. Keep the file compact and agent-actionable.
-2. Cite sources already recognised by the repository (see `TRUSTED_SOURCES.yaml`).
+2. Cite sources already recognised by the project's trusted-source registry. The canonical registry is
+   [`examples/TRUSTED_SOURCES.yaml`](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TRUSTED_SOURCES.yaml)
+   in ACCESSIBILITY.md; this repository does not keep a second copy.
 3. Distinguish probable barriers from confirmed barriers.
 4. Do not claim AI can simulate lived experience.
 5. Do not describe all users within a category as having identical needs.

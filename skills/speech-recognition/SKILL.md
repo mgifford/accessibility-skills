@@ -96,12 +96,16 @@ associated `<label>`.
 ```
 
 The second example contains "Delete" and "report" but inserts other words
-between them — some speech tools may not match the phrase a user sees. A
-hidden *prefix* (context appearing before the visible word) is not
-automatically a 2.5.3 failure if the visible text still appears intact, but
-it can still make direct label activation harder — prefer not to put hidden
-words before the text a person sees. Put format hints/constraints in an
-`aria-describedby` description, not the name.
+between them — some speech tools may not match the phrase a user sees.
+Additional text before the visible label still conforms to WCAG 2.5.3 when
+the visible words remain intact, contiguous, and in order. W3C recommends
+placing visible text first. Product behaviour varies: Dragon and Windows
+Voice Access support partial matching, while Apple does not document
+partial-name matching. Prefer an exact name where possible; otherwise append
+necessary context and test the supported environments. A unique hidden
+suffix may help screen-reader users and speech products that accept full or
+partial names, but it does not guarantee easier voice operation. Put format
+hints/constraints in an `aria-describedby` description, not the name.
 
 ---
 
@@ -357,12 +361,16 @@ automated results as review items, not confirmed failures.
 
 ---
 
-## Common Failures
+## Common failures and usability risks
 
-| Failure | Correction |
+Repeated labels and hidden prefixes are not necessarily WCAG failures. The
+following patterns increase effort or reduce reliability for speech users.
+
+| Issue | Better approach |
 |---|---|
 | Visible "Save" button has hidden name "Confirm changes" | Use "Save," or a name beginning with "Save" |
 | Hidden words inserted inside the visible phrase | Keep visible words contiguous and in order |
+| Hidden suffix is relied on for uniqueness | Prefer specific visible labels; test the product's overlay and disambiguation |
 | Every repeated link is visibly "Read more" | Use specific visible text or append contextual hidden text after it |
 | Placeholder is the only field label | Add a persistent, associated `<label>` |
 | Icon-only button has no accessible name | Add a concise name; prefer persistent visible text |

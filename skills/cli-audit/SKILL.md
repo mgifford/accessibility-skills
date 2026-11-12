@@ -65,7 +65,8 @@ For each issue reported:
 5. Provide a concrete remediation recommendation tied to a skill rule.
 6. Preserve the tool's raw outcome (`axe.violations` vs. `axe.incomplete`, or
    the accessibility-tree evidence) rather than collapsing it into a single
-   pass/fail label.
+   pass/fail label. Playwright MCP refs and browser AX/DOM node IDs are
+   session metadata, not tracker IDs or fingerprint inputs.
 7. Report every `axe.violations` and `accessibilityTree` finding from this
    audit as `evidence_status: automated-indicator` with `handling: review`
    — this audit alone does not constitute the human confirmation needed for

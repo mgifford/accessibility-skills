@@ -2,8 +2,10 @@
 
 ```yaml
 canonical_source: examples/MANUAL_ACCESSIBILITY_TESTING_GUIDE.md
-last_synced_commit: "c8f7f47"
-last_synced_date: "2026-07-25"
+last_synced_commit: "a5967b3adab5f222652bd80cfba9051069b6d833"
+last_synced_date: "2026-11-11"
+last_reviewed_commit: "a5967b3adab5f222652bd80cfba9051069b6d833"
+review_decision: no-update-needed
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md.
@@ -25,6 +27,10 @@ notes: >
   from the canonical file's prose structure. Content substance is synced;
   presentation format is not expected to match verbatim.
 ```
+
+## Review history
+
+- 2026-11-11 review (c8f7f47 -> a5967b3): canonical added the precise SC 1.4.10 exception wording, the 320 CSS-pixel/400%-zoom equivalence, single-column clarification, and the reusable Playwright Reflow module reference. The skill already contained that guidance; no SKILL.md content change was needed. Metadata advanced after review.
 
 ## How to Update This Skill
 

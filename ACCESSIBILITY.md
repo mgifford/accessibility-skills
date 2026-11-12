@@ -26,4 +26,14 @@ That repo contains:
 
 ## How the two repos stay in sync
 
-Both repos share the same set of accessibility best practices. When the canonical example files in `mgifford/ACCESSIBILITY.md` are updated, the skills in this repo are updated to match. See the `SYNC.md` files in each skill directory for details.
+`examples/` in `mgifford/ACCESSIBILITY.md` is the canonical source. Skills in
+this repository are concise derivatives, not copies. Each skill records its
+canonical source and review status in `SYNC.md`; shared finding terminology,
+schemas, and fingerprints are tracked in `VOCABULARY_SYNC.md`.
+
+The deterministic check is `scripts/sync-check.sh`. A canonical change requires
+a documented review decision: update the skill, record that no update is
+needed, or mark further review as required. CI reports drift; it does not
+rewrite skill content. See the
+[README sync section](README.md#how-skills-stay-in-sync) for the workflow and
+issue ownership model.

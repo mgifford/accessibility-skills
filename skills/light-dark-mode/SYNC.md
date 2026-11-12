@@ -2,8 +2,10 @@
 
 ```yaml
 canonical_source: examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md
-last_synced_commit: "1374d8f"
-last_synced_date: "2026-07-15"
+last_synced_commit: "f7e3c24a222a787180d554fd1df4793bc05b39e2"
+last_synced_date: "2026-11-11"
+last_reviewed_commit: "f7e3c24a222a787180d554fd1df4793bc05b39e2"
+review_decision: updated
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md.
@@ -19,6 +21,10 @@ notes: >
   semantic design tokens and theme architecture that complements this
   skill's content; not folded into the skill body itself, just linked.
 ```
+
+## Review history
+
+- 2026-11-11 sync (1374d8f -> f7e3c24): canonical was restructured around required outcomes, System/Light/Dark selection, forced-colours, and the separation of `prefers-contrast` from `prefers-color-scheme`. The skill already covered the three-option selector, storage, anti-flash, forced-colours, and reduced-motion requirements; added a concise "Increased and Reduced Contrast Preferences" section so the skill no longer omits that distinct preference. No wholesale copy of the rewritten canonical guide.
 
 ## How to Update This Skill
 

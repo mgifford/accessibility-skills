@@ -6,8 +6,10 @@ Links this skill to its canonical source. Read by `.github/workflows/skill-sync-
 
 ```yaml
 canonical_source: examples/CI_CD_ACCESSIBILITY_BEST_PRACTICES.md
-last_synced_commit: "a4ccf278924692a3fa0e911ed6ef928676c248fa"
-last_synced_date: "2026-07-27"
+last_synced_commit: "9368ef6df3a7bd9f0552ba2f6f392cc3cd42e08f"
+last_synced_date: "2026-11-11"
+last_reviewed_commit: "9368ef6df3a7bd9f0552ba2f6f392cc3cd42e08f"
+review_decision: updated
 skill_maintainer: ""
 notes: >
   2026-07-27 sync pass (a5967b3 -> a4ccf27, mgifford/ACCESSIBILITY.md,
@@ -49,6 +51,10 @@ notes: >
   from the canonical file's prose structure. Content substance is synced;
   presentation format is not expected to match verbatim.
 ```
+
+## Review history
+
+- 2026-11-11 sync (a4ccf27 -> 9368ef6): canonical added "Beyond axe-core" behavioral interaction contracts (Tab reachability, disclosure/dialog state, post-submit error linkage, repeated-component contracts), fixture/failure cautions, and the Intopia Playwright reference. Added the concise "Behavior a rule scan cannot settle" subsection to SKILL.md. Did not copy the full canonical section or its test code.
 
 ## How to Update This Skill
 

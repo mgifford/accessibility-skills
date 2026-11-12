@@ -376,6 +376,34 @@ reason and the resulting colours are tested.
 
 ---
 
+## Required: Increased and Reduced Contrast Preferences
+
+`prefers-contrast` is separate from `prefers-color-scheme`. A user may request
+more or less contrast while using either a light or dark theme. Do NOT switch
+between light and dark mode just because a contrast preference is present.
+
+Support `prefers-contrast: more` with stronger text, border, and focus tokens.
+Do NOT reduce required text, component, or focus contrast in response to
+`prefers-contrast: less`; preserve the WCAG minimum. Gate progressive
+enhancements such as `contrast-color()` behind `@supports` with an explicit
+fallback, and keep testing actual colour pairs.
+
+```css
+@media (prefers-contrast: more) {
+  :root {
+    --color-text: #000000;
+    --color-background: #ffffff;
+    --color-border: #000000;
+    --color-focus: #000000;
+  }
+}
+```
+
+Do not treat forced-colours, high-contrast, `prefers-contrast`, and light/dark
+mode as interchangeable concepts.
+
+---
+
 ## Required: Accessible Naming and Status
 
 Use visible text labels: System, Light, Dark. Icons MAY supplement the labels

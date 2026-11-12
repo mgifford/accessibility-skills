@@ -2,8 +2,10 @@
 
 ```yaml
 canonical_source: examples/SPEECH_RECOGNITION_ACCESSIBILITY_BEST_PRACTICES.md
-last_synced_commit: "bb235f3"
-last_synced_date: "2026-07-22"
+last_synced_commit: "9ada92101120f9034e512a083e6197acbed14f5d"
+last_synced_date: "2026-11-11"
+last_reviewed_commit: "9ada92101120f9034e512a083e6197acbed14f5d"
+review_decision: updated
 skill_maintainer: ""
 notes: >
   GAP FOUND AND FIXED: this skill did not exist at all prior to 2026-07-22.
@@ -21,6 +23,10 @@ notes: >
   from the canonical file's prose structure. Content substance is synced;
   presentation format is not expected to match verbatim.
 ```
+
+## Review history
+
+- 2026-11-11 sync (bb235f3 -> 9ada921): canonical clarified that additional text before a visible label still conforms to WCAG 2.5.3 when the visible words remain intact, contiguous, and in order; added product-variation evidence for partial-name matching and the reminder that a hidden suffix does not guarantee easier voice operation; reframed the common-failures table as usability risks. Updated the skill concisely and did not copy the full compatibility table.
 
 ## How to Update This Skill
 

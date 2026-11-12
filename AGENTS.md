@@ -58,4 +58,10 @@ When adding or updating a skill:
 
 ## Trusted Sources
 
-Consult `TRUSTED_SOURCES.yaml` for a curated list of authoritative accessibility references.
+The canonical registry is
+[`examples/TRUSTED_SOURCES.yaml`](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TRUSTED_SOURCES.yaml)
+in the ACCESSIBILITY.md repository. Use the
+[human-readable guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/TRUSTED_SOURCES.md)
+for authority, licensing, AI-use, and task-based discovery. This repository
+does not maintain a second copy. Inclusion is not an endorsement, and registry
+metadata does not grant reuse or training rights.
