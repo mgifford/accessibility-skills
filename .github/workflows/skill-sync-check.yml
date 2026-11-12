@@ -10,6 +10,12 @@ on:
       - "skills/**"
       - "workflows/**"
       - "scripts/sync-check.sh"
+      - "scripts/sync.mjs"
+      - "SYNC_WORKFLOW.md"
+      - "prompts/**"
+      - "evals/**"
+      - "tests/**"
+      - "package.json"
       - "VOCABULARY_SYNC.md"
       - ".github/workflows/skill-sync-check.yml"
       - ".github/scripts/upsert-issue.js"
@@ -96,7 +102,7 @@ jobs:
               '',
               'To resolve:',
               '1. Review the canonical diff shown in the report and update `skills/<name>/SKILL.md` only where needed.',
-              '2. Record the decision in `skills/<name>/SYNC.md`: `review_decision: updated`, `no-update-needed`, or `further-review-required`, plus `last_reviewed_commit` and `last_synced_commit`.',
+              '2. Record the decision with `npm run sync:review -- --skill <name> --decision <update|no-update|divergence|defer> --note "..."`.',
               '3. Do not copy the full canonical guide over the distilled skill.',
               '',
               `Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
@@ -147,6 +153,22 @@ jobs:
               labelDescription: 'Tracks shared finding-vocabulary synchronization with mgifford/ACCESSIBILITY.md',
             });
             console.log(JSON.stringify(result));
+
+      - name: Generate machine-readable report
+        if: always()
+        working-directory: accessibility-skills
+        env:
+          ACCESSIBILITY_MD_DIR: ${{ github.workspace }}/ACCESSIBILITY.md
+        run: |
+          node scripts/sync.mjs report --format json --output /tmp/sync-report.json || true
+
+      - name: Upload synchronization report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-skills-sync-report
+          path: /tmp/sync-report.json
+          if-no-files-found: ignore
 
       - name: Fail when review or repair is required
         if: steps.sync_check.outputs.has_review == 'true' || steps.vocab_check.outputs.has_review == 'true'

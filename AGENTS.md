@@ -48,13 +48,32 @@ Before working on a topic area, read the relevant skill file:
 - Touch and pointer: read `skills/touch-pointer/SKILL.md`
 - User personalization: read `skills/user-personalization/SKILL.md`
 
+## Local Synchronization
+
+Before changing a skill that mirrors `ACCESSIBILITY.md`:
+
+1. Run `npm run sync:status`.
+2. Inspect the upstream change with `npm run sync:diff -- --skill <name>`.
+3. Update only the necessary `SKILL.md` content; keep it a distillation.
+4. Record the decision with `npm run sync:review -- --skill <name> --decision <update|no-update|divergence|defer> --note "..."`.
+5. Run `npm run sync:validate`.
+
+Do not edit `SYNC.md` metadata by hand to make a check pass. Do not edit the
+canonical guide merely to match the skill. Do not commit, push, or merge
+without authorization. See [SYNC_WORKFLOW.md](./SYNC_WORKFLOW.md).
+
+Optional AI assistance is bounded by
+[prompts/UPDATE_SKILL_FROM_CANONICAL.md](./prompts/UPDATE_SKILL_FROM_CANONICAL.md);
+the maintainer records the review decision.
+
 ## Contributing
 
 When adding or updating a skill:
 
 1. Create `skills/<topic>/SKILL.md` with distilled, agent-actionable rules (no extended prose).
 2. Create `skills/<topic>/SYNC.md` recording the `canonical_source` and `last_synced_commit`.
-3. Update the skills table in `README.md`.
+3. Run `npm run sync:validate`.
+4. Update the skills table in `README.md`.
 
 ## Trusted Sources
 

@@ -40,7 +40,14 @@
     "test:sync": "node tests/test-sync-check.mjs",
     "test:issues": "node tests/test-upsert-issue.mjs",
     "test:invariants": "node tests/test-repo-invariants.mjs",
-    "test": "npm run test:csv && npm run test:sync && npm run test:issues && npm run test:invariants"
+    "test": "npm run test:csv && npm run test:sync && npm run test:sync-cli && npm run test:issues && npm run test:invariants",
+    "sync:status": "node scripts/sync.mjs status",
+    "sync:list": "node scripts/sync.mjs list",
+    "sync:diff": "node scripts/sync.mjs diff",
+    "sync:review": "node scripts/sync.mjs review",
+    "sync:validate": "node scripts/sync.mjs validate",
+    "sync:report": "node scripts/sync.mjs report",
+    "test:sync-cli": "node tests/test-sync-cli.mjs"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.10.2",

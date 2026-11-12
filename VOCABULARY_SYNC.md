@@ -29,6 +29,16 @@ or `examples/schemas/` as their primary `canonical_source` in their own
 cannot detect drift in the shared vocabulary those skills reference. The
 `--vocab` check below closes that gap.
 
+## Local check
+
+```bash
+npm run sync:status
+npm run sync:validate
+```
+
+`sync:validate` runs the per-skill engine, this vocabulary check, and the
+deterministic Node test suites. It does not call a model or the network.
+
 ## What `--vocab` checks
 
 ```bash

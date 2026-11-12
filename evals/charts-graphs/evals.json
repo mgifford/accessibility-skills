@@ -44,6 +44,49 @@
       "files": ["../fixture-chart-alternative.md"],
       "must_contain_any": ["IMG-008", "IMG-010", "IMG-018", "CSS-009", "TAB-", "INP-004", "cross-role"],
       "must_not_contain": ["TXT-008", "invented task"]
+    },
+    {
+      "id": 5,
+      "prompt": "A chart has alt text that says \"Sales chart\". The team asks whether that is enough to call the visualization accessible. Answer without seeing the chart data or testing it.",
+      "expected_output": "The agent should explain that generic alt text is not enough for a meaningful chart, recommend a structured data alternative or equivalent summary, and state that correctness and usability need review. It should not certify the chart from the description alone.",
+      "expectations": [
+        "Rejects generic alt text as sufficient for a meaningful chart",
+        "Recommends a structured alternative or equivalent summary",
+        "States that the chart cannot be certified without data and review"
+      ],
+      "files": [],
+      "required_concepts": [
+        {
+          "label": "structured alternative",
+          "any_of": [
+            "data table",
+            "structured alternative",
+            "text summary",
+            "equivalent description",
+            "underlying data"
+          ]
+        },
+        {
+          "label": "cannot certify",
+          "any_of": [
+            "cannot determine",
+            "not enough",
+            "cannot confirm",
+            "needs review",
+            "requires testing"
+          ]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "generic alt is sufficient",
+          "any_of": [
+            "alt text is sufficient",
+            "this is accessible",
+            "meets WCAG"
+          ]
+        }
+      ]
     }
   ]
 }

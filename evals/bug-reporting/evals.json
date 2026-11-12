@@ -305,6 +305,50 @@
           "any_of": ["must calculate a fingerprint", "requires a fingerprint to be valid", "compute one anyway"]
         }
       ]
+    },
+    {
+      "id": 15,
+      "prompt": "An automated scanner reports zero accessibility violations. The team asks: \"So the audit is complete and the product is accessible, right?\" Draft a short, honest response.",
+      "expected_output": "The agent should explain that zero automated findings is not proof of accessibility or WCAG conformance, identify what the scan cannot cover, and recommend manual and assistive-technology testing and user research.",
+      "expectations": [
+        "Does not treat a clean scan as conformance evidence",
+        "Names limits of automated scanning",
+        "Recommends manual and assistive-technology testing"
+      ],
+      "files": [],
+      "required_concepts": [
+        {
+          "label": "clean scan is not proof",
+          "any_of": [
+            "not proof",
+            "does not prove",
+            "cannot confirm",
+            "not sufficient",
+            "not a conformance"
+          ]
+        },
+        {
+          "label": "manual or AT testing",
+          "any_of": [
+            "manual test",
+            "assistive technology",
+            "screen reader",
+            "keyboard test",
+            "user testing"
+          ]
+        }
+      ],
+      "prohibited_concepts": [
+        {
+          "label": "clean scan means compliant",
+          "any_of": [
+            "audit is complete",
+            "product is accessible",
+            "fully compliant",
+            "zero violations means"
+          ]
+        }
+      ]
     }
   ]
 }
