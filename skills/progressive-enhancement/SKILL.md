@@ -212,6 +212,20 @@ reach **Serious**.
 
 ---
 
+## Serious: Web Component Dependencies
+
+A web component is a JavaScript enhancement. It must not gate core content,
+navigation, or form submission. Confirm what remains when the module fails or
+has not loaded, and whether the component renders or enhances native controls.
+
+The [Web Component Starter Template](https://github.com/aarongustafson/web-component-starter)
+is reviewed project scaffolding, not an accessible component. It cannot
+establish that a generated component is accessible. For component references,
+use the canonical registry and record the version, limitations, and test
+evidence; a reference is not permission to add a dependency.
+
+---
+
 ## What to Avoid
 
 * Rendering page content exclusively in JavaScript — **Critical**

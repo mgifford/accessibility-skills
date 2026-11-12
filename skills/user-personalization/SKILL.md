@@ -224,6 +224,20 @@ button, focus return to opener.
 
 ---
 
+### Reusable preference-control components
+
+A web component may implement the editor, but it must preserve native control
+semantics, user control, storage failure handling, and a usable no-JavaScript
+fallback. Do not let a custom element become the only way to change a
+preference.
+
+[`<theme-switcher>`](https://github.com/aarongustafson/theme-switcher) is one
+reviewed reference for a System/Light/Dark control. It leaves colours to CSS and
+documents an authored-radio fallback. This is a reference, not a recommendation;
+evaluate the licence, tests, limitations, and context before using it.
+
+---
+
 ## Moderate: Apply Presentation With CSS Variables, Not Raw Stored Strings
 
 ```css

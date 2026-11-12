@@ -31,3 +31,7 @@ When the canonical source changes and CI flags drift:
 3. Update `SKILL.md` to reflect new requirements, changed patterns, or removed guidance
 4. Set `last_synced_commit` to the current commit SHA of `mgifford/ACCESSIBILITY.md`
 5. Rebuild: `cd skills && zip -r user-personalization.skill user-personalization/`
+
+## Review history
+
+- 2026-11-12: added a concise reference to the reviewed `<theme-switcher>` component. The canonical `USER_PERSONALIZATION_ACCESSIBILITY_BEST_PRACTICES.md` source did not change, so no source revision was advanced; the registry entry records the component metadata.

@@ -2,9 +2,9 @@
 
 ```yaml
 canonical_source: examples/LIGHT_DARK_MODE_ACCESSIBILITY_BEST_PRACTICES.md
-last_synced_commit: "f7e3c24a222a787180d554fd1df4793bc05b39e2"
-last_synced_date: "2026-11-11"
-last_reviewed_commit: "f7e3c24a222a787180d554fd1df4793bc05b39e2"
+last_synced_commit: "25a354624bc81bb54d0cf80a88d92de24db6b326"
+last_synced_date: "2026-11-12"
+last_reviewed_commit: "25a354624bc81bb54d0cf80a88d92de24db6b326"
 review_decision: updated
 skill_maintainer: ""
 notes: >
@@ -25,6 +25,7 @@ notes: >
 ## Review history
 
 - 2026-11-11 sync (1374d8f -> f7e3c24): canonical was restructured around required outcomes, System/Light/Dark selection, forced-colours, and the separation of `prefers-contrast` from `prefers-color-scheme`. The skill already covered the three-option selector, storage, anti-flash, forced-colours, and reduced-motion requirements; added a concise "Increased and Reduced Contrast Preferences" section so the skill no longer omits that distinct preference. No wholesale copy of the rewritten canonical guide.
+- 2026-11-12 reviewed 25a354624bc81bb54d0cf80a88d92de24db6b326: updated - Added a web component option referencing theme-switcher, with fallback and testing boundaries.
 
 ## How to Update This Skill
 

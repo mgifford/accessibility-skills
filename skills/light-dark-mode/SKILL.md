@@ -83,6 +83,20 @@ or pointer hover across theme choices MUST NOT preview, select, or apply a theme
 Tabbing across System, Light, and Dark MUST leave the page colours unchanged
 until the user presses Enter or Space.
 
+### Web component option
+
+A custom element may generate or enhance the selector, but it must still render
+native radios or buttons with the same semantics, keyboard behaviour, and clear
+selected state. Preserve System/Light/Dark, storage failure handling, and a
+usable no-JavaScript fallback where the control is essential. A custom element
+name is not an accessible role or name.
+
+[`<theme-switcher>`](https://github.com/aarongustafson/theme-switcher) is one
+reviewed reference. It writes `data-theme` and leaves colours to CSS; its
+minimal generated form has no usable controls without JavaScript, and authored
+radios are the documented fallback. This is a reference, not a recommendation.
+Check the registry, licence, tests, and limitations, and test it in context.
+
 ---
 
 ## Required: HTML Structure
