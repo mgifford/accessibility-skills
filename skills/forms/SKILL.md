@@ -443,7 +443,9 @@ and an existing native or custom error must not be overwritten.
 is one reviewed reference. It compares the first two eligible text-type inputs
 and pins a custom validity message to the second. That is a narrow scope, not a
 general validation framework. This is a reference, not a recommendation; test
-the error announcement and no-JavaScript behaviour in context.
+the error announcement and no-JavaScript behaviour in context. Check the
+[component registry](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/TRUSTED_SOURCES.md#component-reference-curation)
+for the reviewed metadata and limitations.
 
 ---
 
