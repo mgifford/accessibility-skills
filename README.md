@@ -5,7 +5,7 @@ Each skill distills a full example into agent-actionable rules.
 **The `examples/` file is always the canonical source of truth.**
 
 > **Looking for the AGENTS.md approach?** If you want to add accessibility guidance to a project via `AGENTS.md` or `ACCESSIBILITY.md` files (for GitHub Copilot, Cursor, or any AI agent), see the companion repo: **[mgifford/ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md)**. See [ACCESSIBILITY.md](./ACCESSIBILITY.md) for a full comparison.
-> Not sure when to use AI skills vs scanners like axe?** Read [AI-Assisted Accessibility Audits Guide](./docs/AI_AUDIT_GUIDE.md).
+> Not sure when to use AI skills vs scanners like axe?** Read [AI-Assisted Accessibility Audits Guide](./docs/AI_AUDIT_GUIDE.md). For maintainer and architecture documentation, see [docs/README.md](./docs/README.md).
 > **New: See the [Operating Model](./docs/OPERATING_MODEL.md)
 
 ## Available Skills
