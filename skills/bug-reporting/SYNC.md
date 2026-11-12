@@ -2,8 +2,10 @@
 
 ```yaml
 canonical_source: examples/ACCESSIBILITY_BUG_REPORTING_BEST_PRACTICES.md
-last_synced_commit: "a4ccf278924692a3fa0e911ed6ef928676c248fa"
-last_synced_date: "2026-07-27"
+last_synced_commit: "45d6b464fadc4986a74d78244df9526a1a27ad9d"
+last_synced_date: "2026-11-11"
+last_reviewed_commit: "45d6b464fadc4986a74d78244df9526a1a27ad9d"
+review_decision: updated
 skill_maintainer: ""
 notes: >
   2026-07-27 sync pass (ce9aa2a -> a4ccf27, mgifford/ACCESSIBILITY.md,
@@ -110,6 +112,10 @@ notes: >
   not-yet-live linking already present in drupal-core's and open-scans'
   Stage 4B/4C updates.
 ```
+
+## Review history
+
+- 2026-11-11 sync (a4ccf27 -> 45d6b46): the canonical guide added a link to the Technical Evidence guide, the evidence-artifact and tool/session node reference rows, and the explicit observed / potential / verified / unsupported-assumption states under "Automation and AI Guardrails". Updated the skill with the session-identifier boundary and the four evidence states. Kept the skill concise; did not copy the canonical section.
 
 ## Sync-check methodology
 

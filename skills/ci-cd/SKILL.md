@@ -75,6 +75,26 @@ affected task and the likelihood/consequence of a regression:
 
 Use `skills/manual-testing/SKILL.md` for checks automation cannot complete.
 
+### Behavior a rule scan cannot settle
+
+A rule scan evaluates the page in whatever state it is in. It cannot press
+Tab, open a disclosure, submit an empty form, or observe where focus goes
+after a dialog closes. Add behavioral assertions for contracts such as:
+
+- every link, button, and form control is reachable with Tab;
+- disclosure state matches the content shown;
+- dialog focus enters the dialog and returns to its trigger;
+- form errors are marked and linked after submission;
+- the same component keeps the same contract on every instance.
+
+These are test results, not audit findings: no severity, no WCAG mapping,
+and no remediation advice. Confirm a check can fail against a known-broken
+fixture, and record browser/OS settings that change the result (for example,
+WebKit's keyboard-navigation default). Treat a first failure as evidence to
+investigate, not a confirmed defect. The Intopia Playwright article cited in
+the canonical guide is informative practitioner guidance, not a standard or
+a conformance suite.
+
 ---
 
 ## Critical: Define the CI Contract Before Choosing Tools

@@ -296,6 +296,15 @@ Explain what the excerpt demonstrates — here, the visible error isn't
 programmatically associated with the field. Do not assume an excerpt shows
 the entire computed accessibility tree.
 
+**Session identifiers are evidence metadata, not durable identity.**
+Playwright MCP refs and Chrome CDP `AXNodeId`/DOM node IDs locate a node
+inside one capture session. Do not use them as tracker IDs, durable
+locators, or fingerprint inputs. Use an evidence artifact reference for the
+stored snapshot/trace/excerpt, and use the project's tracker ID for durable
+work. See the canonical
+[Technical Evidence guide](https://mgifford.github.io/ACCESSIBILITY.md/examples/ACCESSIBILITY_FINDING_EVIDENCE.html)
+for collection and provenance.
+
 **Before sharing HTML, DOM snapshots, logs, or screenshots, remove:** tokens/
 cookies/hidden credentials; names/addresses/account data; private form field
 values; unnecessary internal URLs or IDs. For screenshots/recordings:
@@ -585,6 +594,17 @@ matters (`source.raw_result_reference` / `evidence.references`).
 
 Automation can collect and organize evidence — it should **not invent
 certainty, affected populations, or lived experience.**
+
+Keep the evidence state explicit:
+
+- **Observed behavior** — reproduced interface property/input/output, with conditions.
+- **Potential barrier** — a plausible mismatch that still needs investigation; not a confirmed defect.
+- **Verified finding** — confirmed through the project's review and evidence process, within a stated scope.
+- **Unsupported assumption** — a claim about a person, disability, AT use, cause, or impact that the evidence does not establish. Do not report it as a finding.
+
+A possible barrier is a reason to investigate, not a diagnosis of a person.
+Preserve uncertainty and keep interface observations separate from claims
+about people.
 
 An automated/AI-assisted workflow should:
 1. Preserve the raw result, tool/rule version, config, time, and tested URL/route

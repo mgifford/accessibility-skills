@@ -37,6 +37,15 @@ jobs:
       - name: Validate shared cross-repo policy fixture
         run: npm run test:shared-fixture
 
+      - name: Test the sync engine
+        run: npm run test:sync
+
+      - name: Test sync issue deduplication
+        run: npm run test:issues
+
+      - name: Test repository invariants
+        run: npm run test:invariants
+
       - name: Verify generated output is up to date
         run: |
           npm run generate:arrm-roles

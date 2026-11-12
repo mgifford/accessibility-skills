@@ -12,25 +12,33 @@ on:
       - "scripts/sync-check.sh"
       - "VOCABULARY_SYNC.md"
       - ".github/workflows/skill-sync-check.yml"
+      - ".github/scripts/upsert-issue.js"
 
 permissions:
   contents: read
   issues: write
 
+concurrency:
+  group: skill-sync-check
+  cancel-in-progress: true
+
 jobs:
   sync-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Check out accessibility-skills
         uses: actions/checkout@v4
         with:
           path: accessibility-skills
+          fetch-depth: 0
 
       - name: Check out mgifford/ACCESSIBILITY.md
         uses: actions/checkout@v4
         with:
           repository: mgifford/ACCESSIBILITY.md
           path: ACCESSIBILITY.md
+          fetch-depth: 0
 
       - name: Run sync check
         id: sync_check
@@ -40,70 +48,15 @@ jobs:
         run: |
           set +e
           ./scripts/sync-check.sh > /tmp/sync-check-output.txt 2>&1
-          exit_code=$?
+          code=$?
+          set -e
           cat /tmp/sync-check-output.txt
-          {
-            echo "output<<EOF"
-            cat /tmp/sync-check-output.txt
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-          # sync-check.sh exits non-zero whenever any skill shows drift,
-          # including documented (expected) divergence. Only undocumented
-          # drift (the [DRIFT] label) should open an issue.
-          if grep -q '^\[DRIFT\]' /tmp/sync-check-output.txt; then
-            echo "has_undocumented_drift=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_undocumented_drift=false" >> "$GITHUB_OUTPUT"
+          if [ "$code" -eq 1 ]; then
+            echo "has_review=true" >> "$GITHUB_OUTPUT"
+          elif [ "$code" -eq 2 ]; then
+            echo "has_error=true" >> "$GITHUB_OUTPUT"
+            echo "has_review=true" >> "$GITHUB_OUTPUT"
           fi
-          exit 0
-
-      - name: Open or update drift issue
-        if: steps.sync_check.outputs.has_undocumented_drift == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const title = "Skill sync drift detected against mgifford/ACCESSIBILITY.md";
-            const body = [
-              "The scheduled skill sync check found skills whose content differs",
-              "from their canonical source in `mgifford/ACCESSIBILITY.md`, without",
-              "a documented `DIVERGENCE:` note in the skill's `SYNC.md`.",
-              "",
-              "```",
-              "${{ steps.sync_check.outputs.output }}",
-              "```",
-              "",
-              "To resolve:",
-              "1. Review the diff: `./scripts/sync-check.sh --diff --skill <name>`",
-              "2. Update `skills/<name>/SKILL.md` to reflect the canonical source, or",
-              "   document the intentional difference with a `DIVERGENCE:` note in",
-              "   `skills/<name>/SYNC.md`",
-              "3. Update `last_synced_commit` and `last_synced_date` in `SYNC.md`",
-            ].join("\n");
-
-            const { data: issues } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: "open",
-              labels: ["skill-sync-drift"],
-            });
-            const existing = issues.find((i) => i.title === title);
-
-            if (existing) {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: existing.number,
-                body,
-              });
-            } else {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title,
-                body,
-                labels: ["skill-sync-drift"],
-              });
-            }
 
       - name: Run shared vocabulary sync check
         id: vocab_check
@@ -113,69 +66,90 @@ jobs:
         run: |
           set +e
           ./scripts/sync-check.sh --vocab > /tmp/vocab-check-output.txt 2>&1
-          exit_code=$?
+          code=$?
+          set -e
           cat /tmp/vocab-check-output.txt
-          {
-            echo "output<<EOF"
-            cat /tmp/vocab-check-output.txt
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-          if [[ $exit_code -ne 0 ]]; then
-            echo "has_vocab_drift=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_vocab_drift=false" >> "$GITHUB_OUTPUT"
+          if [ "$code" -eq 1 ]; then
+            echo "has_review=true" >> "$GITHUB_OUTPUT"
+          elif [ "$code" -eq 2 ]; then
+            echo "has_error=true" >> "$GITHUB_OUTPUT"
+            echo "has_review=true" >> "$GITHUB_OUTPUT"
           fi
-          exit 0
 
-      - name: Open or update vocabulary drift issue
-        if: steps.vocab_check.outputs.has_vocab_drift == 'true'
+      - name: Open or update skill sync issue
+        if: steps.sync_check.outputs.has_review == 'true'
         uses: actions/github-script@v7
+        env:
+          SYNC_REPORT_PATH: /tmp/sync-check-output.txt
         with:
           script: |
-            const title = "Shared vocabulary drift detected against mgifford/ACCESSIBILITY.md";
+            const fs = require('fs');
+            const path = process.env.GITHUB_WORKSPACE + '/accessibility-skills/.github/scripts/upsert-issue.js';
+            const { upsertIssue } = require(path);
+            const report = fs.readFileSync(process.env.SYNC_REPORT_PATH, 'utf8');
             const body = [
-              "The scheduled vocabulary sync check found that a shared",
-              "vocabulary source (finding terminology, lifecycle states,",
-              "the finding schema, or policy classification) changed since",
-              "its recorded sync point in `VOCABULARY_SYNC.md`.",
-              "",
-              "This is broader than a single skill's own canonical-source",
-              "check: these sources are consumed by several skills that do",
-              "not each list the source as their primary `canonical_source`.",
-              "",
-              "```",
-              "${{ steps.vocab_check.outputs.output }}",
-              "```",
-              "",
-              "To resolve:",
-              "1. Review every consumer skill listed in `VOCABULARY_SYNC.md`",
-              "   for the changed source, not only the skill that prompted it.",
-              "2. Update each affected `SKILL.md` and its own `SYNC.md`.",
-              "3. Update the recorded commit for that source in `VOCABULARY_SYNC.md`",
-              "   only after every listed consumer has been reviewed.",
-            ].join("\n");
-
-            const { data: issues } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: "open",
-              labels: ["vocabulary-sync-drift"],
+              'The sync check found a skill whose canonical source changed, an external review that is due, or a configuration problem.',
+              '',
+              '```',
+              report,
+              '```',
+              '',
+              'To resolve:',
+              '1. Review the canonical diff shown in the report and update `skills/<name>/SKILL.md` only where needed.',
+              '2. Record the decision in `skills/<name>/SYNC.md`: `review_decision: updated`, `no-update-needed`, or `further-review-required`, plus `last_reviewed_commit` and `last_synced_commit`.',
+              '3. Do not copy the full canonical guide over the distilled skill.',
+              '',
+              `Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            ].join('\n');
+            const result = await upsertIssue({
+              github,
+              context,
+              label: 'skill-sync-drift',
+              title: 'Skill sync needs review',
+              report,
+              body,
+              labelDescription: 'Tracks skill synchronization with mgifford/ACCESSIBILITY.md',
             });
-            const existing = issues.find((i) => i.title === title);
+            console.log(JSON.stringify(result));
 
-            if (existing) {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: existing.number,
-                body,
-              });
-            } else {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title,
-                body,
-                labels: ["vocabulary-sync-drift"],
-              });
-            }
+      - name: Open or update vocabulary sync issue
+        if: steps.vocab_check.outputs.has_review == 'true'
+        uses: actions/github-script@v7
+        env:
+          VOCAB_REPORT_PATH: /tmp/vocab-check-output.txt
+        with:
+          script: |
+            const fs = require('fs');
+            const path = process.env.GITHUB_WORKSPACE + '/accessibility-skills/.github/scripts/upsert-issue.js';
+            const { upsertIssue } = require(path);
+            const report = fs.readFileSync(process.env.VOCAB_REPORT_PATH, 'utf8');
+            const body = [
+              'The shared-vocabulary check found a source that changed since its recorded sync point.',
+              '',
+              '```',
+              report,
+              '```',
+              '',
+              'To resolve:',
+              '1. Review the diff for every consumer listed in `VOCABULARY_SYNC.md`, not only the first one.',
+              '2. Update the affected `SKILL.md` files and their own `SYNC.md` metadata.',
+              '3. Update the recorded commit in `VOCABULARY_SYNC.md` only after every consumer has been reviewed.',
+              '',
+              `Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            ].join('\n');
+            const result = await upsertIssue({
+              github,
+              context,
+              label: 'vocabulary-sync-drift',
+              title: 'Shared vocabulary sync needs review',
+              report,
+              body,
+              labelDescription: 'Tracks shared finding-vocabulary synchronization with mgifford/ACCESSIBILITY.md',
+            });
+            console.log(JSON.stringify(result));
+
+      - name: Fail when review or repair is required
+        if: steps.sync_check.outputs.has_review == 'true' || steps.vocab_check.outputs.has_review == 'true'
+        run: |
+          echo "Sync review is required. See the issue opened or updated by this run."
+          exit 1

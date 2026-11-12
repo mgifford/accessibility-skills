@@ -2,8 +2,10 @@
 
 ```yaml
 canonical_source: examples/SVG_ACCESSIBILITY_BEST_PRACTICES.md
-last_synced_commit: "bb235f3"
-last_synced_date: "2026-07-22"
+last_synced_commit: "c4ecd7549aedb3fe7897a859f3390ad1ae008419"
+last_synced_date: "2026-11-11"
+last_reviewed_commit: "c4ecd7549aedb3fe7897a859f3390ad1ae008419"
+review_decision: no-update-needed
 skill_maintainer: ""
 notes: >
   Canonical example file exists in mgifford/ACCESSIBILITY.md.
@@ -23,6 +25,10 @@ notes: >
   severity-tagged sections, condensed Definition of Done checklist) also
   intentionally differs from the canonical file's prose structure.
 ```
+
+## Review history
+
+- 2026-11-11 review (bb235f3 -> c4ecd75): the only canonical change was an updated SVGO documentation URL. The skill does not restate that reference. No SKILL.md content change was needed. Metadata advanced after review.
 
 ## How to Update This Skill
 

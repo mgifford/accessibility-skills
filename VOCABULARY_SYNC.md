@@ -51,10 +51,42 @@ canonical source.
 # Recorded sync points for shared vocabulary sources.
 # Update after reviewing every listed consumer skill, not just one.
 vocab_sync:
-  examples/ACCESSIBILITY_FINDING_TRACKING.md: "f2c89d7e5c143a3fd7c836a0de1ea82aad92ba73"
+  examples/ACCESSIBILITY_FINDING_TRACKING.md: "123c1f66d764d6ee4b5b44bb8656abf549727a82"
   examples/schemas/: "6d9d2967daee194658265bc2f57373fa126ae7f5"
   examples/fingerprints/: "b87a2994aba52de491340490fb969df954180e18"
 ```
+
+Directory sources ignore dependency lockfiles (`package-lock.json`,
+`npm-shrinkwrap.json`, `yarn.lock`, `pnpm-lock.yaml`). A lockfile-only bump is
+not a vocabulary change. This prevents dependency maintenance from creating a
+false review item.
+
+## Review log
+
+### 2026-11-11: `ACCESSIBILITY_FINDING_TRACKING.md` (f2c89d7 -> 123c1f6)
+
+The canonical guide added an evidence-artifact reference and a tool/session
+node reference, and stated that Playwright MCP refs and Chrome CDP `AXNodeId`
+or DOM node IDs are evidence metadata rather than tracker IDs, durable
+locators, or fingerprint inputs.
+
+Consumer decisions:
+
+| Consumer | Decision |
+| --- | --- |
+| `skills/bug-reporting/SKILL.md` | Updated: added the session-identifier boundary and the observed/potential/verified/assumption evidence states. |
+| `skills/axe-rules/SKILL.md` | Reviewed; no change needed. It classifies automated results but does not define identity fields. |
+| `skills/ci-cd/SKILL.md` | Reviewed; no vocabulary change needed. Its separate canonical update is recorded in its own `SYNC.md`. |
+| `skills/cli-audit/SKILL.md` | Updated: reporting requirements now state that MCP refs and browser node IDs are session metadata. |
+| `skills/upstream-first/SKILL.md` | Reviewed; no change needed. It does not assign finding identity. |
+| `workflows/decision-states.md` | Reviewed; no change needed. The new vocabulary does not alter its decision states. |
+| `workflows/end-to-end.md` | Reviewed; no change needed. The new vocabulary does not alter its workflow order or ownership. |
+
+### 2026-11-11: `examples/schemas/` (6d9d296 -> 037a1d2)
+
+The only intervening change was a `package-lock.json` dependency bump. No
+schema, example, or README change. No consumer review was required; the
+directory-source check now ignores lockfiles and reports this source synced.
 
 ## How to update
 

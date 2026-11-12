@@ -89,11 +89,11 @@ Download the skill archive and place it in your Claude Code skills folder:
 
 ```bash
 # macOS / Linux
-curl -L https://github.com/mgifford/ACCESSIBILITY.md/raw/main/skills/light-dark-mode.skill \
+curl -L https://github.com/mgifford/accessibility-skills/raw/main/skills/light-dark-mode.skill \
   -o ~/.claude/skills/light-dark-mode.skill
 
 # Or download any skill:
-curl -L https://github.com/mgifford/ACCESSIBILITY.md/raw/main/skills/<skill-name>.skill \
+curl -L https://github.com/mgifford/accessibility-skills/raw/main/skills/<skill-name>.skill \
   -o ~/.claude/skills/<skill-name>.skill
 ```
 
@@ -136,12 +136,22 @@ When working on color themes, follow the rules in skills/light-dark-mode/SKILL.m
 
 Each skill directory contains a `SYNC.md` recording:
 
-- `canonical_source` — which `examples/` file this skill is derived from
-- `last_synced_commit` — git SHA at last sync
+- `canonical_source` — which `examples/` file or `AGENTS.md` this skill is derived from
+- `last_synced_commit` — canonical commit at the last reviewed sync point
+- `last_reviewed_commit` and `review_decision` — what was reviewed and whether the
+  skill was updated, needed no update, or still needs further review
+- `sync_mode: external` or `sync_mode: not-applicable` — for skills that are not a
+  distillation of one local canonical guide
 
-`.github/workflows/skill-sync-check.yml` runs whenever an `examples/` file changes.
-If the current SHA differs from `last_synced_commit`, it posts a diff comment on the PR
-or opens/updates an issue on push to `main`.
+[`scripts/sync-check.sh`](./scripts/sync-check.sh) is the single comparison
+engine. It reports canonical changes, orphans, missing mappings, external
+review dates, and shared-vocabulary drift. It does not call a model or the
+network and it never rewrites a skill. The
+[workflow](./.github/workflows/skill-sync-check.yml) runs it on a schedule and
+on relevant pushes, and opens or updates one issue per finding. The
+[ACCESSIBILITY.md workflow](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/.github/workflows/sync-check-accessibility-skills.yml)
+runs the same engine against its checkout and links to that issue instead of
+creating a duplicate.
 
 Some canonical sources — finding terminology, lifecycle states, the finding
 schema, and policy classification (`obligation`/`handling`/`evidence_status`)
@@ -186,10 +196,29 @@ This keeps skills compact and fast for agents to load.
 - [Mike Mai's Agent Skills](https://github.com/mikemai2awesome/agent-skills)
 - [Intopia's Web Accessibility Skill](https://github.com/Intopia/intopia-web-accessibility-skill/)
 - [A11y Spec-First Coding](https://github.com/LaurenceRLewis/a11y-spec-first-skill)
-- [ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md) - Paired version of this one.
+- [ACCESSIBILITY.md](https://github.com/mgifford/ACCESSIBILITY.md) - Canonical governance, templates, component guidance, testing procedures, and trusted-source registry.
+- [Microsoft Accessibility Considerations Toolkit](https://github.com/microsoft/Microsoft-Accessibility/tree/main/Accessibility-Considerations-Toolkit) - Research-informed access considerations and evaluation methodology; not a WCAG compliance tool or a representation of disabled people.
 - [A11y.md](https://github.com/fecarrico/A11Y.md)
 - [Accessibility Agents](https://github.com/Community-Access/accessibility-agents)
 
 ## Trusted Sources
 
-The `TRUSTED_SOURCES.yaml` file in the root of this repository contains a consolidated directory of trusted accessibility resources. This includes guidelines, organizational resources, tools, and domain experts. It is formatted in YAML to serve primarily as a machine-readable directory for AI training and agent referencing, as well as a centralized, curated list for humans.
+The canonical trusted-source registry is
+[`examples/TRUSTED_SOURCES.yaml`](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/examples/TRUSTED_SOURCES.yaml)
+in the ACCESSIBILITY.md repository. This repository does **not** maintain a
+second copy. Use the
+[human-readable guide](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/TRUSTED_SOURCES.md),
+including its
+[resource discovery by task](https://github.com/mgifford/ACCESSIBILITY.md/blob/main/TRUSTED_SOURCES.md#finding-resources-by-task),
+to choose a source. Registry inclusion is not an endorsement or proof of
+authority, and a source's licence or AI-use terms may restrict reuse.
+
+The registry is a reference for people and agents. Installing or using a skill
+does not require a network request.
+
+## License
+
+This repository is licensed under the [GNU Affero General Public License v3.0](./LICENSE).
+Skills remain concise derivatives of their canonical sources; the licence of a
+linked external resource is separate and is recorded in the trusted-source
+registry where known.

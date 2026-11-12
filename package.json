@@ -1,7 +1,7 @@
 {
   "name": "accessibility-skills",
   "version": "1.0.0",
-  "description": "AI agent skills for web accessibility — WCAG conformance, ARIA patterns, and topic-specific best practices for Claude Code, Cursor, Copilot and other AI agents",
+  "description": "AI agent skills for web accessibility \u2014 WCAG conformance, ARIA patterns, and topic-specific best practices for Claude Code, Cursor, Copilot and other AI agents",
   "keywords": [
     "accessibility",
     "a11y",
@@ -20,7 +20,7 @@
     "type": "git",
     "url": "git+https://github.com/mgifford/accessibility-skills.git"
   },
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "author": "Mike Gifford",
   "bin": {
     "cli-audit-inspect": "skills/cli-audit/scripts/cli-inspect.mjs"
@@ -36,7 +36,11 @@
     "validate:csv": "node tests/test-csv-parsing.js",
     "generate:arrm-roles": "node scripts/generate-role-indexes.js",
     "check:arrm-roles": "node scripts/check-arrm-roles.js",
-    "test:shared-fixture": "node tests/validate-shared-fixture.js"
+    "test:shared-fixture": "node tests/validate-shared-fixture.js",
+    "test:sync": "node tests/test-sync-check.mjs",
+    "test:issues": "node tests/test-upsert-issue.mjs",
+    "test:invariants": "node tests/test-repo-invariants.mjs",
+    "test": "npm run test:csv && npm run test:sync && npm run test:issues && npm run test:invariants"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.10.2",
